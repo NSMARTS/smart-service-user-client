@@ -1,0 +1,23 @@
+<div class="sidenav">
+    <mat-sidenav-container style="height: 100vh" (backdropClick)="closeEvent()">
+        <!-- sidenav 옵션
+            1. autoFocus: 자동 포커스 기능 false
+            2. opened: 열림 상태 지정
+            3. mode: 'side' 옆으로 밀어냄, 'over' 덮어씀
+            4. disableClose: 사이드 바 사라지는 것 방지
+            5. fixedInViewport: 사이드 바 고정
+        -->
+        <mat-sidenav #sidenav autoFocus="false" [opened]="isDesktop()" [mode]="isDesktop() ? 'side' : 'over'"
+            [disableClose]="isDesktop()" [fixedInViewport]="!isDesktop()">
+            <sidenav></sidenav>
+        </mat-sidenav>
+
+        <mat-sidenav-content style="display: flex; flex-direction: column;">
+            <app-toolbar></app-toolbar>
+
+            <main style="flex: 1;">
+                <router-outlet></router-outlet>
+            </main>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

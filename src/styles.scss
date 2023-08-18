@@ -2,3 +2,25 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/** 
+작성자: 임호균
+작성일: 2023-08-17
+내용: 사이드 네비게이션 공통 스타일 지정, 툴팁 공통 스타일 지정
+*/
+.side_nav {
+    width: 278px;
+    display: flex;
+    flex-direction: column;
+
+    .side_nav_toolbar {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+}
