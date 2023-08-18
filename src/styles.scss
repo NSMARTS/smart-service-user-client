@@ -7,17 +7,50 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 작성자: 임호균
 작성일: 2023-08-17
 내용: 사이드 네비게이션 공통 스타일 지정, 툴팁 공통 스타일 지정
+
+수정일: 2023-08-18
+수정자: 임호균
+내용: 사이드 네비게시연 공통 스타일 수정. 
+side_nav_toolbar
 */
+$side_nav_active_color: #e6e6e6;
+
+
 .side_nav {
     width: 278px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+}
 
-    .side_nav_toolbar {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
+/**
+작성자: 임호균
+*/
+.side_nav_toolbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.side_nav_items {
+    flex: 1;
+    position: relative;
+}
+
+.scroll {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+.scroll::-webkit-scrollbar {
+    display: none;
 }
 
 .toolbar {

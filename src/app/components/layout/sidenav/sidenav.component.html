@@ -4,6 +4,8 @@
     </div>
 
     <div class="side_nav_items">
-        <sidenav-item></sidenav-item>
+        <section class="scroll">
+            <sidenav-item *ngFor="let item of navItems()" [item]="item" [level]="0"></sidenav-item>
+        </section>
     </div>
 </div>
