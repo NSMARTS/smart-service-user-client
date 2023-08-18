@@ -70,6 +70,10 @@
     transition: all 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+.item_dropdown {
+    overflow: hidden;
+}
+
 .subheading {
     box-sizing: border-box;
     margin-top: 1.5rem;
