@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialsModule } from './materials/materials.module';
-import { LeaveManagementComponent } from './pages/leave-management/leave-management.component';
 import { SpaceComponent } from './pages/space/space.component';
 import { ProfileEditComponent } from './pages/profile-edit/profile-edit.component';
 import { SignInComponent } from './pages/auth/sign-in/sign-in.component';
@@ -16,11 +15,15 @@ import { PositiveDialogComponent } from './components/dialog/positive-dialog/pos
 import { NegativeDialogComponent } from './components/dialog/negative-dialog/negative-dialog.component';
 import { MainComponent } from './pages/main/main.component';
 import { IndexComponent } from './pages/index/index.component';
+import { EmaployeeLeaveStatusComponent } from './pages/employee-management/emaployee-leave-status/emaployee-leave-status.component';
+import { EmployeeListComponent } from './pages/employee-management/employee-list/employee-list.component';
+import { LeaveRequestComponent } from './pages/employee-management/leave-request/leave-request.component';
+import { EmployeeRdRequestComponent } from './pages/employee-management/employee-rd-request/employee-rd-request.component';
+import { RegisterRequestComponent } from './pages/employee-management/register-request/register-request.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LeaveManagementComponent,
     SpaceComponent,
     ProfileEditComponent,
     SignInComponent,
@@ -31,6 +34,11 @@ import { IndexComponent } from './pages/index/index.component';
     NegativeDialogComponent,
     MainComponent,
     IndexComponent,
+    EmaployeeLeaveStatusComponent,
+    EmployeeListComponent,
+    LeaveRequestComponent,
+    EmployeeRdRequestComponent,
+    RegisterRequestComponent,
   ],
   imports: [
     BrowserModule,
