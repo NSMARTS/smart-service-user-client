@@ -32,6 +32,11 @@ $side_nav_active_color: #e6e6e6;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    height: 64px;
+
+    h1 { 
+        margin: 0;
+    }
 }
 
 .side_nav_items {

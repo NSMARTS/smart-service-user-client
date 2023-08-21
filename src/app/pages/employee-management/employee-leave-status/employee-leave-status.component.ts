@@ -3,15 +3,15 @@ import { Component } from '@angular/core';
 import { MaterialsModule } from 'src/app/materials/materials.module';
 
 @Component({
-  selector: 'app-leave-request',
+  selector: 'app-employee-leave-status',
   standalone: true,
   imports: [
     CommonModule,
     MaterialsModule
   ],
-  templateUrl: './leave-request.component.html',
-  styleUrls: ['./leave-request.component.scss']
+  templateUrl: './employee-leave-status.component.html',
+  styleUrls: ['./employee-leave-status.component.scss']
 })
-export class LeaveRequestComponent {
+export class EmployeeLeaveStatusComponent {
 
 }

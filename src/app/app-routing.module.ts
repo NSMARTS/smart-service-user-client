@@ -43,6 +43,10 @@ const routes: Routes = [
         loadChildren: () => import('./pages/leave/routes').then(mod => mod.LEAVE_ROUTES)
       },
       {
+        path: 'employee-management',
+        loadChildren: () => import('./pages/employee-management/routes').then(mod => mod.EMPLOYEE_MANAGEMENT_ROUTES)
+      },
+      {
         path: 'collab',
         component: SpaceComponent
       },

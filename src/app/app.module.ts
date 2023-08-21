@@ -15,11 +15,6 @@ import { PositiveDialogComponent } from './components/dialog/positive-dialog/pos
 import { NegativeDialogComponent } from './components/dialog/negative-dialog/negative-dialog.component';
 import { MainComponent } from './pages/main/main.component';
 import { IndexComponent } from './pages/index/index.component';
-import { EmaployeeLeaveStatusComponent } from './pages/employee-management/emaployee-leave-status/emaployee-leave-status.component';
-import { EmployeeListComponent } from './pages/employee-management/employee-list/employee-list.component';
-import { LeaveRequestComponent } from './pages/employee-management/leave-request/leave-request.component';
-import { EmployeeRdRequestComponent } from './pages/employee-management/employee-rd-request/employee-rd-request.component';
-import { RegisterRequestComponent } from './pages/employee-management/register-request/register-request.component';
 
 @NgModule({
   declarations: [
@@ -34,11 +29,6 @@ import { RegisterRequestComponent } from './pages/employee-management/register-r
     NegativeDialogComponent,
     MainComponent,
     IndexComponent,
-    EmaployeeLeaveStatusComponent,
-    EmployeeListComponent,
-    LeaveRequestComponent,
-    EmployeeRdRequestComponent,
-    RegisterRequestComponent,
   ],
   imports: [
     BrowserModule,
