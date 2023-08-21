@@ -7,12 +7,12 @@
  */
 
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, Input, OnChanges, OnDestroy, OnInit, Signal, SimpleChanges, inject } from '@angular/core';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { Component, HostBinding, Input, OnChanges, OnDestroy, OnInit, Signal, SimpleChanges, inject } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { IsActiveMatchOptions, NavigationEnd, Router, RouterModule } from '@angular/router';
-import { Subscription, filter, takeUntil } from 'rxjs';
+import { Subscription, filter } from 'rxjs';
 import { dropdownAnimation } from 'src/app/animations/dropdown.animation';
-import { NavigationDropdown, NavigationItem, NavigationLink, NavigationSubheading } from 'src/app/interfaces/navigation-item.interface';
+import { NavigationDropdown, NavigationLink } from 'src/app/interfaces/navigation-item.interface';
 import { MaterialsModule } from 'src/app/materials/materials.module';
 import { NavigationService } from 'src/app/stores/layout/navigation.service';
 
@@ -31,6 +31,11 @@ import { NavigationService } from 'src/app/stores/layout/navigation.service';
   ]
 })
 export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
+  @HostBinding('class')
+  get levelClass() {
+    return `item-level-${this.level}`;
+  }
+
   //상위 컴포넌트에서 넘어오는 아이템
   //any 사용 이유, 아래쪽에서 isLink, isDropdown, isSubheading을 사용해 타입을 분리하고 있음
 
@@ -44,7 +49,7 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
   isActive: boolean = false;
   
   router = inject(Router)
-  
+
   subscriptions: Subscription | undefined;
 
   // navigationService 에서 isLink, isDropdown, isSubheading 꺼내서 사용

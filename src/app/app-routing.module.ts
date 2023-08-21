@@ -18,13 +18,25 @@ import { ProfileEditComponent } from './pages/profile-edit/profile-edit.componen
 import { SpaceComponent } from './pages/space/space.component';
 import { IndexComponent } from './pages/index/index.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { SignInComponent } from './pages/auth/sign-in/sign-in.component';
+import { FindPasswordComponent } from './pages/auth/find-password/find-password.component';
 
 const routes: Routes = [
+  // 웰컴 페이지 입니다.
   {
     path: 'welcome',
     component: IndexComponent
   },
-
+  // 로그인 페이지 입니다.
+  { 
+    path: 'sign-in',
+    component: SignInComponent
+  },  
+  // 비밀번호 찾기 페이지 입니다.
+  {
+    path: 'find-password',
+    component: FindPasswordComponent
+  },
   {
     path: '',
     component: LayoutComponent,
@@ -38,18 +50,24 @@ const routes: Routes = [
         path: 'profile',
         component: ProfileEditComponent
       },
+      // 직원들이 자기 휴가를 관리할 수 있는 컴포넌트를 모아놓은 것입니다.
+      // 타고 들어가면 /leave/... 라우터 경로에 대한 처리를 확인할 수 있습니다.
       {
         path: 'leave',
         loadChildren: () => import('./pages/leave/routes').then(mod => mod.LEAVE_ROUTES)
       },
+      // 매니저가 직원들의 휴가를 관리할 수 있는 컴포넌틀르 모아놓은 것입니다.
+      // 타고 들어가면 /employee-management/... 라우터 경로에 대한 처리를 확인할 수 있습니다.
       {
         path: 'employee-management',
         loadChildren: () => import('./pages/employee-management/routes').then(mod => mod.EMPLOYEE_MANAGEMENT_ROUTES)
       },
+      // space에 대한 컴포넌트를 모아놓은 것입니다.
       {
         path: 'collab',
         component: SpaceComponent
       },
+      // 잘못된 경로로 접근했을 경우 처리하는 로직입니다.
       {
         path: '',
         redirectTo: 'main',
@@ -57,6 +75,7 @@ const routes: Routes = [
       }
     ]
   },
+  // 잘못된 경로로 접근했을 경우 처리하는 로직입니다.
   {
     path: '**',
     component: PageNotFoundComponent

@@ -1,0 +1,29 @@
+@import '../../../../styles.scss';
+
+.layout {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: $smart_service_background_color;
+
+    .mat_card {
+        max-width: 600px;
+        width: 100%;
+    }
+
+    .mat_card_header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 50px;
+    }
+
+    .sign_in_form {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+}

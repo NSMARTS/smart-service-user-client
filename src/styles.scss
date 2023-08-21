@@ -13,7 +13,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 내용: 사이드 네비게시연 공통 스타일 수정. 
 side_nav_toolbar
 */
-$side_nav_active_color: #e6e6e6;
+$side_nav_active_color: #eeeeee;
+$side_nav_active_font_color: rgba(255, 64, 129, 255);
+
+$smart_service_background_color: rgba(250, 250, 250, 255);
 
 
 .side_nav {
