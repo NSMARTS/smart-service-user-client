@@ -3,7 +3,11 @@
  * 파일명: sign-in.components.ts
  * 작성일시: 2023-08-21
  * 작성자: 임호균
- * 설명: 로그인 구현
+ * 설명: 로그인 폼 구현
+ * 
+ * 수정일시: 2023-08-22
+ * 수정자: 임호균
+ * 설명: 로그인 기능 구현
  */
 
 import { CommonModule } from '@angular/common';
@@ -15,6 +19,7 @@ import { NegativeDialogComponent } from 'src/app/components/dialog/negative-dial
 import { PositiveDialogComponent } from 'src/app/components/dialog/positive-dialog/positive-dialog.component';
 import { ProgressDialogComponent } from 'src/app/components/dialog/progress-dialog/progress-dialog.component';
 import { MaterialsModule } from 'src/app/materials/materials.module';
+import { AuthService } from 'src/app/services/auth/auth.service';
 interface FormData {
   email: FormControl;
   password: FormControl;
@@ -36,7 +41,7 @@ export class SignInComponent {
     password: new FormControl('', [Validators.required])
   })
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private authService: AuthService) {
     // const dialogRef = this.dialog.open(ProgressDialogComponent);
 
   }
@@ -45,6 +50,12 @@ export class SignInComponent {
    * 
    */
   signIn() {
-
+    // console.log(this.signInForm.value)
+    this.authService.signIn(this.signInForm.value).subscribe({
+      next: (res: any) => {
+        console.log(res)
+      },
+      error: (e) => console.error(e)
+    })
   }
 }

@@ -14,7 +14,7 @@
             </section>
         </mat-card-header>
         <mat-card-content>
-            <form [formGroup]="signInForm" class="sign_in_form">
+            <form [formGroup]="signInForm" class="sign_in_form" (ngSubmit)="signIn()">
                 <mat-form-field appearance="fill">
                     <mat-label>Email</mat-label>
                     <input matInput type="email" formControlName="email" placeholder="Ex. pat@example.com" name="email"

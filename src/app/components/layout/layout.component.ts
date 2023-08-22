@@ -14,6 +14,7 @@ import { RouterModule } from '@angular/router';
 import { SidenavService } from 'src/app/stores/layout/sidenav.service';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { MatSidenav } from '@angular/material/sidenav';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-layout',
@@ -22,7 +23,8 @@ import { MatSidenav } from '@angular/material/sidenav';
     MaterialsModule,
     SidenavComponent,
     ToolbarComponent,
-    RouterModule
+    RouterModule,
+    HttpClientModule
   ],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss', '../../../styles.scss']

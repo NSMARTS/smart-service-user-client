@@ -29,5 +29,12 @@ export class SidenavComponent {
   private navigationService = inject(NavigationService);
   // 사이드 내비 구성 데이터
   navItems = this.navigationService.navItems;
+
+  //메니저 구분
+  flag = {
+    isReplacementDay: null,
+    isManager: null
+  }
+  
   constructor() {}
 }

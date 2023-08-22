@@ -44,6 +44,8 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
   //레벨, 얼마나 깊이 들어왔는지 파악하기 위함
   @Input() level: number = 0;
 
+  @Input() flag: any;
+
   //열려있는지 파악하기 위함
   isOpen: boolean = false;
   isActive: boolean = false;

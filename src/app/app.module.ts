@@ -10,8 +10,16 @@ import { ProfileEditComponent } from './pages/profile-edit/profile-edit.componen
 import { CreateSpaceDialogComponent } from './components/dialog/create-space-dialog/create-space-dialog.component';
 import { MainComponent } from './pages/main/main.component';
 import { IndexComponent } from './pages/index/index.component';
+import { HttpClientModule } from '@angular/common/http';
+import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 
 
+// Config
+import { ENV } from './config/config';
+
+export function tokenGetter() {
+	return localStorage.getItem(ENV.tokenName);
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,9 +33,19 @@ import { IndexComponent } from './pages/index/index.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MaterialsModule
+    MaterialsModule,
+    HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        disallowedRoutes: [
+          '/api/v1/auth/sign-in',
+          '/api/v1/auth/sign-up',
+        ]
+      }
+    }),
   ],
-  providers: [],
+  providers: [JwtHelperService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

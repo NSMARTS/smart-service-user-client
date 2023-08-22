@@ -20,27 +20,32 @@ import { IndexComponent } from './pages/index/index.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { SignInComponent } from './pages/auth/sign-in/sign-in.component';
 import { FindPasswordComponent } from './pages/auth/find-password/find-password.component';
+import { signInGuard } from './guards/sign-in.guard';
+import { managerGuard } from './guards/manager.guard';
 
 const routes: Routes = [
   // 웰컴 페이지 입니다.
   {
     path: 'welcome',
-    component: IndexComponent
+    component: IndexComponent,
+    canActivate: [signInGuard]
   },
   // 로그인 페이지 입니다.
   { 
     path: 'sign-in',
-    component: SignInComponent
+    component: SignInComponent,
+    canActivate: [signInGuard]
   },  
   // 비밀번호 찾기 페이지 입니다.
   {
     path: 'find-password',
-    component: FindPasswordComponent
+    component: FindPasswordComponent,
+    canActivate: [signInGuard]
   },
   {
     path: '',
     component: LayoutComponent,
-    // canActivate: [isLoggedInGuard],
+    canActivate: [signInGuard],
     children: [
       {
         path: 'main',
@@ -59,7 +64,7 @@ const routes: Routes = [
       // 매니저가 직원들의 휴가를 관리할 수 있는 컴포넌틀르 모아놓은 것입니다.
       // 타고 들어가면 /employee-management/... 라우터 경로에 대한 처리를 확인할 수 있습니다.
       {
-        path: 'employee-management',
+        path: 'employee-management', canActivate: [managerGuard],
         loadChildren: () => import('./pages/employee-management/routes').then(mod => mod.EMPLOYEE_MANAGEMENT_ROUTES)
       },
       // space에 대한 컴포넌트를 모아놓은 것입니다.
