@@ -14,12 +14,14 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ConfirmDialogComponent } from 'src/app/components/dialog/confirm-dialog/confirm-dialog.component';
 import { NegativeDialogComponent } from 'src/app/components/dialog/negative-dialog/negative-dialog.component';
 import { PositiveDialogComponent } from 'src/app/components/dialog/positive-dialog/positive-dialog.component';
 import { ProgressDialogComponent } from 'src/app/components/dialog/progress-dialog/progress-dialog.component';
 import { MaterialsModule } from 'src/app/materials/materials.module';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { DialogService } from 'src/app/services/dialog/dialog.service';
 interface FormData {
   email: FormControl;
   password: FormControl;
@@ -41,9 +43,13 @@ export class SignInComponent {
     password: new FormControl('', [Validators.required])
   })
 
-  constructor(public dialog: MatDialog, private authService: AuthService) {
-    // const dialogRef = this.dialog.open(ProgressDialogComponent);
+  params: Params | undefined;
 
+  constructor(public dialog: MatDialog, private authService: AuthService, private route: ActivatedRoute, private router: Router,private dialogService: DialogService) {
+    // const dialogRef = this.dialog.open(ProgressDialogComponent);
+    this.route.queryParams.subscribe(params => {
+      this.params = params;
+    });
   }
 
   /**
@@ -53,9 +59,21 @@ export class SignInComponent {
     // console.log(this.signInForm.value)
     this.authService.signIn(this.signInForm.value).subscribe({
       next: (res: any) => {
-        console.log(res)
+        if(this.params!['redirectURL'] != '' && this.params!['redirectURL'] != null && res.token != '' && res.token != null) {
+          this.router.navigate([`${this.params!['redirectURL']}`])
+        }
+        else if(res.token != '' && res.token != null) {
+          this.router.navigate(['main'])
+        }
       },
-      error: (e) => console.error(e)
+      error: (e) => {
+        console.log(e)
+        this.errorAlert(e.error.message)
+      }
     })
+  }
+
+  errorAlert(err: string) {
+    this.dialogService.openDialogNegative(err)
   }
 }

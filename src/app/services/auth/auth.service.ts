@@ -4,6 +4,11 @@
  * 작성일시: 2023-08-22
  * 작성자: 임호균
  * 설명: 로그인 백엔드 연동 로직
+ * 
+ * 
+ * 수정일시: 2023-0823
+ * 수정자: 임호균
+ * 수정 내용: 로그인 리다이렉트, 다이어로그 작업 
  */
 
 
@@ -42,7 +47,7 @@ export class AuthService {
    * @returns Observable<Token>
    */
   signIn(loginData : SignInData) : Observable<Token>{
-    return this.http.post<Token>(this.baseUrl + `/user/auth/signIn`, loginData).pipe(
+    return this.http.post<Token>(this.baseUrl + `/employee/auth/signIn`, loginData).pipe(
       shareReplay(),
       tap(
         (res: any) => {
@@ -59,31 +64,6 @@ export class AuthService {
    */
   signOut(): void {
     this.removeToken();
-  }
-
-  getUserProfile() {
-    return this.http.get('/api/v1/user/profile').pipe(
-      tap((res: any) => {
-        if(res.user.profile_img == '') {
-          if(res.manager != null) {
-            res.manager.profile_img = '/assets/image/person.png'
-          }else {
-            res.user.profile_img = '/assets/image/person.png'
-          }  
-        }
-
-        //
-        return res.result = true;
-      })
-    )
-  }
-
-  changeUserProfile() {
-
-  }
-
-  changeProfileImage() {
-
   }
 
   /**

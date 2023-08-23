@@ -7,13 +7,17 @@
  */
 
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { JwtModule } from '@auth0/angular-jwt';
 import { UserProfileData } from 'src/app/interfaces/user-profile-data.interface';
 import { MaterialsModule } from 'src/app/materials/materials.module';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SidenavService } from 'src/app/stores/layout/sidenav.service';
+import { ProfileService } from 'src/app/stores/profile/profile.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -29,11 +33,21 @@ import { SidenavService } from 'src/app/stores/layout/sidenav.service';
 })
 export class ToolbarComponent implements OnInit{
   userProfileData: UserProfileData | undefined;
+  userProfile$ = toObservable(this.profileService.userProfile);
 
-  constructor(private sidenavService: SidenavService, private authService: AuthService) {}
+  constructor(
+    private sidenavService: SidenavService, 
+    private authService: AuthService, 
+    private profileService: ProfileService, 
+    private router: Router) {
+      this.userProfile$.subscribe(() => {
+        this.userProfileData = this.profileService.userProfile().user;
+        console.log(this.userProfileData)
+      })
+  }
 
   ngOnInit(): void {
-    
+    this.getUserProfileData()
   }
 
   openSidenav(): void {
@@ -41,7 +55,7 @@ export class ToolbarComponent implements OnInit{
   }
 
   getUserProfileData() {
-    
+    this.profileService.getUserProfile().subscribe()
   }
 
   /**
@@ -49,5 +63,7 @@ export class ToolbarComponent implements OnInit{
    */
   signOut(): void {
     this.authService.signOut();
+    this.router.navigate(['welcome'])
   }
 }
+
