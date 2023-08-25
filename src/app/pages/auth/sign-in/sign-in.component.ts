@@ -53,10 +53,11 @@ export class SignInComponent {
   }
 
   /**
-   * 
+   * @수정자 임호균
+   * @수정일 2023-08-25
+   * @description 로그인 후 토큰 에러 발생하는 버그 해결
    */
   signIn() {
-    // console.log(this.signInForm.value)
     this.authService.signIn(this.signInForm.value).subscribe({
       next: (res: any) => {
         if(this.params!['redirectURL'] != '' && this.params!['redirectURL'] != null && res.token != '' && res.token != null) {
@@ -67,7 +68,7 @@ export class SignInComponent {
         }
       },
       error: (e) => {
-        console.log(e)
+        console.error(e)
         this.errorAlert(e.error.message)
       }
     })

@@ -4,6 +4,10 @@
  * 작성일시: 2023-08-23
  * 작성자: 임호균
  * 설명: 유저 프로필 정보 저장 서비스
+ * 
+ * 수정자: 임호균
+ * 수정 일시: 2023-08-25
+ * 수정 내용: checkRole 추가
  */
 
 import { HttpClient } from '@angular/common/http';
@@ -15,19 +19,18 @@ import { environment } from 'src/environments/environment.development';
 })
 export class ProfileService {
   private baseUrl = environment.apiUrl;
-  userProfile = signal<any>('');
+  userProfile = signal<any>({});
 
   constructor(public http: HttpClient) { }
   
   getUserProfile() {
     return this.http.get(this.baseUrl + '/employee/profile').pipe(
       tap((res: any) => {
-        console.log(res) 
         if(res.user.profile_img == '') {
           if(res.manager != null) {
-            res.manager.profile_img = '/assets/image/person.png'
+            res.manager.profile_img = '/assets/images/person.png'
           }else {
-            res.user.profile_img = '/assets/image/person.png'
+            res.user.profile_img = '/assets/images/person.png'
           }  
         }
         
@@ -40,5 +43,9 @@ export class ProfileService {
 
   updateUserProfile(profile: any) {
      this.userProfile.set(profile);
+  }
+
+  checkRole() {
+    return this.userProfile().isManager;
   }
 }

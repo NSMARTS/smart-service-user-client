@@ -1,3 +1,4 @@
+<!-- 소제목 -->
 <ng-container *ngIf="isSubheading(item)" class="item">
     <div class="subheading">{{item.label}}</div>
     <sidenav-item class="side_nav_items" *ngFor="let subItem of item.children" [item]="subItem"
@@ -5,7 +6,7 @@
 </ng-container>
 
 
-
+<!-- 링크 -->
 <ng-container *ngIf="isLink(item)">
     <a matRipple [routerLink]="item.route" class="item" routerLinkActive="active">
         <mat-icon class="item_icon">{{item.icon}}</mat-icon>
@@ -14,9 +15,9 @@
 </ng-container>
 
 
-
+<!-- 드롭다운 -->
 <ng-container *ngIf="isDropdown(item)">
-    <div>
+    <div *ngIf="item.isManager == false || (item.isManager && (item.isManager == flag.isManager))">
         <div matRipple class="item" (click)="toggleOpen()" [class.active]="isOpen || isActive" [class.open]="isOpen">
             <mat-icon class="item_icon">{{item.icon}}</mat-icon>
             <span class="item_label" style="flex: 1;">{{item.label}}</span>
@@ -32,7 +33,7 @@
 </ng-container>
 
 
-
+<!-- 스페이스 생성 버튼 -->
 <a matRipple *ngIf="isCreateSpace(item)" class="item createSpace">
     <mat-icon class="item_icon">{{item.icon}}</mat-icon>
     <span class="item_label">{{item.label}}</span>

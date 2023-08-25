@@ -15,6 +15,7 @@ import { dropdownAnimation } from 'src/app/animations/dropdown.animation';
 import { NavigationDropdown, NavigationLink } from 'src/app/interfaces/navigation-item.interface';
 import { MaterialsModule } from 'src/app/materials/materials.module';
 import { NavigationService } from 'src/app/stores/layout/navigation.service';
+import { ProfileService } from 'src/app/stores/profile/profile.service';
 
 @Component({
   selector: 'sidenav-item',
@@ -44,7 +45,11 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
   //레벨, 얼마나 깊이 들어왔는지 파악하기 위함
   @Input() level: number = 0;
 
-  @Input() flag: any;
+  //메니저 구분
+  flag = {
+    isReplacementDay: null,
+    isManager: null
+  }
 
   //열려있는지 파악하기 위함
   isOpen: boolean = false;
@@ -63,7 +68,18 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
   openItems: Signal<NavigationDropdown> = inject(NavigationService).openItems;
   openItems$ = toObservable(this.openItems)
 
-  constructor(private navigationService: NavigationService) {}
+  userProfile$ = toObservable(this.profileService.userProfile);
+
+  constructor(
+    private profileService: ProfileService, 
+    private navigationService: NavigationService
+  ) {
+    this.userProfile$.subscribe(() => {
+      if(this.profileService.userProfile().user !== undefined){
+        this.flag.isManager = this.profileService.userProfile().user.isManager;
+      } 
+    })
+  }
 
   ngOnInit() :void {
     this.subscriptions = new Subscription();
@@ -76,11 +92,12 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
 
       this.subscriptions.add(sub1)
     }
+    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && changes.hasOwnProperty('item') && this.isDropdown(this.item)) { 
-      // this.item -> changes.item.currentValue로 해도 됩
+      // this.item -> changes.item.currentValue로 해도 됨
       this.onRouteChange();
     }
   }
