@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { MaterialsModule } from 'src/app/materials/materials.module';
 
 @Component({
@@ -7,7 +8,8 @@ import { MaterialsModule } from 'src/app/materials/materials.module';
   standalone: true,
   imports: [
     CommonModule,
-    MaterialsModule
+    MaterialsModule,
+    RouterModule
   ],
   templateUrl: './leave-request-list.component.html',
   styleUrls: ['./leave-request-list.component.scss']

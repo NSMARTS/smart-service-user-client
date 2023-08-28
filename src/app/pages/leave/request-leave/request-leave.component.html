@@ -1,0 +1,89 @@
+<div>
+    <div class="page_header">
+        <h1 class="page_title">Request Leave</h1>
+    </div>
+
+    <form [formGroup]="requestLeaveForm" (ngSubmit)="requestLeave()">
+        <mat-card>
+            <mat-card-content>
+                <div class="input_group_layout">
+                    <div class="left_box">
+                        <span>Requestor</span>
+                    </div>
+                    <div class="right_box">
+                        {{userProfileData?.username}}
+                    </div>
+                </div>
+                <div class="input_group_layout">
+                    <div class="left_box">
+                        <span>Leave Information</span>
+                    </div>
+                    <div class="right_box">
+                        <div>
+                            <div>
+                                <span>Annual Leave: </span>
+                            </div>
+                            <div>
+                                <span>Rollover: </span>
+                            </div>
+                            <div>
+                                <span>Sick Leave: </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="input_group_layout">
+                    <div class="left_box">
+                        <span>Type</span>
+                    </div>
+                    <div class="right_box">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Leave Classification</mat-label>
+                            <mat-select formControlName="leaveClassification">
+                                <mat-option value="annualLeave">Annual Leave</mat-option>
+                                <mat-option value="sickLeave">Sick Leave</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Unit of Use</mat-label>
+                            <mat-select formControlName="unitOfUse">
+                                <mat-option value="day">Day</mat-option>
+                                <mat-option value="half">Half</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="input_group_layout">
+                    <div class="left_box">Period</div>
+                    <div class="right_box">
+                        <mat-form-field>
+                            <mat-label>Enter a date range</mat-label>
+                            <mat-date-range-input [formGroup]="requestLeaveForm" [rangePicker]="picker">
+                                <input matStartDate formControlName="start" placeholder="Start date">
+                                <input matEndDate formControlName="end" placeholder="End date">
+                            </mat-date-range-input>
+                            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="input_group_layout">
+                    <div class="left_box">Reason</div>
+                    <div class="no_border_bottom right_box">
+                        <mat-form-field style="width: 100%;">
+                            <mat-label>Reason</mat-label>
+                            <textarea formControlName="reason" matInput rows="6"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button [disabled]="!requestLeaveForm.valid" mat-flat-button color="primary"
+                    style="margin-right: 5px;">Request</button>
+                <button mat-flat-button [routerLink]="['/leave/leave-request-list']">Cancel</button>
+            </mat-card-actions>
+        </mat-card>
+    </form>
+</div>

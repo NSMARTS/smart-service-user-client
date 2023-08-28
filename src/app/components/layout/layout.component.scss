@@ -1,0 +1,7 @@
+.main_area{
+    padding: 40px;
+
+    @media (max-width: 816px) {
+        padding: 20px;
+    }
+}
