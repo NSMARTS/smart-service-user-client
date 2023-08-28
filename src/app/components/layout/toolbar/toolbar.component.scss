@@ -1,3 +1,5 @@
+@import '../../../../styles.scss';
+
 .profile_button {
     display: flex;
     align-items: center;
@@ -6,4 +8,12 @@
 
 .profile_image {
    width: 35px; 
+}
+
+
+
+.menu_header {
+    padding: 1rem 1.5rem;
+    background: $smart_service_primary_color;
+	color: #fff;
 }

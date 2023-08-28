@@ -9,7 +9,6 @@ import { SpaceComponent } from './pages/space/space.component';
 import { ProfileEditComponent } from './pages/profile-edit/profile-edit.component';
 import { CreateSpaceDialogComponent } from './components/dialog/create-space-dialog/create-space-dialog.component';
 import { MainComponent } from './pages/main/main.component';
-import { IndexComponent } from './pages/index/index.component';
 import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
 
@@ -27,7 +26,6 @@ export function tokenGetter() {
     ProfileEditComponent,
     CreateSpaceDialogComponent,
     MainComponent,
-    IndexComponent,
   ],
   imports: [
     BrowserModule,

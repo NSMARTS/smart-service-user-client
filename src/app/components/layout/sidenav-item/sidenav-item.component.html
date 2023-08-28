@@ -17,7 +17,7 @@
 
 <!-- 드롭다운 -->
 <ng-container *ngIf="isDropdown(item)">
-    <div *ngIf="item.isManager == false || (item.isManager && (item.isManager == flag.isManager))">
+    <div *ngIf="item.isManager == flag.isManager">
         <div matRipple class="item" (click)="toggleOpen()" [class.active]="isOpen || isActive" [class.open]="isOpen">
             <mat-icon class="item_icon">{{item.icon}}</mat-icon>
             <span class="item_label" style="flex: 1;">{{item.label}}</span>
@@ -31,10 +31,3 @@
         </div>
     </div>
 </ng-container>
-
-
-<!-- 스페이스 생성 버튼 -->
-<a matRipple *ngIf="isCreateSpace(item)" class="item createSpace">
-    <mat-icon class="item_icon">{{item.icon}}</mat-icon>
-    <span class="item_label">{{item.label}}</span>
-</a>

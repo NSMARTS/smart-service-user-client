@@ -15,27 +15,45 @@ export const sidenavRouteInfo: NavigationItem[] = [
         route: '/main',
         icon: 'dashboard'
     },
-    // project
     {
         type: 'subheading',
-        label: 'PROJECT',
+        label: 'SPACE',
         children: [
             {
-                type: 'click',
-                label: 'Create Space',
-                icon: 'create_new_folder',
+                type: 'link',
+                label: 'notification',
+                route: '/notification',
+                icon: 'campaign'
             },
             {
-                type: 'dropdown',
-                label: 'Space',
-                icon: 'library_books',
-                isManager: false,
-                children: [
-
-                ]
+                type: 'link',
+                label: 'meeting',
+                route: '/meeting',
+                icon: 'groups'
             }
         ]
     },
+    // // project
+    // {
+    //     type: 'subheading',
+    //     label: 'PROJECT',
+    //     children: [
+    //         {
+    //             type: 'click',
+    //             label: 'Create Space',
+    //             icon: 'create_new_folder',
+    //         },
+    //         {
+    //             type: 'dropdown',
+    //             label: 'Space',
+    //             icon: 'library_books',
+    //             isManager: false,
+    //             children: [
+
+    //             ]
+    //         }
+    //     ]
+    // },
     // Leave
     {
         type: 'subheading',
@@ -51,7 +69,7 @@ export const sidenavRouteInfo: NavigationItem[] = [
                         type: 'link',
                         label: 'My Leave Status',
                         route: '/leave/my-status',
-                        icon: 'update',
+                        icon: 'fact_check',
                         isManager: false,
                         isReplacementDay: false
                     },
@@ -59,7 +77,7 @@ export const sidenavRouteInfo: NavigationItem[] = [
                         type: 'link',
                         label: 'Leave Request',
                         route: '/leave/leave-request-list',
-                        icon: 'update',
+                        icon: 'request_page',
                         isManager: false,
                         isReplacementDay: false,
                     },
@@ -67,7 +85,7 @@ export const sidenavRouteInfo: NavigationItem[] = [
                         type: 'link',
                         label: 'Replacement Day Request',
                         route: '/leave/rd-request-list',
-                        icon: 'update',
+                        icon: 'find_replace',
                         isManager: false,
                         isReplacementDay: true
                     }
