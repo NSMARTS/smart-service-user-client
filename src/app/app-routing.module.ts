@@ -8,6 +8,10 @@
  * 수정일시: 2023-08-21
  * 수정자: 임호균
  * 설명: standalone 특성에 맞게 라우팅 수정
+ * 
+ * 수정일시: 2023-08-28
+ * 수정자: 임호균
+ * 설명: notification, meeting 추가
  */
 
 import { NgModule } from '@angular/core';
@@ -22,6 +26,8 @@ import { SignInComponent } from './pages/auth/sign-in/sign-in.component';
 import { FindPasswordComponent } from './pages/auth/find-password/find-password.component';
 import { signInGuard } from './guards/sign-in.guard';
 import { myManagerGuard } from './guards/my-manager.guard';
+import { NotificationComponent } from './pages/space/notification/notification.component';
+import { MeetingComponent } from './pages/space/meeting/meeting.component';
 
 const routes: Routes = [
   // 웰컴 페이지 입니다.
@@ -54,6 +60,14 @@ const routes: Routes = [
       {
         path: 'profile',
         component: ProfileEditComponent
+      },
+      {
+        path: 'notification',
+        component: NotificationComponent
+      },
+      {
+        path: 'meeting',
+        component: MeetingComponent
       },
       // 직원들이 자기 휴가를 관리할 수 있는 컴포넌트를 모아놓은 것입니다.
       // 타고 들어가면 /leave/... 라우터 경로에 대한 처리를 확인할 수 있습니다.
