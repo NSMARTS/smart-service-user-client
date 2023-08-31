@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { map, merge, startWith, switchMap } from 'rxjs';
 import { MaterialsModule } from 'src/app/materials/materials.module';
+import { LeaveService } from 'src/app/services/leave/leave.service';
 
 @Component({
   selector: 'app-my-status',
@@ -12,6 +16,50 @@ import { MaterialsModule } from 'src/app/materials/materials.module';
   templateUrl: './my-status.component.html',
   styleUrls: ['./my-status.component.scss']
 })
-export class MyStatusComponent {
+export class MyStatusComponent implements AfterViewInit{
+  displayedColumns: string[] = ['createdAt', 'period','year', 'day', 'type', 'status'];
+  leaveDatabase: any | null;
+  data: any = [];
 
+  resultsLength = 0;
+  isLoadingResults = true;
+  isRateLimitReached = false;
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator ;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  ngAfterViewInit() {
+    this.getData()
+  }
+
+  constructor(private leaveService: LeaveService){}
+  
+  getData() {
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+
+    merge(this.sort.sortChange, this.paginator.page)
+    .pipe(
+      startWith({}),
+      switchMap(() => {
+        this.isLoadingResults = true;
+        return this.leaveService.searchLeavesThreeMonth(this.sort.active, this.sort.direction, this.paginator.pageIndex).pipe()
+      }),
+      map((data: any) => {
+        // Flip flag to show that loading has finished.
+        this.isLoadingResults = false;
+        this.isRateLimitReached = data === null;
+
+        if (data === null) {
+          return [];
+        }
+
+        // Only refresh the result length if there is new data. In case of rate
+        // limit errors, we do not want to reset the paginator to zero, as that
+        // would prevent users from re-triggering requests.
+        this.resultsLength = data.total_count;
+        return data.items;
+      }),
+    )
+    .subscribe(data => (this.data = data));
+  }
 }

@@ -1,5 +1,7 @@
 .main_area{
     padding: 40px;
+    overflow: auto;
+    z-index: -1 !important;
 
     @media (max-width: 816px) {
         padding: 20px;

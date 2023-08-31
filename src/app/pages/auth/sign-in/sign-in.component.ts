@@ -68,7 +68,7 @@ export class SignInComponent {
         }
       },
       error: (e) => {
-        console.error(e)
+        // console.error(e)
         this.errorAlert(e.error.message)
       }
     })

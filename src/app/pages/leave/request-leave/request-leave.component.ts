@@ -15,13 +15,18 @@ import {MatNativeDateModule} from '@angular/material/core';
 import { UserProfileData } from 'src/app/interfaces/user-profile-data.interface';
 import { ProfileService } from 'src/app/stores/profile/profile.service';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { LeaveService } from 'src/app/services/leave/leave.service';
+import { DialogService } from 'src/app/services/dialog/dialog.service';
+import { HolidayService } from 'src/app/services/holiday/holiday.service';
+import * as moment from 'moment';
+
 interface FormData {
-  leaveClassification: FormControl;
-  unitOfUse: FormControl;
-  reason: FormControl;
-  start: FormControl;
-  end: FormControl;
+  leaveType: FormControl;
+  leaveDay: FormControl;
+  leaveReason: FormControl;
+  leaveStartDate: FormControl;
+  leaveEndDate: FormControl;
 }
 
 @Component({
@@ -40,22 +45,78 @@ export class RequestLeaveComponent {
   userProfileData: UserProfileData | undefined;
   userProfile$ = toObservable(this.profileService.userProfile);
   requestLeaveForm: FormGroup = new FormGroup<FormData>({
-    leaveClassification: new FormControl('', [Validators.required]),
-    unitOfUse: new FormControl('', [Validators.required]),
-    reason: new FormControl('', [Validators.required]),
-    start: new FormControl<Date | null>(null, [Validators.required]),
-    end: new FormControl<Date | null>(null, [Validators.required]),
+    leaveType: new FormControl('', [Validators.required]),
+    leaveDay: new FormControl('', [Validators.required]),
+    leaveReason: new FormControl('', [Validators.required]),
+    leaveStartDate: new FormControl<Date | null>(null, [Validators.required]),
+    leaveEndDate: new FormControl<Date | null>(null, [Validators.required]),
   })
+
+  countryHoliday: any = [];
+  companyHoliday: any = [];
 
   constructor(
     private profileService: ProfileService, 
+    private leaveService: LeaveService,
+    private holidayService: HolidayService,
+    private dialogService: DialogService,
+    private router: Router,
   ) {
       this.userProfile$.subscribe(() => {
         this.userProfileData = this.profileService.userProfile().user;
       })
+
+      this.requestLeaveForm.get('leaveStartDate')?.valueChanges.subscribe(newValue => {
+        // Set the same value for leaveEndDate when leaveStartDate changes
+        if(this.requestLeaveForm.value.leaveDay = 'half')
+          this.requestLeaveForm.get('leaveEndDate')?.setValue(newValue);
+      });
+
+      this.requestCountryHoliday();
+      this.requestCompanyHoliday();
+  }
+  
+  myFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+
+    //국가 휴일 체크
+    const isCountryHoliday = this.countryHoliday.filter((holiday: any) => {
+      return moment(d).isSame(holiday.holidayDate)
+    })
+
+    //회사 휴일 체크
+    const isCompanyHoliday = this.companyHoliday.filter((holiday: any) => {
+      return moment(d).isSame(holiday.companyHolidayDate)
+    })
+
+    // Prevent Saturday and Sunday from being selected.
+    return day !== 0 && day !== 6 && !isCountryHoliday.length && !isCompanyHoliday.length;
+  };
+
+
+  requestCompanyHoliday() {
+    this.holidayService.requestCompanyHoliday().subscribe((res) => {
+      this.companyHoliday = res;
+    })
+  }
+
+  requestCountryHoliday() {
+    this.holidayService.requestCountryHoliday().subscribe((res) => {
+      this.countryHoliday = res;
+    })
   }
 
   requestLeave() {
-    console.log(this.requestLeaveForm.value)
+    this.leaveService.requestLeave(this.requestLeaveForm.value).subscribe({
+      next: (res: any) => {
+        if(res.message == 'success')
+        this.dialogService.openDialogPositive('request success');
+        this.router.navigate(['/leave/leave-request-list'])
+      },
+      error: (e) => {
+        // console.error(e)
+        this.dialogService.openDialogPositive(e)
+      }
+    })
   }
 }
