@@ -54,4 +54,12 @@ export class LeaveService {
     searchLeavesThreeMonth(sort: string, order: SortDirection, page: number){
       return this.http.get(this.baseUrl + `/leave/threeMonthAgo?sort=${sort}&order=${order}&page=${page + 1}`).pipe()
     }
+
+    leaveInformation() {
+      return this.http.get(this.baseUrl + '/leave/leaveInformation');
+    }
+
+    leaveInformationForStatus() {
+      return this.http.get(this.baseUrl + '/leave/leaveInformationForStatus');
+    }
 }

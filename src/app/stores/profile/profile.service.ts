@@ -26,11 +26,12 @@ export class ProfileService {
   getUserProfile() {
     return this.http.get(this.baseUrl + '/employee/profile').pipe(
       tap((res: any) => {
-        if(res.user.profile_img == '') {
+        console.log(res)
+        if(res.profileData.user.profile_img == '') {
           if(res.manager != null) {
-            res.manager.profile_img = '/assets/images/person.png'
+            res.profileData.manager.profile_img = '/assets/images/person.png'
           }else {
-            res.user.profile_img = '/assets/images/person.png'
+            res.profileData.user.profile_img = '/assets/images/person.png'
           }  
         }
         
@@ -42,6 +43,7 @@ export class ProfileService {
   }
 
   updateUserProfile(profile: any) {
+  
      this.userProfile.set(profile);
   }
 

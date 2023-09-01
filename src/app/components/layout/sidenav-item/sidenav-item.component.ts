@@ -58,7 +58,6 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
   router = inject(Router)
 
   subscriptions: Subscription | undefined;
-
   // navigationService 에서 isLink, isDropdown, isSubheading 꺼내서 사용
   isLink = this.navigationService.isLink;
   isDropdown = this.navigationService.isDropdown;
@@ -70,13 +69,16 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
 
   userProfile$ = toObservable(this.profileService.userProfile);
 
+  userLeaveData: any;
   constructor(
     private profileService: ProfileService, 
     private navigationService: NavigationService
   ) {
     this.userProfile$.subscribe(() => {
-      if(this.profileService.userProfile().user !== undefined){
-        this.flag.isManager = this.profileService.userProfile().user.isManager;
+       this.userLeaveData = this.profileService.userProfile().personalLeaveData;
+      if(this.profileService.userProfile().profileData?.user !== undefined){
+        this.flag.isManager = this.profileService.userProfile().profileData?.user.isManager;
+        
       } 
     })
   }
@@ -206,5 +208,14 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
 
 
 
+
+
+  isReplacement(item: NavigationLink) {
+    if(item.isReplacementDay == false || item.isReplacementDay == undefined) {
+      return true;
+    }
+
+    return item.isReplacementDay == true && this.userLeaveData?.isReplacementDay == true 
+  }
 
 }

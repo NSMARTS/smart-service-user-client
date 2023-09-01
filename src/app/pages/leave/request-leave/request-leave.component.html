@@ -22,13 +22,13 @@
                         <div class="right_box">
                             <div>
                                 <div>
-                                    <span>Annual Leave: </span>
+                                    <span>Annual Leave: {{employeeAnnualLeave}}</span>
+                                </div>
+                                <div *ngIf="userLeaveData?.isRollover">
+                                    <span>Rollover: {{employeeRollover}}</span>
                                 </div>
                                 <div>
-                                    <span>Rollover: </span>
-                                </div>
-                                <div>
-                                    <span>Sick Leave: </span>
+                                    <span>Sick Leave: {{employeeSickLeave}}</span>
                                 </div>
                             </div>
 
@@ -44,6 +44,8 @@
                                 <mat-select formControlName="leaveType">
                                     <mat-option value="annualLeave">Annual Leave</mat-option>
                                     <mat-option value="sickLeave">Sick Leave</mat-option>
+                                    <mat-option *ngIf="userLeaveData?.isRollover"
+                                        value="rollover">Rollover</mat-option>
                                 </mat-select>
                             </mat-form-field>
                             <mat-form-field appearance="fill">

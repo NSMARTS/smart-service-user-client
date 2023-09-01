@@ -43,6 +43,8 @@ interface FormData {
 })
 export class RequestLeaveComponent {
   userProfileData: UserProfileData | undefined;
+  userLeaveData : any;
+
   userProfile$ = toObservable(this.profileService.userProfile);
   requestLeaveForm: FormGroup = new FormGroup<FormData>({
     leaveType: new FormControl('', [Validators.required]),
@@ -55,6 +57,10 @@ export class RequestLeaveComponent {
   countryHoliday: any = [];
   companyHoliday: any = [];
 
+  employeeAnnualLeave: number | undefined;
+  employeeRollover: number | undefined;
+  employeeSickLeave: number | undefined;
+
   constructor(
     private profileService: ProfileService, 
     private leaveService: LeaveService,
@@ -63,7 +69,9 @@ export class RequestLeaveComponent {
     private router: Router,
   ) {
       this.userProfile$.subscribe(() => {
-        this.userProfileData = this.profileService.userProfile().user;
+        this.userProfileData = this.profileService.userProfile().profileData?.user;
+        this.userLeaveData = this.profileService.userProfile().personalLeaveData;
+
       })
 
       this.requestLeaveForm.get('leaveStartDate')?.valueChanges.subscribe(newValue => {
@@ -74,6 +82,12 @@ export class RequestLeaveComponent {
 
       this.requestCountryHoliday();
       this.requestCompanyHoliday();
+
+      this.leaveService.leaveInformation().subscribe((res:any) => {
+        this.employeeAnnualLeave = res.employeeAnnualLeave;
+        this.employeeRollover = res.employeeRollover;
+        this.employeeSickLeave = res.employeeSickLeave;
+      });
   }
   
   myFilter = (d: Date | null): boolean => {
@@ -107,11 +121,18 @@ export class RequestLeaveComponent {
   }
 
   requestLeave() {
-    this.leaveService.requestLeave(this.requestLeaveForm.value).subscribe({
+    this.leaveService.requestLeave({...this.requestLeaveForm.value, 
+      employeeAnnualLeave: this.employeeAnnualLeave, 
+      employeeRollover: this.employeeRollover,
+      employeeSickLeave: this.employeeSickLeave
+    }).subscribe({
       next: (res: any) => {
-        if(res.message == 'success')
-        this.dialogService.openDialogPositive('request success');
-        this.router.navigate(['/leave/leave-request-list'])
+        if(res.message == 'success') {
+          this.dialogService.openDialogPositive('request success');
+          this.router.navigate(['/leave/leave-request-list'])
+        }else{
+          this.dialogService.openDialogNegative(res.message);
+        }
       },
       error: (e) => {
         // console.error(e)

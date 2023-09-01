@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map, merge, startWith, switchMap } from 'rxjs';
@@ -16,7 +16,7 @@ import { LeaveService } from 'src/app/services/leave/leave.service';
   templateUrl: './my-status.component.html',
   styleUrls: ['./my-status.component.scss']
 })
-export class MyStatusComponent implements AfterViewInit{
+export class MyStatusComponent implements AfterViewInit, OnInit{
   displayedColumns: string[] = ['createdAt', 'period','year', 'day', 'type', 'status'];
   leaveDatabase: any | null;
   data: any = [];
@@ -25,6 +25,10 @@ export class MyStatusComponent implements AfterViewInit{
   isLoadingResults = true;
   isRateLimitReached = false;
 
+  annualLeave: any;
+  rollover: any;
+  sickLeave: any;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator ;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -32,7 +36,17 @@ export class MyStatusComponent implements AfterViewInit{
     this.getData()
   }
 
-  constructor(private leaveService: LeaveService){}
+  constructor(private leaveService: LeaveService){
+
+  }
+
+  ngOnInit() {
+    this.leaveService.leaveInformationForStatus().subscribe((res: any) => {
+      this.annualLeave = res.AnnualLeave,
+      this.rollover = res.Rollover,
+      this.sickLeave = res.SickLeave
+    })
+  }
   
   getData() {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));

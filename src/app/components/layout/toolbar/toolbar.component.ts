@@ -39,7 +39,7 @@ export class ToolbarComponent implements OnInit{
     private profileService: ProfileService, 
     private router: Router) {
       this.userProfile$.subscribe(() => {
-        this.userProfileData = this.profileService.userProfile().user;
+        this.userProfileData = this.profileService.userProfile().profileData?.user;
       })
   }
 
