@@ -10,6 +10,9 @@ import { LeaveService } from 'src/app/services/leave/leave.service';
 import {merge, Observable, of as observableOf, Subject} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { LeaveRequestDetailsComponent } from 'src/app/components/dialog/leave-request-details/leave-request-details.component';
+
 
 interface FormData {
   leaveType: FormControl;
@@ -55,7 +58,8 @@ export class LeaveRequestListComponent implements AfterViewInit{
 
 
   constructor(
-    private leaveService: LeaveService
+    private leaveService: LeaveService,
+    public dialog: MatDialog,
   ) {}
 
   SearchRequest() {
@@ -93,5 +97,19 @@ export class LeaveRequestListComponent implements AfterViewInit{
       }),
     )
     .subscribe(data => (this.data = data));
+  }
+
+  openDialogPendingLeaveDetail(data: any) {
+    const dialogRef = this.dialog.open(LeaveRequestDetailsComponent, {
+      maxWidth: '600px',
+      width : '100%',
+      data
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+      if(result == 'success') {
+        this.getData()
+      }
+    })
   }
 }

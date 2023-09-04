@@ -1,4 +1,8 @@
 <div>
+    <div class="full-loading-shade" *ngIf="leaveLoadingStatus">
+        <mat-spinner></mat-spinner>
+    </div>
+
     <div class="page_header">
         <h1 class="page_title">Request Leave</h1>
     </div>
@@ -44,8 +48,7 @@
                                 <mat-select formControlName="leaveType">
                                     <mat-option value="annualLeave">Annual Leave</mat-option>
                                     <mat-option value="sickLeave">Sick Leave</mat-option>
-                                    <mat-option *ngIf="userLeaveData?.isRollover"
-                                        value="rollover">Rollover</mat-option>
+                                    <mat-option *ngIf="userLeaveData?.isRollover" value="rollover">Rollover</mat-option>
                                 </mat-select>
                             </mat-form-field>
                             <mat-form-field appearance="fill">

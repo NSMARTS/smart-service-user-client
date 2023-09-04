@@ -10,7 +10,7 @@ export const myManagerGuard: CanActivateFn = (route, state) => {
   const userProfile$ = toObservable(profileService.userProfile);
 
   userProfile$.subscribe(() => {
-    if(profileService.userProfile().user && profileService.userProfile().user.isManager) {
+    if(profileService.userProfile().profileData?.user && profileService.userProfile().profileData.user.isManager) {
       return true;
     }
     router.navigate(['main'])

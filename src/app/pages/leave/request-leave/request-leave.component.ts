@@ -61,6 +61,8 @@ export class RequestLeaveComponent {
   employeeRollover: number | undefined;
   employeeSickLeave: number | undefined;
 
+  leaveLoadingStatus: boolean = true;
+
   constructor(
     private profileService: ProfileService, 
     private leaveService: LeaveService,
@@ -83,10 +85,12 @@ export class RequestLeaveComponent {
       this.requestCountryHoliday();
       this.requestCompanyHoliday();
 
+      this.leaveLoadingStatus = true;
       this.leaveService.leaveInformation().subscribe((res:any) => {
         this.employeeAnnualLeave = res.employeeAnnualLeave;
         this.employeeRollover = res.employeeRollover;
         this.employeeSickLeave = res.employeeSickLeave;
+        this.leaveLoadingStatus = false;
       });
   }
   

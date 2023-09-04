@@ -38,6 +38,7 @@ export class ToolbarComponent implements OnInit{
     private authService: AuthService, 
     private profileService: ProfileService, 
     private router: Router) {
+      
       this.userProfile$.subscribe(() => {
         this.userProfileData = this.profileService.userProfile().profileData?.user;
       })
@@ -49,7 +50,12 @@ export class ToolbarComponent implements OnInit{
    * @description 툴팁이 생성될 때 유저 데이터를 가져온다 
    */
   ngOnInit(): void {
-    this.getUserProfileData()
+    if(this.authService.getTokenInfo().isManager) {
+      this.getManagerProfileData()
+    } else {
+      this.getUserProfileData()
+    }
+    
   }
 
   /**
@@ -70,6 +76,16 @@ export class ToolbarComponent implements OnInit{
    */
   getUserProfileData() {
     this.profileService.getUserProfile().subscribe()
+  }
+
+  /**
+   * @작성자 임호균
+   * @작성일 2023-08-25
+   * @description 매니저 데이터를 가져오는 함수
+   * @reference profile.service.ts
+   */
+  getManagerProfileData() {
+    this.profileService.getManagerProfile().subscribe()
   }
 
   /**

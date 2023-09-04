@@ -148,7 +148,8 @@
                     <ng-container matColumnDef="button">
                         <th mat-header-cell *matHeaderCellDef>detail</th>
                         <td mat-cell *matCellDef="let row">
-                            <button mat-flat-button color="primary">detail</button>
+                            <button mat-flat-button color="primary"
+                                (click)="openDialogPendingLeaveDetail(row)">detail</button>
                         </td>
                     </ng-container>
 

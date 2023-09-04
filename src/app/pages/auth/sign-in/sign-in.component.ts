@@ -25,6 +25,7 @@ import { DialogService } from 'src/app/services/dialog/dialog.service';
 interface FormData {
   email: FormControl;
   password: FormControl;
+  isManager: FormControl;
 }
 @Component({
   selector: 'app-sign-in',
@@ -40,10 +41,13 @@ interface FormData {
 export class SignInComponent {
   signInForm: FormGroup = new FormGroup<FormData>({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required])
+    password: new FormControl('', [Validators.required]),
+    isManager: new FormControl(false)
   })
 
   params: Params | undefined;
+
+  
 
   constructor(public dialog: MatDialog, private authService: AuthService, private route: ActivatedRoute, private router: Router,private dialogService: DialogService) {
     // const dialogRef = this.dialog.open(ProgressDialogComponent);
@@ -56,22 +60,46 @@ export class SignInComponent {
    * @수정자 임호균
    * @수정일 2023-08-25
    * @description 로그인 후 토큰 에러 발생하는 버그 해결
+   * 
+   * @수정자
+   * @수정일 2023-09-04
+   * @description 매니저 로그인 회원 로그인 분리
    */
   signIn() {
-    this.authService.signIn(this.signInForm.value).subscribe({
-      next: (res: any) => {
-        if(this.params!['redirectURL'] != '' && this.params!['redirectURL'] != null && res.token != '' && res.token != null) {
-          this.router.navigate([`${this.params!['redirectURL']}`])
+    console.log(this.signInForm.value)
+    //매니저 로그인 분리
+    if(this.signInForm.value.isManager){
+      this.authService.managerSignIn(this.signInForm.value).subscribe({
+        next: (res: any) => {
+          if(this.params!['redirectURL'] != '' && this.params!['redirectURL'] != null && res.token != '' && res.token != null) {
+            this.router.navigate([`${this.params!['redirectURL']}`])
+          }
+          else if(res.token != '' && res.token != null) {
+            this.router.navigate(['main'])
+          }
+        },
+        error: (e) => {
+          // console.error(e)
+          this.errorAlert(e.error.message)
         }
-        else if(res.token != '' && res.token != null) {
-          this.router.navigate(['main'])
+      })
+    }else{
+      this.authService.signIn(this.signInForm.value).subscribe({
+        next: (res: any) => {
+          if(this.params!['redirectURL'] != '' && this.params!['redirectURL'] != null && res.token != '' && res.token != null) {
+            this.router.navigate([`${this.params!['redirectURL']}`])
+          }
+          else if(res.token != '' && res.token != null) {
+            this.router.navigate(['main'])
+          }
+        },
+        error: (e) => {
+          // console.error(e)
+          this.errorAlert(e.error.message)
         }
-      },
-      error: (e) => {
-        // console.error(e)
-        this.errorAlert(e.error.message)
-      }
-    })
+      })
+    }
+    
   }
 
   errorAlert(err: string) {

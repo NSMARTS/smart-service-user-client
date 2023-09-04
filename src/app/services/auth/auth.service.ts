@@ -58,6 +58,25 @@ export class AuthService {
   }
 
   /**
+* @작성일 2023-09-04
+   * @작성장 임호균
+   * @description 매니저 로그인 로직
+   * @param loginData SignInData [email: string, password: string]
+   * @returns Observable<Token>
+   */
+  managerSignIn(loginData: SignInData) : Observable<Token> {
+    return this.http.post<Token>(this.baseUrl + `/manager/auth/managerSignIn`, loginData).pipe(
+      shareReplay(),
+      tap(
+        (res: any) => {
+          this.setToken(res.token)
+        }
+      ),
+      shareReplay()
+    )
+  }
+
+  /**
    * @작성일 2023-08-22
    * @작성자 임호균
    * @description 로그아웃

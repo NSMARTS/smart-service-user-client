@@ -109,34 +109,34 @@ export const sidenavRouteInfo: NavigationItem[] = [
                         type: 'link',
                         label: 'Employee List',
                         route: '/employee-management/employee-list',
-                        icon: 'update',
+                        icon: 'format_list_bulleted',
                         isManager: true,
                         isReplacementDay: false
                     },
-                    {
-                        type: 'link',
-                        label: 'Employee Leave Request',
-                        route: '/employee-management/leave-request',
-                        icon: 'update',
-                        isManager: true,
-                        isReplacementDay: false
-                    },
+                    // {
+                    //     type: 'link',
+                    //     label: 'Employee Leave Request',
+                    //     route: '/employee-management/leave-request',
+                    //     icon: 'request_quote',
+                    //     isManager: true,
+                    //     isReplacementDay: false
+                    // },
                     {
                         type: 'link',
                         label: 'RD Confirming Request',
                         route: '/employee-management/employee-rd-request',
-                        icon: 'update',
+                        icon: 'recommend',
                         isManager: true,
                         isReplacementDay: false
                     },
-                    {
-                        type: 'link',
-                        label: 'Employee Register Request',
-                        route: '/employee-management/register-request',
-                        icon: 'update',
-                        isManager: true,
-                        isReplacementDay: false 
-                    }
+                    // {
+                    //     type: 'link',
+                    //     label: 'Employee Register Request',
+                    //     route: '/employee-management/register-request',
+                    //     icon: 'how_to_reg',
+                    //     isManager: true,
+                    //     isReplacementDay: false 
+                    // }
                 ]
             }
         ]

@@ -6,42 +6,100 @@
         <div class="my_status_card_container">
             <section class="my_status_card_container">
                 <mat-card style="width: 100%;">
+                    <div class="full-loading-shade" *ngIf="isStatusLoading">
+                        <mat-spinner></mat-spinner>
+                    </div>
                     <mat-card-header>
                         <h2>Annual Leave</h2>
                     </mat-card-header>
                     <mat-card-content>
                         <mat-list role="list">
-                            <mat-list-item role="listitem">Total {{annualLeave?.total}}</mat-list-item>
-                            <mat-list-item role="listitem">Taken {{annualLeave?.taken}}</mat-list-item>
-                            <mat-list-item role="listitem">Balance {{annualLeave?.balance}}</mat-list-item>
+                            <mat-list-item role="listitem">
+                                <div class="listItems">
+                                    <div>Total</div>
+                                    <div>{{annualLeave?.total}}</div>
+                                </div>
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <div class="listItems">
+                                    <div>Taken</div>
+                                    <div>{{annualLeave?.taken}}</div>
+                                </div>
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <div class="listItems">
+                                    <div>
+                                        Balance
+                                    </div>
+                                    <div>
+                                        {{annualLeave?.balance}}
+                                    </div>
+                                </div>
+                            </mat-list-item>
                         </mat-list>
                     </mat-card-content>
                 </mat-card>
             </section>
             <section class="my_status_card_container">
                 <mat-card style="width: 100%;">
+                    <div class="full-loading-shade" *ngIf="isStatusLoading">
+                        <mat-spinner></mat-spinner>
+                    </div>
                     <mat-card-header>
                         <h2>Sick Leave</h2>
                     </mat-card-header>
                     <mat-card-content>
                         <mat-list role="list">
-                            <mat-list-item role="listitem">Total {{sickLeave?.total}}</mat-list-item>
-                            <mat-list-item role="listitem">Taken {{sickLeave?.taken}}</mat-list-item>
-                            <mat-list-item role="listitem">Balance {{sickLeave?.balance}}</mat-list-item>
+                            <mat-list-item role="listitem">
+                                <div class="listItems">
+                                    <div>Total</div>
+                                    <div>{{sickLeave?.total}}</div>
+                                </div>
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <div class="listItems">
+                                    <div>Taken</div>
+                                    <div>{{sickLeave?.taken}}</div>
+                                </div>
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <div class="listItems">
+                                    <div>Balance</div>
+                                    <div>{{sickLeave?.balance}}</div>
+                                </div>
+                            </mat-list-item>
                         </mat-list>
                     </mat-card-content>
                 </mat-card>
             </section>
             <section class="my_status_card_container">
                 <mat-card style="width: 100%;">
+                    <div class="full-loading-shade" *ngIf="isStatusLoading">
+                        <mat-spinner></mat-spinner>
+                    </div>
                     <mat-card-header>
                         <h2>Rollover</h2>
                     </mat-card-header>
                     <mat-card-content>
                         <mat-list role="list">
-                            <mat-list-item role="listitem">Total {{rollover?.total}}</mat-list-item>
-                            <mat-list-item role="listitem">Taken {{rollover?.taken}}</mat-list-item>
-                            <mat-list-item role="listitem">Balance {{rollover?.balance}}</mat-list-item>
+                            <mat-list-item role="listitem">
+                                <div class="listItems">
+                                    <div>Total</div>
+                                    <div>{{rollover?.total}}</div>
+                                </div>
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <div class="listItems">
+                                    <div>Taken</div>
+                                    <div>{{rollover?.taken}}</div>
+                                </div>
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <div class="listItems">
+                                    <div>Balance</div>
+                                    <div>{{rollover?.balance}}</div>
+                                </div>
+                            </mat-list-item>
                         </mat-list>
                     </mat-card-content>
                 </mat-card>

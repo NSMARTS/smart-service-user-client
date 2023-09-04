@@ -35,9 +35,14 @@
                     <mat-error *ngIf="signInForm.controls['password'].hasError('required')">Password is
                         <strong>required</strong></mat-error>
                 </mat-form-field>
-                <div style="margin-top: 1rem;">
+                <div style="margin-top: 1rem; display: flex; justify-content: space-between;">
                     <button mat-raised-button color="primary" type="submit" [disabled]="!signInForm.valid">SIGN
                         IN</button>
+
+                    <section>
+                        <mat-checkbox formControlName="isManager"><span
+                                style="font-weight: bold;">MANAGER</span></mat-checkbox>
+                    </section>
                 </div>
             </form>
         </mat-card-content>

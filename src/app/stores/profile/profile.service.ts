@@ -26,7 +26,6 @@ export class ProfileService {
   getUserProfile() {
     return this.http.get(this.baseUrl + '/employee/profile').pipe(
       tap((res: any) => {
-        console.log(res)
         if(res.profileData.user.profile_img == '') {
           if(res.manager != null) {
             res.profileData.manager.profile_img = '/assets/images/person.png'
@@ -36,6 +35,29 @@ export class ProfileService {
         }
         
 
+        this.updateUserProfile(res);
+        return res.result = true;
+      })
+    )
+  }
+
+  /**
+   * @작성자 임호균
+   * @작성일 2023-09-04
+   * @description 매니저 프로필 정보 받아오는 로직 추가
+   * @returns 
+   */
+  getManagerProfile() {
+    return this.http.get(this.baseUrl + '/manager/profile').pipe(
+      tap((res: any) => {
+        if(res.profileData.user.profile_img == '') {
+          if(res.manager != null) {
+            res.profileData.manager.profile_img = '/assets/images/person.png'
+          }else {
+            res.profileData.user.profile_img = '/assets/images/person.png'
+          }  
+        }
+      
         this.updateUserProfile(res);
         return res.result = true;
       })

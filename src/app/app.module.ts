@@ -16,6 +16,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 // Config
 import { ENV } from './config/config';
 
+
 export function tokenGetter() {
 	return localStorage.getItem(ENV.tokenName);
 }

@@ -29,6 +29,8 @@ export class MyStatusComponent implements AfterViewInit, OnInit{
   rollover: any;
   sickLeave: any;
 
+  isStatusLoading = true;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator ;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -41,10 +43,13 @@ export class MyStatusComponent implements AfterViewInit, OnInit{
   }
 
   ngOnInit() {
+    this.isStatusLoading = true;
     this.leaveService.leaveInformationForStatus().subscribe((res: any) => {
       this.annualLeave = res.AnnualLeave,
       this.rollover = res.Rollover,
       this.sickLeave = res.SickLeave
+      this.isStatusLoading = false;
+      
     })
   }
   

@@ -62,4 +62,14 @@ export class LeaveService {
     leaveInformationForStatus() {
       return this.http.get(this.baseUrl + '/leave/leaveInformationForStatus');
     }
+
+    /**
+     * @작성자 임호균
+     * @작성일 2023-09-04
+     * @param leaveId 취소하려는 휴가의 데이터베이스 아이디
+     * @returns 
+     */
+    cancelLeaveRequest(leaveId: string) {
+      return this.http.post(this.baseUrl + '/leave/cancelLeave', {_id : leaveId})
+    }
 }
