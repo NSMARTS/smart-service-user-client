@@ -72,20 +72,28 @@
                         {{data.rejector.email}}
                     </td>
                 </tr>
-                <tr *ngIf="data.rejectedReason">
+                <tr>
                     <th>
                         <b>Rejected Reason</b>
                     </th>
-                    <td>
-                        {{data.rejectedReason}}
+                    <td *ngIf="data.status == 'approve'">
+                        <mat-form-field style="width: 100%;">
+                            <mat-label>Reason</mat-label>
+                            <textarea [formControl]="rejectedReason" matInput rows="6"></textarea>
+                        </mat-form-field>
+                    </td>
+                    <td *ngIf="data.status == 'rejected'">
+                        {{data?.rejectedReason}}
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
     <div mat-dialog-actions>
-        <button color="primary" mat-flat-button mat-dialog-close>Confirm</button>
+        <button mat-flat-button mat-dialog-close>Confirm</button>
         <button *ngIf="data.status == 'approve'" color="accent" mat-flat-button
-            (click)="cancelRequest()">Cancel</button>
+            (click)="rejectRequest()">rejected</button>
+        <!-- <button *ngIf="data.status == 'cancel' || data.status == 'reject'" color="primary" mat-flat-button
+            (click)="approveRequest()">Approve</button> -->
     </div>
 </div>

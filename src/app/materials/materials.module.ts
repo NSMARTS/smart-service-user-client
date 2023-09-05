@@ -21,6 +21,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
   exports: [
@@ -46,7 +47,8 @@ import {MatDividerModule} from '@angular/material/divider';
     MatSortModule,
     MatGridListModule,
     MatCheckboxModule,
-    MatDividerModule
+    MatDividerModule,
+    MatAutocompleteModule
   ]
 })
 export class MaterialsModule { }

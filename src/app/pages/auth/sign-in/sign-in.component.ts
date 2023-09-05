@@ -66,7 +66,7 @@ export class SignInComponent {
    * @description 매니저 로그인 회원 로그인 분리
    */
   signIn() {
-    console.log(this.signInForm.value)
+    // console.log(this.signInForm.value)
     //매니저 로그인 분리
     if(this.signInForm.value.isManager){
       this.authService.managerSignIn(this.signInForm.value).subscribe({

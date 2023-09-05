@@ -27,6 +27,7 @@ export function tokenGetter() {
     ProfileEditComponent,
     CreateSpaceDialogComponent,
     MainComponent,
+
   ],
   imports: [
     BrowserModule,

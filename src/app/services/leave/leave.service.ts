@@ -72,4 +72,34 @@ export class LeaveService {
     cancelLeaveRequest(leaveId: string) {
       return this.http.post(this.baseUrl + '/leave/cancelLeave', {_id : leaveId})
     }
+
+
+    //================================================manager==================================
+
+    /**
+     * @작성자 임호균
+     * @작성일 2023-09-05
+     * @param leaveId 승인하려는 휴가의 데이터베이스 아이디
+     * @returns 
+     */
+    approveLeaveRequest(leaveId: string) {
+      return this.http.post(this.baseUrl + '/manager/leave/approveLeave', {_id : leaveId})
+    }
+
+    /**
+     * @작성자 임호균
+     * @작성일 2023-09-05
+     * @param leaveId 거절하려는 휴가의 데이터베이스 아이디
+     * @returns 
+     */
+    rejectLeaveRequest(leaveId: string, rejectedReason: string) {
+      return this.http.post(this.baseUrl + '/manager/leave/rejectLeave', {_id : leaveId, rejectedReason})
+    }
+
+    //manager
+    //======================================================================================================================
+
+    getLeaveList(sort: string, order: SortDirection, page: number, leaveType: string, leaveDay: string, leaveStartDate: Date, leaveEndDate: Date, status: string, email: string) {
+      return this.http.get(this.baseUrl + `/manager/leave?sort=${sort}&order=${order}&page=${page + 1}&leaveType=${leaveType}&leaveDay=${leaveDay}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}&email=${email}`);
+    }
 }

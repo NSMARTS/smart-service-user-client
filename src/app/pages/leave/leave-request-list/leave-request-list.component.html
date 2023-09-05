@@ -4,84 +4,80 @@
         <button mat-flat-button color="primary" [routerLink]="['/leave/request-leave']">Request Leave</button>
     </div>
     <section class="search_section">
-        <form>
-            <mat-card>
-                <form [formGroup]="searchForm" (ngSubmit)="SearchRequest()">
-                    <mat-card-content>
-                        <div class="search_container">
-                            <div>
-                                <div class="search_tile">
-                                    <span class="search_title">Type</span>
-                                    <!-- type 연가, 병가, 이월, 대체 휴가 -->
-                                    <mat-form-field appearance="fill">
-                                        <mat-label>Leave Classification</mat-label>
-                                        <mat-select formControlName="leaveType">
-                                            <mat-option value="">All</mat-option>
-                                            <mat-option value="annualLeave">Annual Leave</mat-option>
-                                            <mat-option value="rollover">Rollover</mat-option>
-                                            <mat-option value="sickLeave">Sick Leave</mat-option>
-                                            <mat-option value="replacementDay">Replacement Day</mat-option>
-                                        </mat-select>
+        <mat-card>
+            <form [formGroup]="searchForm" (ngSubmit)="SearchRequest()">
+                <mat-card-content>
+                    <div class="search_container">
+                        <div>
+                            <div class="search_tile">
+                                <span class="search_title">Type</span>
+                                <!-- type 연가, 병가, 이월, 대체 휴가 -->
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Leave Classification</mat-label>
+                                    <mat-select formControlName="leaveType">
+                                        <mat-option value="">All</mat-option>
+                                        <mat-option value="annualLeave">Annual Leave</mat-option>
+                                        <mat-option value="rollover">Rollover</mat-option>
+                                        <mat-option value="sickLeave">Sick Leave</mat-option>
+                                        <mat-option value="replacementDay">Replacement Day</mat-option>
+                                    </mat-select>
 
-                                    </mat-form-field>
-                                    <!-- 연차 반차 -->
-                                    <mat-form-field appearance="fill">
-                                        <mat-label>Unit of Use</mat-label>
-                                        <mat-select formControlName="leaveDay">
-                                            <mat-option value="">All</mat-option>
-                                            <mat-option value="day">Day</mat-option>
-                                            <mat-option value="half">Half</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
+                                </mat-form-field>
+                                <!-- 연차 반차 -->
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Unit of Use</mat-label>
+                                    <mat-select formControlName="leaveDay">
+                                        <mat-option value="">All</mat-option>
+                                        <mat-option value="day">Day</mat-option>
+                                        <mat-option value="half">Half</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
 
-                            </div>
-                            <div>
-                                <div class="search_tile">
-                                    <span class="search_title">Period</span>
-                                    <!-- 언제 부터 언제 까지 휴가 검색 -->
-                                    <mat-form-field>
-                                        <mat-label>Enter a date range</mat-label>
-                                        <mat-date-range-input [formGroup]="searchForm" [rangePicker]="picker">
-                                            <input matStartDate formControlName="leaveStartDate"
-                                                placeholder="Start date">
-                                            <input matEndDate formControlName="leaveEndDate" placeholder="End date">
-                                        </mat-date-range-input>
-                                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                                        <mat-date-range-picker #picker>
-                                            <mat-datepicker-actions>
-                                                <button mat-button matDatepickerCancel>Cancel</button>
-                                                <button mat-raised-button color="primary"
-                                                    matDatepickerApply>Apply</button>
-                                            </mat-datepicker-actions>
-                                        </mat-date-range-picker>
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="search_tile">
-                                    <span class="search_title">Status</span>
-                                    <!-- 상태  -->
-                                    <mat-form-field appearance="fill">
-                                        <mat-label>Status</mat-label>
-                                        <mat-select formControlName="status">
-                                            <mat-option value="">All</mat-option>
-                                            <mat-option value="approve">approved</mat-option>
-                                            <mat-option value="reject">rejected</mat-option>
-                                            <mat-option value="cancel">cancel</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
+                        </div>
+                        <div>
+                            <div class="search_tile">
+                                <span class="search_title">Period</span>
+                                <!-- 언제 부터 언제 까지 휴가 검색 -->
+                                <mat-form-field>
+                                    <mat-label>Enter a date range</mat-label>
+                                    <mat-date-range-input [formGroup]="searchForm" [rangePicker]="picker">
+                                        <input matStartDate formControlName="leaveStartDate" placeholder="Start date">
+                                        <input matEndDate formControlName="leaveEndDate" placeholder="End date">
+                                    </mat-date-range-input>
+                                    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker>
+                                        <mat-datepicker-actions>
+                                            <button mat-button matDatepickerCancel>Cancel</button>
+                                            <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+                                        </mat-datepicker-actions>
+                                    </mat-date-range-picker>
+                                </mat-form-field>
                             </div>
                         </div>
-                    </mat-card-content>
-                    <mat-card-actions align="end">
-                        <button mat-flat-button color="primary" type="submit">SEARCH</button>
-                    </mat-card-actions>
-                </form>
-            </mat-card>
-        </form>
+                        <div>
+                            <div class="search_tile">
+                                <span class="search_title">Status</span>
+                                <!-- 상태  -->
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Status</mat-label>
+                                    <mat-select formControlName="status">
+                                        <mat-option value="">All</mat-option>
+                                        <mat-option value="approve">approved</mat-option>
+                                        <mat-option value="reject">rejected</mat-option>
+                                        <mat-option value="cancel">cancel</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button mat-flat-button color="primary" type="submit">SEARCH</button>
+                </mat-card-actions>
+            </form>
+        </mat-card>
     </section>
 
     <section class="table_section mat-elevation-z1">
