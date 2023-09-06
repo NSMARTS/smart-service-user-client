@@ -100,6 +100,7 @@ export class LeaveService {
     //======================================================================================================================
 
     getLeaveList(sort: string, order: SortDirection, page: number, leaveType: string, leaveDay: string, leaveStartDate: Date, leaveEndDate: Date, status: string, email: string) {
+
       return this.http.get(this.baseUrl + `/manager/leave?sort=${sort}&order=${order}&page=${page + 1}&leaveType=${leaveType}&leaveDay=${leaveDay}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}&email=${email}`);
     }
 }

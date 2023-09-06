@@ -73,11 +73,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>
+                    <th *ngIf="data.status == 'approve' || data.status == 'rejected'">
                         <b>Rejected Reason</b>
                     </th>
-                    <td *ngIf="data.status == 'approve'">
-                        <mat-form-field style="width: 100%;">
+                    <td *ngIf=" data.status=='approve'">
+                        <mat-form-field style=" width: 100%;">
                             <mat-label>Reason</mat-label>
                             <textarea [formControl]="rejectedReason" matInput rows="6"></textarea>
                         </mat-form-field>

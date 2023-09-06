@@ -70,13 +70,12 @@ export class EmployeeLeaveStatusComponent implements AfterViewInit, OnInit{
 
   getData() {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-
     merge(this.sort.sortChange, this.paginator.page)
     .pipe(
       startWith({}),
       switchMap(() => {
         this.isLoadingResults = true;
-        return this.leaveService.getLeaveList(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.searchForm.value.leaveType, this.searchForm.value.leaveDay, this.searchForm.value.leaveStartDate, this.searchForm.value.leaveEndDate, this.searchForm.value.status, this.searchForm.value.email).pipe()
+        return this.leaveService.getLeaveList(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.searchForm.value.leaveType, this.searchForm.value.leaveDay, this.searchForm.value.leaveStartDate, this.searchForm.value.leaveEndDate, this.searchForm.value.status, this.searchForm.value.email.email ? this.searchForm.value.email.email : this.searchForm.value.email).pipe()
       }),
       map((data: any) => {
         // Flip flag to show that loading has finished.
@@ -87,7 +86,7 @@ export class EmployeeLeaveStatusComponent implements AfterViewInit, OnInit{
         this.filteredOptions = this.searchForm.get('email')?.valueChanges.pipe(
           startWith(''),
           map(value => {
-            const name = typeof value === 'string' ? value : value?.name;
+            const name = typeof value === 'string' ? value : value?.email;
             return name ? this._filter(name as string) : this.options.slice();
           }),
         );
