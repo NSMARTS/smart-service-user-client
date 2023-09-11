@@ -103,4 +103,36 @@ export class LeaveService {
 
       return this.http.get(this.baseUrl + `/manager/leave?sort=${sort}&order=${order}&page=${page + 1}&leaveType=${leaveType}&leaveDay=${leaveDay}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}&email=${email}`);
     }
+
+
+
+
+    requestReplacementConfirm(data: any) {
+      return this.http.post(this.baseUrl + '/leave/rdRequestConfirm', data)
+    }
+
+    replacementConfirmList(sort: string, order: SortDirection, page: number) {
+      return this.http.get(this.baseUrl + `/manager/leave/replacementConfirmList?sort=${sort}&order=${order}&page=${page + 1}`)
+    }
+
+    
+    replacementList(sort: string, order: SortDirection, page: number) {
+      return this.http.get(this.baseUrl + `/leave/rdList?sort=${sort}&order=${order}&page=${page + 1}`)
+    }
+
+    replacementInfo(_id: string) {
+      return this.http.get(this.baseUrl + `/leave/rdOne?_id=${_id}`)
+    }
+
+    requestReplacementLeave(data: any) {
+      return this.http.post(this.baseUrl + '/leave/replacementRequest', data);
+    }
+
+    acceptReplacementConfirm(data: any) {
+      return this.http.post(this.baseUrl + '/manager/leave/acceptRdRequestConfirm', data)
+    }
+
+    rejectReplacementConfirm(data: any) { 
+      return this.http.post(this.baseUrl + '/manager/leave/rejectRdRequestConfirm', data);
+    }
 }

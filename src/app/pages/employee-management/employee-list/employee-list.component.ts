@@ -17,7 +17,7 @@ type NewType = MatPaginator;
   styleUrls: ['./employee-list.component.scss']
 })
 export class EmployeeListComponent implements OnInit, AfterViewInit{
-  displayedColumns: string[] = ['name', 'department', 'year','taken/Entitlement', 'taken/Rollover','taken/SickLeave', 'RD', 'tenure'];
+  displayedColumns: string[] = ['username', 'department', 'year','taken/Entitlement', 'taken/Rollover','taken/SickLeave', 'RD', 'tenure'];
   leaveDatabase: any | null;
   data: any = [];
 

@@ -20,7 +20,7 @@
                         <b>Requestor</b>
                     </th>
                     <td>
-                        {{userProfileData?.username}}
+                        {{data.requestor.username}}
                     </td>
                 </tr>
                 <tr>
@@ -29,14 +29,6 @@
                     </th>
                     <td>
                         {{data.createdAt | date}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <b>Leave Type</b>
-                    </th>
-                    <td>
-                        {{data.leaveType}}
                     </td>
                 </tr>
                 <tr>
@@ -50,48 +42,40 @@
                 </tr>
                 <tr>
                     <th>
-                        <b>Leave of used</b>
-                    </th>
-                    <td>
-                        {{data.leaveDuration}}day(s)
-                    </td>
-                </tr>
-                <tr>
-                    <th>
                         <b>Reason</b>
                     </th>
                     <td>
                         {{data.leaveReason}}
                     </td>
                 </tr>
-                <tr *ngIf="data.rejector">
+                <tr>
                     <th>
-                        <b>Rejector</b>
+                        <b>manager</b>
                     </th>
                     <td>
-                        {{data.rejector.email}}
+                        {{data.manager.username}}
                     </td>
                 </tr>
                 <tr>
-                    <th *ngIf="data.status == 'approve' || data.status == 'rejected'">
-                        <b>Rejected Reason</b>
+                    <th>
+                        <b>Duration</b>
                     </th>
-                    <td *ngIf=" data.status=='approve'">
-                        <mat-form-field style=" width: 100%;">
-                            <mat-label>Reason</mat-label>
-                            <textarea [formControl]="rejectedReason" matInput rows="6"></textarea>
-                        </mat-form-field>
+                    <td>
+                        {{data.duration}}
                     </td>
-                    <td *ngIf="data.status == 'rejected'">
-                        {{data?.rejectedReason}}
+                </tr>
+                <tr>
+                    <th>
+                        <b>Manager's Reason</b>
+                    </th>
+                    <td>
+                        {{data.managerReason}}
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <div mat-dialog-actions style="display: flex; justify-content: space-between;">
+    <div mat-dialog-actions style="display: flex; justify-content: space-between">
         <button mat-flat-button mat-dialog-close>Close</button>
-        <button *ngIf="data.status == 'approve'" color="accent" mat-flat-button
-            (click)="rejectRequest()">reject</button>
     </div>
 </div>

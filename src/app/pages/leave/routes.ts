@@ -12,6 +12,8 @@ import { LeaveRequestListComponent } from "./leave-request-list/leave-request-li
 import { RdRequestListComponent } from "./rd-request-list/rd-request-list.component";
 import { PageNotFoundComponent } from "../page-not-found/page-not-found.component";
 import { RequestLeaveComponent } from "./request-leave/request-leave.component";
+import { ReplacementDayConfirmingRequestComponent } from "./replacement-day-confirming-request/replacement-day-confirming-request.component";
+import { ReplacementDayRequestComponent } from "./replacement-day-request/replacement-day-request.component";
 
 export const LEAVE_ROUTES: Route[] = [
     {path: 'my-status', component: MyStatusComponent},
@@ -19,6 +21,9 @@ export const LEAVE_ROUTES: Route[] = [
     {path: 'rd-request-list', component: RdRequestListComponent},
 
     {path: 'request-leave', component: RequestLeaveComponent},
+
+    {path: 'replacement-day-confirming-request', component: ReplacementDayConfirmingRequestComponent},
+    {path: 'replacement-day-request/:_id', component: ReplacementDayRequestComponent},
 
     {path: '**', component: PageNotFoundComponent}
 ]

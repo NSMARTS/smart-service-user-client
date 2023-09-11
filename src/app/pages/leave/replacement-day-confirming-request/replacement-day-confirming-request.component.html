@@ -1,0 +1,61 @@
+<div>
+    <!-- <div class="full-loading-shade" *ngIf="leaveLoadingStatus">
+        <mat-spinner></mat-spinner>
+    </div> -->
+
+    <div class="page_header">
+        <h1 class="page_title">A replacement day confirming request</h1>
+    </div>
+
+    <section>
+        <form [formGroup]="requestLeaveForm" (ngSubmit)="requestConfirm()">
+            <mat-card>
+                <mat-card-content>
+                    <div class="input_group_layout">
+                        <div class="left_box">
+                            <span>Requestor</span>
+                        </div>
+                        <div class="right_box">
+                            {{userProfileData?.username}}
+                        </div>
+                    </div>
+                    <div class="input_group_layout">
+                        <div class="left_box">Period</div>
+                        <div class="right_box">
+                            <!-- 연차 사용하면 언제부터 언제까지 입력 -->
+                            <mat-form-field>
+                                <mat-label>Enter a date range</mat-label>
+                                <mat-date-range-input [formGroup]="requestLeaveForm" [rangePicker]="picker">
+                                    <input matStartDate formControlName="leaveStartDate" placeholder="Start date">
+                                    <input matEndDate formControlName="leaveEndDate" placeholder="End date">
+                                </mat-date-range-input>
+                                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker>
+                                    <mat-datepicker-actions>
+                                        <button mat-button matDatepickerCancel>Cancel</button>
+                                        <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+                                    </mat-datepicker-actions>
+                                </mat-date-range-picker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="input_group_layout">
+                        <div class="left_box">Reason</div>
+                        <div class="no_border_bottom right_box">
+                            <mat-form-field style="width: 100%;">
+                                <mat-label>Reason</mat-label>
+                                <textarea formControlName="leaveReason" matInput rows="6"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button [disabled]="!requestLeaveForm.valid" mat-flat-button color="primary"
+                        style="margin-right: 5px;">Request</button>
+                    <button mat-flat-button [routerLink]="['/leave/rd-request-list']">Cancel</button>
+                </mat-card-actions>
+            </mat-card>
+        </form>
+    </section>
+</div>

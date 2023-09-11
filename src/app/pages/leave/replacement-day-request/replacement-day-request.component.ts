@@ -1,26 +1,16 @@
-/**
- * Version 1.0
- * 파일명: request-leave.components.ts
- * 작성일시: 2023-08-28
- * 작성자: 임호균
- * 설명: 휴가 신청 처리
- */
-
-
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MaterialsModule } from 'src/app/materials/materials.module';
-import {MatNativeDateModule} from '@angular/material/core';
-import { UserProfileData } from 'src/app/interfaces/user-profile-data.interface';
-import { ProfileService } from 'src/app/stores/profile/profile.service';
+import { Component, OnInit } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { Router, RouterModule } from '@angular/router';
-import { LeaveService } from 'src/app/services/leave/leave.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import * as moment from 'moment';
+import { UserProfileData } from 'src/app/interfaces/user-profile-data.interface';
+import { MaterialsModule } from 'src/app/materials/materials.module';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { HolidayService } from 'src/app/services/holiday/holiday.service';
-import * as moment from 'moment';
-
+import { LeaveService } from 'src/app/services/leave/leave.service';
+import { ProfileService } from 'src/app/stores/profile/profile.service';
 interface FormData {
   leaveType: FormControl;
   leaveDay: FormControl;
@@ -28,38 +18,37 @@ interface FormData {
   leaveStartDate: FormControl;
   leaveEndDate: FormControl;
 }
-
 @Component({
-  selector: 'app-request-leave',
+  selector: 'app-replacement-day-request',
   standalone: true,
   imports: [
     CommonModule,
     MaterialsModule,
+    RouterModule,
     MatNativeDateModule,
-    RouterModule
   ],
-  templateUrl: './request-leave.component.html',
-  styleUrls: ['./request-leave.component.scss']
+  templateUrl: './replacement-day-request.component.html',
+  styleUrls: ['./replacement-day-request.component.scss']
 })
-export class RequestLeaveComponent {
+export class ReplacementDayRequestComponent implements OnInit{ 
   userProfileData: UserProfileData | undefined;
   userLeaveData : any;
 
   userProfile$ = toObservable(this.profileService.userProfile);
   requestLeaveForm: FormGroup = new FormGroup<FormData>({
-    leaveType: new FormControl('', [Validators.required]),
+    leaveType: new FormControl('replacementLeave'),
     leaveDay: new FormControl('', [Validators.required]),
     leaveReason: new FormControl('', [Validators.required]),
     leaveStartDate: new FormControl<Date | null>(null, [Validators.required]),
     leaveEndDate: new FormControl<Date | null>(null, [Validators.required]),
   })
-
   countryHoliday: any = [];
   companyHoliday: any = [];
 
-  employeeAnnualLeave: number | undefined;
-  employeeRollover: number | undefined;
-  employeeSickLeave: number | undefined;
+  employeeReplacementLeave: number | undefined;
+
+  until: moment.Moment | undefined;
+  startDay:  moment.Moment | undefined;
 
   leaveLoadingStatus: boolean = true;
 
@@ -69,32 +58,37 @@ export class RequestLeaveComponent {
     private holidayService: HolidayService,
     private dialogService: DialogService,
     private router: Router,
-  ) {
-      this.userProfile$.subscribe(() => {
-        this.userProfileData = this.profileService.userProfile().profileData?.user;
-        this.userLeaveData = this.profileService.userProfile().personalLeaveData;
+    private route: ActivatedRoute
+  ) {}
 
-      })
+  ngOnInit(): void {
+    this.userProfile$.subscribe(() => {
+      this.userProfileData = this.profileService.userProfile().profileData?.user;
+      this.userLeaveData = this.profileService.userProfile().personalLeaveData;
+    })
 
-      this.requestLeaveForm.get('leaveStartDate')?.valueChanges.subscribe(newValue => {
-        // Set the same value for leaveEndDate when leaveStartDate changes
-          if (!this.requestLeaveForm.get('leaveEndDate')?.value) {
-            this.requestLeaveForm.get('leaveEndDate')?.setValue(newValue);
-          }
-      });
+    this.requestLeaveForm.get('leaveStartDate')?.valueChanges.subscribe(newValue => {
+      // Set the same value for leaveEndDate when leaveStartDate changes
+        if (!this.requestLeaveForm.get('leaveEndDate')?.value) {
+          this.requestLeaveForm.get('leaveEndDate')?.setValue(newValue);
+        }
+    });
 
-      this.requestCountryHoliday();
-      this.requestCompanyHoliday();
+    this.requestCountryHoliday();
+    this.requestCompanyHoliday();
 
-      this.leaveLoadingStatus = true;
-      this.leaveService.leaveInformation().subscribe((res:any) => {
-        this.employeeAnnualLeave = res.employeeAnnualLeave;
-        this.employeeRollover = res.employeeRollover;
-        this.employeeSickLeave = res.employeeSickLeave;
-        this.leaveLoadingStatus = false;
-      });
+    this.leaveLoadingStatus = true;
+
+
+    this.leaveService.replacementInfo(this.route.snapshot.paramMap.get('_id')!).subscribe((res: any) => {
+      this.employeeReplacementLeave = res.item.duration - res.item.taken
+      this.until = moment(res.item.approveDay).add(res.item.requestor.personalLeave.rdValidityTerm, 'months');
+      this.startDay = moment(res.item.approveDay);
+      this.leaveLoadingStatus = false;
+    })   
   }
-  
+
+
   myFilter = (d: Date | null): boolean => {
     const day = (d || new Date()).getDay();
 
@@ -108,28 +102,37 @@ export class RequestLeaveComponent {
       return moment(d).isSame(holiday.companyHolidayDate)
     })
 
+    //until 체크
+    const before = moment(d || new Date()).isBefore(this.until);
+    const after =  moment(d || new Date()).isAfter(this.startDay);
+
+
     // Prevent Saturday and Sunday from being selected.
-    return day !== 0 && day !== 6 && !isCountryHoliday.length && !isCompanyHoliday.length;
+    return day !== 0 && day !== 6 && !isCountryHoliday.length && !isCompanyHoliday.length && before && after;
   };
 
 
+  // 회사 휴일
   requestCompanyHoliday() {
     this.holidayService.requestCompanyHoliday().subscribe((res) => {
       this.companyHoliday = res;
     })
   }
 
+
+  // 국가 휴일
   requestCountryHoliday() {
     this.holidayService.requestCountryHoliday().subscribe((res) => {
       this.countryHoliday = res;
     })
   }
 
+  // 요청 함수
   requestLeave() {
-    this.leaveService.requestLeave({...this.requestLeaveForm.value, 
-      employeeAnnualLeave: this.employeeAnnualLeave, 
-      employeeRollover: this.employeeRollover,
-      employeeSickLeave: this.employeeSickLeave
+    console.log(this.requestLeaveForm.value)
+    this.leaveService.requestReplacementLeave({...this.requestLeaveForm.value, 
+      replacementLeave: this.employeeReplacementLeave,
+      _id : this.route.snapshot.paramMap.get('_id')!
     }).subscribe({
       next: (res: any) => {
         if(res.message == 'success') {

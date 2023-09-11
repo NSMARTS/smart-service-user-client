@@ -28,8 +28,12 @@ export class MyStatusComponent implements AfterViewInit, OnInit{
   annualLeave: any;
   rollover: any;
   sickLeave: any;
+  replacementLeave: any;
 
   isStatusLoading = true;
+
+  isReplacementDay = false;
+  isRollover = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator ;
   @ViewChild(MatSort) sort!: MatSort;
@@ -45,11 +49,14 @@ export class MyStatusComponent implements AfterViewInit, OnInit{
   ngOnInit() {
     this.isStatusLoading = true;
     this.leaveService.leaveInformationForStatus().subscribe((res: any) => {
+      console.log(res)
       this.annualLeave = res.AnnualLeave,
       this.rollover = res.Rollover,
-      this.sickLeave = res.SickLeave
+      this.sickLeave = res.SickLeave,
+      this.isRollover = res.isRollover,
+      this.isReplacementDay = res.isReplacementDay,
+      this.replacementLeave = res.Replacement
       this.isStatusLoading = false;
-      
     })
   }
   
