@@ -64,12 +64,20 @@
                         {{data.leaveReason}}
                     </td>
                 </tr>
+                <tr *ngIf="data.approver">
+                    <th>
+                        <b>Approver</b>
+                    </th>
+                    <td>
+                        {{data.approver.username}}
+                    </td>
+                </tr>
                 <tr *ngIf="data.rejector">
                     <th>
                         <b>Rejector</b>
                     </th>
                     <td>
-                        {{data.rejector.email}}
+                        {{data.rejector.username}}
                     </td>
                 </tr>
                 <tr *ngIf="data.rejectedReason">
@@ -83,9 +91,9 @@
             </tbody>
         </table>
     </div>
-    <div mat-dialog-actions>
-        <button color="primary" mat-flat-button mat-dialog-close>Confirm</button>
-        <button *ngIf="data.status == 'approve'" color="accent" mat-flat-button
+    <div mat-dialog-actions style="display: flex; justify-content: space-between;">
+        <button mat-flat-button mat-dialog-close>Confirm</button>
+        <button *ngIf="data.status == 'pending'" color="accent" mat-flat-button
             (click)="cancelRequest()">Cancel</button>
     </div>
 </div>

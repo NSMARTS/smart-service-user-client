@@ -50,7 +50,7 @@ export class LeaveRequestManagerDetailsComponent implements OnInit{
   }
 
   /**
-   * 취소하거나 거절당한거 다시 살려주는 기능
+   * 휴가 승인
    */
   approveRequest() {
     return this.leaveService.approveLeaveRequest(this.data._id).subscribe((res: any) => {

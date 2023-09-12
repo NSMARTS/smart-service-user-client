@@ -13,4 +13,9 @@ export class EmployeeService {
   employeeList(sort: string, order: SortDirection, page: number) {
     return this.http.get(this.baseUrl + `/manager/employee?sort=${sort}&order=${order}&page=${page + 1}`);
   }
+
+
+  meetingList() {
+    return this.http.get(this.baseUrl + `/employee/meeting`);
+  }
 }

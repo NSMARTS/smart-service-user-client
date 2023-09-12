@@ -1,0 +1,19 @@
+.not_found_container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    h1 {
+        font-size: 100px;
+        height: 80px;
+    }
+
+    p {
+        font-weight: bold;
+        font-size: 30px;
+        
+    }
+}
