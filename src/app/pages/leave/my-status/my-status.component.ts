@@ -49,7 +49,6 @@ export class MyStatusComponent implements AfterViewInit, OnInit{
   ngOnInit() {
     this.isStatusLoading = true;
     this.leaveService.leaveInformationForStatus().subscribe((res: any) => {
-      console.log(res)
       this.annualLeave = res.AnnualLeave,
       this.rollover = res.Rollover,
       this.sickLeave = res.SickLeave,

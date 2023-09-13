@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MaterialsModule } from 'src/app/materials/materials.module';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { EmployeeService } from 'src/app/services/employee/employee.service';
 import { ProfileService } from 'src/app/stores/profile/profile.service';
 
@@ -13,11 +14,25 @@ import { ProfileService } from 'src/app/stores/profile/profile.service';
 })
 export class MeetingComponent implements OnInit{
   meetings: any = [];
-  constructor(private employeeService: EmployeeService, private profileSerivce: ProfileService) {}
+
+  leaveLoadingStatus: boolean = true;
+  constructor(private employeeService: EmployeeService, private authService: AuthService) {}
+
   ngOnInit(): void {
     
-    this.employeeService.meetingList().subscribe((res: any)=> {
-      this.meetings = res;
-    })
+    if(this.authService.getTokenInfo().isManager) {
+      this.employeeService.managerMeetingList().subscribe((res: any)=> {
+        this.meetings = res;
+        this.leaveLoadingStatus = false
+      })
+    }else{
+      this.employeeService.meetingList().subscribe((res: any)=> {
+        this.meetings = res;
+        this.leaveLoadingStatus = false
+      })
+    }
+  }
+  enterMeeting(data: any) {
+    window.open(data.meetingLink);
   }
 }

@@ -28,6 +28,7 @@ import { signInGuard } from './guards/sign-in.guard';
 import { myManagerGuard } from './guards/my-manager.guard';
 import { NotificationComponent } from './pages/space/notification/notification.component';
 import { MeetingComponent } from './pages/space/meeting/meeting.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 const routes: Routes = [
   // 웰컴 페이지 입니다.
@@ -59,6 +60,10 @@ const routes: Routes = [
       },
       {
         path: 'profile',
+        component: ProfileComponent
+      },
+      {
+        path: 'profile-edit',
         component: ProfileEditComponent
       },
       {

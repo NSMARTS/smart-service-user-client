@@ -1,14 +1,20 @@
 {
 	"/api": {
-		"target": "http://127.0.0.1:3300",
-		"secure": false
+		"target": "http://192.168.0.5:3000/api/v1",
+		"secure": true,
+		"changeOrigin": true
+
 	},
 	"/uploads": {
-		"target": "http://127.0.0.1:3300",
-		"secure": false
+		"target": "http://127.0.0.1:3000",
+		"secure": false,
+		"changeOrigin": true
+
 	},
 	"/white_board": {
-		"target":"http://127.0.0.1:3300",
-		"secure":false
+		"target":"http://127.0.0.1:3000",
+		"secure":false,
+		"changeOrigin": true
+
 	}
 }

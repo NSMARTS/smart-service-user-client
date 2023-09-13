@@ -1,0 +1,213 @@
+<diV>
+    <div class="page_header">
+        <h1 class="page_title">About</h1>
+        <button mat-flat-button color='primary'>edit</button>
+    </div>
+    <section class="search_section">
+        <!-- <div>
+
+            <div *ngIf="!isManager">
+                {{profileData?.profileImgPath}}
+                <img src={{profileData?.profileImgPath}} />
+            </div>
+            <div *ngIf="isManager">
+
+            </div>
+        </div> -->
+        <div>
+            <!-- 내용 들어갈 부분 -->
+            <!-- 일반 사원이면 표시될 부분 -->
+            <div *ngIf="!isManager">
+                <table class="profile_table" border="0" cellspacing="0">
+                    <!-- <caption>
+                        <span>profile</span>
+                    </caption> -->
+                    <colgroup>
+                        <col style="width:22%">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th scope="row">
+                                <div>Profile Image</div>
+                            </th>
+                            <td>
+                                <div>
+                                    <div>
+                                        <img class="profile_image" [src]="profileData?.profile_img" alt="" />
+                                    </div>
+                                    <div style="display: flex; gap: 10px;">
+                                        <button mat-flat-button color="primary">change</button>
+                                        <button mat-flat-button color="accent">reset</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <div>Email</div>
+                            </th>
+                            <td>
+                                <div>{{profileData?.email}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <div>Name</div>
+                            </th>
+                            <td>
+                                <div>{{profileData?.username}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <div>Company</div>
+                            </th>
+                            <td>
+                                <div>{{profileData?.company?.companyName}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <div>Managers</div>
+                            </th>
+                            <td>
+                                <div>
+                                    <p *ngFor="let manager of managers">{{manager?.managerId?.username}}</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <div>First day of work</div>
+                            </th>
+                            <td>
+                                <div>
+                                    {{profileData?.empStartDate | date}}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <div>Tenure</div>
+                            </th>
+                            <td style="border-bottom: none;">
+                                <div>
+                                    {{tenure}}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 매니저면 표시될 부분 -->
+            <div *ngIf="isManager">
+                <table class="profile_table" border="0" cellspacing="0">
+                    <!-- <caption>
+                        <span>profile</span>
+                    </caption> -->
+                    <colgroup>
+                        <col style="width:22%">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th scope="row">
+                                <div>Profile Image</div>
+                            </th>
+                            <td>
+                                <div>
+                                    <div>
+                                        <img class="profile_image" [src]="profileData?.profile_img" alt="" />
+                                    </div>
+                                    <div style="display: flex; gap: 10px;">
+                                        <button mat-flat-button color="primary">change</button>
+                                        <button mat-flat-button color="accent">reset</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <div>Email</div>
+                            </th>
+                            <td>
+                                <div>{{profileData?.email}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <div>Name</div>
+                            </th>
+                            <td>
+                                <div>{{profileData?.username}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <div>PhoneNumber</div>
+                            </th>
+                            <td>
+                                <div>{{profileData?.phoneNumber}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <div>Address</div>
+                            </th>
+                            <td>
+                                <div>{{profileData?.address}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <div>Company</div>
+                            </th>
+                            <td>
+                                <div>{{profileData?.companyId?.companyName}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <div>Employees</div>
+                            </th>
+                            <td style="border-bottom: none;">
+                                <div>
+                                    <p *ngFor="let employee of employees">{{employee?.employeeId?.username}}</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <section style="margin-top: 20px;">
+        <!-- 비밀번호 변경, 퇴사 버튼 들어갈 부분 -->
+        <div>
+            <h1>Change Password</h1>
+        </div>
+        <div>
+            <mat-card>
+                <form [formGroup]="ConfirmForm" (ngSubmit)="confirmPassword()">
+                    <mat-card-content>
+                        <mat-form-field appearance="fill" style="width : 100%">
+                            <mat-label>Now Password</mat-label>
+                            <input matInput type="password" formControlName="password" name="password"
+                                autocomplete="password" />
+                            <mat-error
+                                *ngIf="ConfirmForm.controls['password'].hasError('minlength') || ConfirmForm.controls['password'].hasError('maxlength') && !ConfirmForm.controls['password'].hasError('required')">The
+                                password should be between 6 and 15 characters</mat-error>
+                            <mat-error *ngIf="ConfirmForm.controls['password'].hasError('required')">Password is
+                                <strong>required</strong></mat-error>
+                        </mat-form-field>
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <button type="submit" mat-flat-button color="primary"
+                            [disabled]="!ConfirmForm.valid">Confirm</button>
+                    </mat-card-actions>
+                </form>
+            </mat-card>
+        </div>
+    </section>
+</diV>

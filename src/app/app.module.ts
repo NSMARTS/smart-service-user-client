@@ -16,6 +16,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 // Config
 import { ENV } from './config/config';
 
+
 export function tokenGetter() {
 	return localStorage.getItem(ENV.tokenName);
 }
@@ -46,7 +47,7 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ["localhost:3000"],
+        allowedDomains: ["localhost:3000", "192.168.0.5:3000"],
         disallowedRoutes: [
           '/api/v1/auth/sign-in',
           '/api/v1/auth/sign-up',

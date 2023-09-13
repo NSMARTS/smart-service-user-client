@@ -1,0 +1,48 @@
+.card_layout {
+    display: grid;
+    grid-gap: 20px;
+
+    @media (min-width: 1024px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 1023px) and (min-width: 817px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 816px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+.participants {
+    display: flex;
+    gap: 4px;
+
+
+
+}
+
+.participants_user {
+    &::after {
+        content: ',';
+    }
+
+    &:last-child::after {
+        content: '';
+    }
+}
+
+.full-loading-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -146,4 +146,9 @@ export class AuthService {
   getTokenInfo() {
     return this.jwtHelper.decodeToken(this.getToken()!);
   }
+
+
+
+
+
 }

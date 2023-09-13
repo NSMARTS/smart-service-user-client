@@ -1,5 +1,43 @@
-<div >
-    <div NgFor="let meet for meetings">
-        
+<div>
+    <div class="page_header">
+        <h1 class="page_title">Meeting</h1>
     </div>
+
+    <section class="card_layout search_section">
+
+        <div class="full-loading-shade" *ngIf="leaveLoadingStatus">
+            <mat-spinner></mat-spinner>
+        </div>
+
+        <div *ngFor="let meet of meetings">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>
+                        <div>
+                            <div>
+                                Title: {{meet.meetingTitle}}
+                            </div>
+                        </div>
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                        <div>
+                            <div class='participants'>
+                                Manager: <p *ngFor="let manager of meet.managers">{{manager.username}}</p>
+                            </div>
+                            <div class='participants'>
+                                Employees: <p class="participants_user" *ngFor=" let employee of meet.employees">
+                                    {{employee.username}}</p>
+                            </div>
+                        </div>
+                        <p>{{meet.meetingDescription}}</p>
+                        <p>{{meet.startDate | date}} {{meet.startTime}}</p>
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-actions>
+                    <button (click)="enterMeeting(meet)" mat-flat-button color="primary"
+                        [disabled]="!meet.meetingLink">Enter</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </section>
 </div>

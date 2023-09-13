@@ -18,4 +18,33 @@ export class EmployeeService {
   meetingList() {
     return this.http.get(this.baseUrl + `/employee/meeting`);
   }
+
+  managerMeetingList() {
+    return this.http.get(this.baseUrl + `/manager/meeting`);
+  }
+
+
+  about(){
+    return this.http.get(this.baseUrl + '/employee/profile/about');
+  }
+
+  managerAbout() {
+    return this.http.get(this.baseUrl + '/manager/profile/about')
+  }
+
+  /**
+   * @작성일 2023-09-13
+   * @작성자 임호균
+   * @param password 비밀번호 
+   * @description 비밀번호 검증 API 
+   * @returns 
+   */
+  confirmPassword(password: string) {
+    console.log(password)
+    return this.http.post(this.baseUrl + '/employee/profile/confirmPassword', {password})
+  }
+
+  confirmManagerPassword(password: string) {
+    return this.http.post(this.baseUrl + '/manager/profile/confirmPassword', {password})
+  }
 }
