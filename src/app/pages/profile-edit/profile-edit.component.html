@@ -1,1 +1,113 @@
-<p>profile-edit works!</p>
+<diV>
+    <div class="page_header">
+        <h1 class="page_title">Edit Profile</h1>
+    </div>
+    <section class="search_section">
+        <div>
+            <!-- 내용 들어갈 부분 -->
+            <!-- 일반 사원이면 표시될 부분 -->
+            <div *ngIf="!isManager">
+                <form [formGroup]="employeeForm" (ngSubmit)="employeeSubmit()">
+                    <table class="profile_table" border="0" cellspacing="0">
+                        <!-- <caption>
+                            <span>profile</span>
+                        </caption> -->
+                        <colgroup>
+                            <col style="width:22%">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th scope="row">
+                                    <div>Name</div>
+                                </th>
+                                <td>
+                                    <mat-form-field>
+                                        <mat-label>name</mat-label>
+                                        <input type="text" matInput formControlName="username" autocomplete="text">
+                                        <mat-error *ngIf="employeeForm.controls['username'].hasError('required')">name
+                                            is
+                                            <strong>required</strong></mat-error>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <div>Department</div>
+                                </th>
+                                <td style="border-bottom: none;">
+                                    <mat-form-field>
+                                        <mat-label>department</mat-label>
+                                        <input type="text" matInput formControlName="department" autocomplete="text">
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="edit_profile_button_container">
+                        <button mat-flat-button [routerLink]="['/profile']"
+                            [disabled]="!employeeForm.valid">cancel</button>
+                        <button mat-flat-button color="primary" type="submit">save</button>
+                    </div>
+                </form>
+            </div>
+            <!-- 매니저면 표시될 부분 -->
+            <div *ngIf="isManager">
+                <form [formGroup]="managerForm" (ngSubmit)="managerSubmit()">
+                    <table class="profile_table" border="0" cellspacing="0">
+                        <!-- <caption>
+                            <span>profile</span>
+                        </caption> -->
+                        <colgroup>
+                            <col style="width:22%">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th scope="row">
+                                    <div>Name</div>
+                                </th>
+                                <td>
+                                    <mat-form-field>
+                                        <mat-label>name</mat-label>
+                                        <input type="text" matInput formControlName="username" autocomplete="text">
+                                        <mat-error *ngIf="employeeForm.controls['username'].hasError('required')">name
+                                            is
+                                            <strong>required</strong></mat-error>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <div>PhoneNumber</div>
+                                </th>
+                                <td>
+                                    <mat-form-field>
+                                        <mat-label>phoneNumber</mat-label>
+                                        <input type="text" matInput formControlName="phoneNumber" autocomplete="text">
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <div>Address</div>
+                                </th>
+                                <td style="border-bottom: none;">
+                                    <mat-form-field>
+                                        <mat-label>address</mat-label>
+                                        <input type="text" matInput formControlName="address" autocomplete="text">
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="edit_profile_button_container">
+                        <button mat-flat-button [routerLink]="['/profile']"
+                            [disabled]="!managerForm.valid">cancel</button>
+                        <button mat-flat-button color="primary" type="submit">save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</diV>

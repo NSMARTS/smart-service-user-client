@@ -62,4 +62,22 @@ export class EmployeeService {
   changeManagerPassword(password: string) {
     return this.http.post(this.baseUrl + '/manager/profile/changePassword', { password })
   }
+
+
+  /**
+   * @작성일 2023-09-14
+   * @작성자 임호균
+   * @param data 
+   * {employee: name, deportment}
+   * {manager: name, phoneNumber, address}
+   * @description 회원 정보 변경 API
+   * @returns 
+   */
+  changeEmployeeInfo(data: any) {
+    return this.http.post(this.baseUrl + '/employee/profile/editProfile', data)
+  }
+
+  changeMangerInfo(data: any) {
+    return this.http.post(this.baseUrl + '/manager/profile/editProfile', data);
+  }
 }

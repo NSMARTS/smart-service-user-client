@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialsModule } from './materials/materials.module';
 import { SpaceComponent } from './pages/space/space.component';
-import { ProfileEditComponent } from './pages/profile-edit/profile-edit.component';
 import { CreateSpaceDialogComponent } from './components/dialog/create-space-dialog/create-space-dialog.component';
 import { MainComponent } from './pages/main/main.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -24,7 +23,6 @@ export function tokenGetter() {
   declarations: [
     AppComponent,
     SpaceComponent,
-    ProfileEditComponent,
     CreateSpaceDialogComponent,
     MainComponent,
   ],

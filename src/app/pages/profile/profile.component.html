@@ -1,7 +1,7 @@
 <diV>
     <div class="page_header">
         <h1 class="page_title">About</h1>
-        <button mat-flat-button color='primary'>edit</button>
+        <button mat-flat-button color='primary' [routerLink]="['/profile-edit']">edit</button>
     </div>
     <section class="search_section">
         <!-- <div>
@@ -65,6 +65,14 @@
                             </th>
                             <td>
                                 <div>{{profileData?.company?.companyName}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <div>Department</div>
+                            </th>
+                            <td>
+                                <div>{{profileData?.department}}</div>
                             </td>
                         </tr>
                         <tr>
