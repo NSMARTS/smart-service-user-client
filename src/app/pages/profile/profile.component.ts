@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
+import { ChangePasswordDialogComponent } from 'src/app/components/dialog/change-password-dialog/change-password-dialog.component';
 import { MaterialsModule } from 'src/app/materials/materials.module';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
@@ -35,7 +37,8 @@ export class ProfileComponent implements OnInit{
   })
   constructor(private employeeService: EmployeeService,
     private authService: AuthService,
-    private dialogService: DialogService) {}
+    private dialogService: DialogService,
+    public dialog: MatDialog,) {}
 
   ngOnInit(): void {
     this.isManager = this.authService.getTokenInfo().isManager
@@ -70,7 +73,19 @@ export class ProfileComponent implements OnInit{
       //매니저라면 
       this.employeeService.confirmManagerPassword(this.ConfirmForm.value.password).subscribe((res: any) => {
         if(res.message == 'success'){
+          const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {
+            maxWidth: '400px',
+            width : '100%',
+            data: {
+              isManager: this.isManager
+            }
+          })
 
+          dialogRef.afterClosed().subscribe(result => {
+            if(result == 'success') {
+              //여기서 로그아웃 시키고 다시 로그인 시키기
+            }
+          })
         }else{
           this.dialogService.openDialogNegative('The password is incorrect. Please check again.')
         }
@@ -79,7 +94,19 @@ export class ProfileComponent implements OnInit{
       //매니저가 아니라면
       this.employeeService.confirmPassword(this.ConfirmForm.value.password).subscribe((res: any) => {
         if(res.message == 'success'){
+          const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {
+            maxWidth: '400px',
+            width : '100%',
+            data: {
+              isManager: this.isManager
+            }
+          })
 
+          dialogRef.afterClosed().subscribe(result => {
+            if(result == 'success') {
+              //여기서 로그아웃 시키고 다시 로그인 시키기
+            }
+          })
         }else{
           this.dialogService.openDialogNegative('The password is incorrect. Please check again.')
         }

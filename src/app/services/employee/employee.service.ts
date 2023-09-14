@@ -24,7 +24,7 @@ export class EmployeeService {
   }
 
 
-  about(){
+  about() {
     return this.http.get(this.baseUrl + '/employee/profile/about');
   }
 
@@ -40,11 +40,26 @@ export class EmployeeService {
    * @returns 
    */
   confirmPassword(password: string) {
-    console.log(password)
-    return this.http.post(this.baseUrl + '/employee/profile/confirmPassword', {password})
+    return this.http.post(this.baseUrl + '/employee/profile/confirmPassword', { password })
   }
 
   confirmManagerPassword(password: string) {
-    return this.http.post(this.baseUrl + '/manager/profile/confirmPassword', {password})
+    return this.http.post(this.baseUrl + '/manager/profile/confirmPassword', { password })
+  }
+
+
+  /**
+   * @작성일 2023-09-14
+   * @작성자 임호균
+   * @param password 비밀번호
+   * @description 비밀번호 변경 API
+   * @returns 
+   */
+  changePassword(password: string) {
+    return this.http.post(this.baseUrl + '/employee/profile/changePassword', { password })
+  }
+
+  changeManagerPassword(password: string) {
+    return this.http.post(this.baseUrl + '/manager/profile/changePassword', { password })
   }
 }

@@ -106,7 +106,7 @@ export class LeaveRequestListComponent implements AfterViewInit{
       data
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
+
       if(result == 'success') {
         this.getData()
       }
