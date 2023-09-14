@@ -133,8 +133,9 @@ export class RequestLeaveComponent {
     }).subscribe({
       next: (res: any) => {
         if(res.message == 'success') {
-          this.dialogService.openDialogPositive('request success');
-          this.router.navigate(['/leave/leave-request-list'])
+          this.dialogService.openDialogPositive('request success').subscribe(() => {
+            this.router.navigate(['/leave/leave-request-list'])
+          })
         }else{
           this.dialogService.openDialogNegative(res.message);
         }

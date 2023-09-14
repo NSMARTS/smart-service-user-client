@@ -80,4 +80,39 @@ export class EmployeeService {
   changeMangerInfo(data: any) {
     return this.http.post(this.baseUrl + '/manager/profile/editProfile', data);
   }
+
+
+  /**
+   * @작성일 2023-09-14
+   * @작성자 임호균
+   * @param data 
+   * {employee: image}
+   * {manager: image}
+   * @description 회원 프로필 이미지 변경 API
+   * @returns 
+   */
+  changeEmployeeProfileImage(data: any) {
+    const formData: FormData = new FormData();
+    formData.append("file", data, data?.name);
+    return this.http.post(this.baseUrl + '/employee/profile/changeImage', formData, {
+      reportProgress: true,
+    });
+  }
+
+  changeManagerProfileImage(data: any) {
+    const formData: FormData = new FormData();
+    formData.append("file", data, data?.name);
+    return this.http.post(this.baseUrl + '/manager/profile/changeImage', formData, {
+      reportProgress: true,
+    });
+  }
+
+
+  resetEmployeeProfileImage() {
+    return this.http.get(this.baseUrl + '/employee/profile/resetImage')
+  }
+
+  resetManagerProfileImage() {
+    return this.http.get(this.baseUrl + '/manager/profile/resetImage')
+  }
 }

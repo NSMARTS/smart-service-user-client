@@ -34,11 +34,15 @@
                             <td>
                                 <div>
                                     <div>
-                                        <img class="profile_image" [src]="profileData?.profile_img" alt="" />
+                                        <img class="profile_image" [src]="profileData?.profileImgPath" alt="" />
                                     </div>
                                     <div style="display: flex; gap: 10px;">
-                                        <button mat-flat-button color="primary">change</button>
-                                        <button mat-flat-button color="accent">reset</button>
+                                        <button mat-flat-button color="primary"
+                                            (click)="fileInput.click()">change</button>
+                                        <input hidden (change)="onFileSelected($event)" #fileInput type="file"
+                                            id="file">
+                                        <button mat-flat-button color="accent"
+                                            (click)="resetProfileImage()">reset</button>
                                     </div>
                                 </div>
                             </td>
@@ -126,11 +130,15 @@
                             <td>
                                 <div>
                                     <div>
-                                        <img class="profile_image" [src]="profileData?.profile_img" alt="" />
+                                        <img class="profile_image" [src]="profileData?.profileImgPath" alt="" />
                                     </div>
                                     <div style="display: flex; gap: 10px;">
-                                        <button mat-flat-button color="primary">change</button>
-                                        <button mat-flat-button color="accent">reset</button>
+                                        <button mat-flat-button color="primary"
+                                            (click)="fileInput.click()">change</button>
+                                        <input hidden (change)="onFileSelected($event)" #fileInput type="file"
+                                            id="file">
+                                        <button mat-flat-button color="accent"
+                                            (click)="resetProfileImage()">reset</button>
                                     </div>
                                 </div>
                             </td>

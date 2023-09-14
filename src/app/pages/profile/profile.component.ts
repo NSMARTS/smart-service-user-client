@@ -9,6 +9,7 @@ import { MaterialsModule } from 'src/app/materials/materials.module';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { EmployeeService } from 'src/app/services/employee/employee.service';
+import { ProfileService } from 'src/app/stores/profile/profile.service';
 interface FormData {
   password: FormControl;
 }
@@ -41,10 +42,15 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService,
     private dialogService: DialogService,
     public dialog: MatDialog,
+    private profileService: ProfileService
   ) { }
 
   ngOnInit(): void {
     this.isManager = this.authService.getTokenInfo().isManager
+    this.getData();
+  }
+
+  getData() {
     if (this.isManager) {
       this.employeeService.managerAbout().subscribe((res: any) => {
 
@@ -76,17 +82,11 @@ export class ProfileComponent implements OnInit {
       //매니저라면 
       this.employeeService.confirmManagerPassword(this.ConfirmForm.value.password).subscribe((res: any) => {
         if (res.message == 'success') {
-          const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {
+          this.dialog.open(ChangePasswordDialogComponent, {
             maxWidth: '400px',
             width: '100%',
             data: {
               isManager: this.isManager
-            }
-          })
-
-          dialogRef.afterClosed().subscribe(result => {
-            if (result == 'success') {
-              //여기서 로그아웃 시키고 다시 로그인 시키기
             }
           })
         } else {
@@ -97,17 +97,11 @@ export class ProfileComponent implements OnInit {
       //매니저가 아니라면
       this.employeeService.confirmPassword(this.ConfirmForm.value.password).subscribe((res: any) => {
         if (res.message == 'success') {
-          const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {
+          this.dialog.open(ChangePasswordDialogComponent, {
             maxWidth: '400px',
             width: '100%',
             data: {
               isManager: this.isManager
-            }
-          })
-
-          dialogRef.afterClosed().subscribe(result => {
-            if (result == 'success') {
-              //여기서 로그아웃 시키고 다시 로그인 시키기
             }
           })
         } else {
@@ -116,4 +110,89 @@ export class ProfileComponent implements OnInit {
       })
     }
   }
+
+
+
+
+
+  onFileSelected(event: any) {
+    if (event.target.files && event.target.files[0]) {
+      if (
+        event.target.files[0].name.toLowerCase().endsWith('.jpg') ||
+        event.target.files[0].name.toLowerCase().endsWith('.png')
+      ) {
+        // Image resize and update
+        this.changeProfileImage(event.target.files[0]);
+      } else {
+        this.dialogService.openDialogNegative(
+          'Profile photos are only available for PNG and JPG.'
+        );
+        // alert('프로필 사진은 PNG와 JPG만 가능합니다.');
+      }
+    } else {
+      this.dialogService.openDialogNegative('Can not bring up pictures.');
+      // alert('사진을 불러올 수 없습니다.');
+    }
+  }
+
+  /**
+   * @작성일 2023-09-14
+   * @작성자 임호균
+   * @description 사용자 프로필 이미지 변경 함수 
+   * @param imgFile 
+   */
+  changeProfileImage(imgFile: File) {
+    if (this.isManager) {
+      //이미지를 바꾸려는 사용자가 매니저이면
+      this.employeeService.changeManagerProfileImage(imgFile).subscribe((res: any) => {
+        if (res.message == 'success') {
+          this.getManagerProfileData();
+          this.getData();
+        }
+      })
+    } else {
+      //이미지를 바꾸려는 사용자가 직원이면
+      this.employeeService.changeEmployeeProfileImage(imgFile).subscribe((res: any) => {
+        if (res.message == 'success') {
+          this.getUserProfileData();
+          this.getData();
+        }
+      })
+    }
+  }
+
+
+  /**
+   * @작성일 2023-09-14
+   * @작성자 임호균
+   * @description 사용자 프로필 이미지 초기화
+   */
+  resetProfileImage() {
+    //이미지를 설정하기 전의 상태로 초기화
+    if (this.isManager) {
+      this.employeeService.resetManagerProfileImage().subscribe((res: any) => {
+        if (res.message == 'success') {
+          this.getManagerProfileData();
+          this.getData();
+        }
+      })
+    } else {
+      this.employeeService.resetEmployeeProfileImage().subscribe((res: any) => {
+        if (res.message == 'success') {
+          this.getUserProfileData();
+          this.getData();
+        }
+      })
+    }
+  }
+
+
+  getUserProfileData() {
+    this.profileService.getUserProfile().subscribe()
+  }
+
+  getManagerProfileData() {
+    this.profileService.getManagerProfile().subscribe()
+  }
+
 }

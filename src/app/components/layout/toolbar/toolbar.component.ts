@@ -29,19 +29,19 @@ import { ProfileService } from 'src/app/stores/profile/profile.service';
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss', '../../../../styles.scss']
 })
-export class ToolbarComponent implements OnInit{
+export class ToolbarComponent implements OnInit {
   userProfileData: UserProfileData | undefined;
   userProfile$ = toObservable(this.profileService.userProfile);
 
   constructor(
-    private sidenavService: SidenavService, 
-    private authService: AuthService, 
-    private profileService: ProfileService, 
+    private sidenavService: SidenavService,
+    private authService: AuthService,
+    private profileService: ProfileService,
     private router: Router) {
-      
-      this.userProfile$.subscribe(() => {
-        this.userProfileData = this.profileService.userProfile().profileData?.user;
-      })
+
+    this.userProfile$.subscribe(() => {
+      this.userProfileData = this.profileService.userProfile().profileData?.user;
+    })
   }
 
   /**
@@ -50,12 +50,12 @@ export class ToolbarComponent implements OnInit{
    * @description 툴팁이 생성될 때 유저 데이터를 가져온다 
    */
   ngOnInit(): void {
-    if(this.authService.getTokenInfo().isManager) {
+    if (this.authService.getTokenInfo().isManager) {
       this.getManagerProfileData()
     } else {
       this.getUserProfileData()
     }
-    
+
   }
 
   /**

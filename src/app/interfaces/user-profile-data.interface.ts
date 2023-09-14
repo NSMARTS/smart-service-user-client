@@ -7,7 +7,7 @@ export interface UserProfileData {
     //사용자 이름
     username: string,
     //프로필 이미지 
-    profile_img: string
+    profileImgPath: string,
     //매니저 여부
     isManager: boolean
 }

@@ -3,11 +3,13 @@
 .profile_button {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
 }
 
 .profile_image {
-   width: 35px; 
+    width: 35px;
+    border-radius: 100%;
+    background-color: #fff;
 }
 
 
@@ -15,5 +17,5 @@
 .menu_header {
     padding: 1rem 1.5rem;
     background: $smart_service_primary_color;
-	color: #fff;
+    color: #fff;
 }

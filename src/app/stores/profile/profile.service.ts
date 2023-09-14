@@ -22,18 +22,17 @@ export class ProfileService {
   userProfile = signal<any>({});
 
   constructor(public http: HttpClient) { }
-  
+
   getUserProfile() {
     return this.http.get(this.baseUrl + '/employee/profile').pipe(
       tap((res: any) => {
-        if(res.profileData.user.profile_img == '') {
-          if(res.manager != null) {
-            res.profileData.manager.profile_img = '/assets/images/person.png'
-          }else {
-            res.profileData.user.profile_img = '/assets/images/person.png'
-          }  
-        }
-        
+        // if (res.profileData.user.userProfileData == '') {
+        //   if (res.manager != null) {
+        //     res.profileData.manager.userProfileData = '/assets/images/person.png'
+        //   } else {
+        //     res.profileData.user.userProfileData = '/assets/images/person.png'
+        //   }
+        // }
 
         this.updateUserProfile(res);
         return res.result = true;
@@ -50,14 +49,14 @@ export class ProfileService {
   getManagerProfile() {
     return this.http.get(this.baseUrl + '/manager/profile').pipe(
       tap((res: any) => {
-        if(res.profileData.user.profile_img == '') {
-          if(res.manager != null) {
-            res.profileData.manager.profile_img = '/assets/images/person.png'
-          }else {
-            res.profileData.user.profile_img = '/assets/images/person.png'
-          }  
-        }
-      
+        // if (res.profileData.user.profile_img == '') {
+        //   if (res.manager != null) {
+        //     res.profileData.manager.profile_img = '/assets/images/person.png'
+        //   } else {
+        //     res.profileData.user.profile_img = '/assets/images/person.png'
+        //   }
+        // }
+
         this.updateUserProfile(res);
         return res.result = true;
       })
@@ -65,8 +64,8 @@ export class ProfileService {
   }
 
   updateUserProfile(profile: any) {
-  
-     this.userProfile.set(profile);
+
+    this.userProfile.set(profile);
   }
 
   checkRole() {
