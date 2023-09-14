@@ -9,11 +9,12 @@
     background-color: $smart_service_background_color;
     position: relative;
     z-index: 1;
+
     &::after {
         width: 100%;
         height: 100%;
-        content: ''; 
-        background-image: url('../../../../assets/images/company.jpg');
+        content: '';
+        background-image: url('../../../../assets/image/company.jpg');
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
