@@ -31,7 +31,7 @@ import { ProfileService } from 'src/app/stores/profile/profile.service';
   animations: [dropdownAnimation
   ]
 })
-export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
+export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy {
   @HostBinding('class')
   get levelClass() {
     return `item-level-${this.level}`;
@@ -54,7 +54,7 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
   //열려있는지 파악하기 위함
   isOpen: boolean = false;
   isActive: boolean = false;
-  
+
   router = inject(Router)
 
   subscriptions: Subscription | undefined;
@@ -71,34 +71,34 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
 
   userLeaveData: any;
   constructor(
-    private profileService: ProfileService, 
+    private profileService: ProfileService,
     private navigationService: NavigationService
   ) {
     this.userProfile$.subscribe(() => {
-       this.userLeaveData = this.profileService.userProfile().personalLeaveData;
-      if(this.profileService.userProfile().profileData?.user !== undefined){
+      this.userLeaveData = this.profileService.userProfile().personalLeaveData;
+      if (this.profileService.userProfile().profileData?.user !== undefined) {
         this.flag.isManager = this.profileService.userProfile().profileData?.user.isManager;
-        
-      } 
+
+      }
     })
   }
 
-  ngOnInit() :void {
+  ngOnInit(): void {
     this.subscriptions = new Subscription();
-    if(this.isDropdown(this.item)){
+    if (this.isDropdown(this.item)) {
       const sub1 = this.router.events.pipe(
         filter(event => event instanceof NavigationEnd),
       ).subscribe(() => this.onRouteChange());
-      
+
       this.openItems$.subscribe((item) => this.onOpenChange(item))
 
       this.subscriptions.add(sub1)
     }
-    
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes && changes.hasOwnProperty('item') && this.isDropdown(this.item)) { 
+    if (changes && changes.hasOwnProperty('item') && this.isDropdown(this.item)) {
       // this.item -> changes.item.currentValue로 해도 됨
       this.onRouteChange();
     }
@@ -124,17 +124,17 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
    */
   onOpenChange(item: NavigationDropdown) {
     // 1. 클릭한 메뉴가 내 자식일 경우
-    if(this.isChildrenOf(this.item as NavigationDropdown, item as NavigationLink | NavigationDropdown)){
+    if (this.isChildrenOf(this.item as NavigationDropdown, item as NavigationLink | NavigationDropdown)) {
       return;
     }
 
     // 2. 클릭한 메뉴가 active한 child (Link)를 가지고 있는 경우
-    if(this.hasActiveChilds(this.item as NavigationDropdown)) {
+    if (this.hasActiveChilds(this.item as NavigationDropdown)) {
       return;
     }
 
     // 3. 현재내 dropdown에 대한 변경일 경우
-    if(this.item === item) {
+    if (this.item === item) {
       return;
     }
 
@@ -152,7 +152,7 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
    */
   onRouteChange() {
     // 내 하위 Menu에 active child가 있는 경우
-    if(this.hasActiveChilds(this.item as NavigationDropdown)) {
+    if (this.hasActiveChilds(this.item as NavigationDropdown)) {
       this.isActive = true;
       this.isOpen = true;
       this.navigationService.openItems.set(this.item as NavigationDropdown)
@@ -162,7 +162,7 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
       this.isActive = false;
       this.isOpen = false;
       this.navigationService.openItems.set(this.item as NavigationDropdown)
-    } 
+    }
   }
 
   /**
@@ -171,12 +171,12 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
    * @param item 
    */
   isChildrenOf(parent: NavigationDropdown, item: NavigationLink | NavigationDropdown): any {
-    if(parent.children.indexOf(item) !== -1) {
+    if (parent.children.indexOf(item) !== -1) {
       return true;
     }
     return parent.children
-    .filter((child: NavigationLink | NavigationDropdown) => this.isDropdown(child as NavigationDropdown))
-    .filter((child: NavigationLink | NavigationDropdown) => this.isChildrenOf(child as NavigationDropdown, item)).length
+      .filter((child: NavigationLink | NavigationDropdown) => this.isDropdown(child as NavigationDropdown))
+      .filter((child: NavigationLink | NavigationDropdown) => this.isChildrenOf(child as NavigationDropdown, item)).length
   }
 
   /**
@@ -194,28 +194,25 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy{
    * @param parent 
    * @returns 
    */
-  hasActiveChilds(parent: NavigationDropdown):any {
-    return parent.children.some((child : any) => {
-      if(this.isDropdown(child)) {
+  hasActiveChilds(parent: NavigationDropdown): any {
+    return parent.children.some((child: any) => {
+      if (this.isDropdown(child)) {
         return this.hasActiveChilds(child);
       }
 
-      if(this.isLink(child)) {
+      if (this.isLink(child)) {
         return this.router.isActive(child.route as string, this.isActiveOptions);
       }
     })
   }
 
 
-
-
-
   isReplacement(item: NavigationLink) {
-    if(item.isReplacementDay == false || item.isReplacementDay == undefined) {
+    if (item.isReplacementDay == false || item.isReplacementDay == undefined) {
       return true;
     }
 
-    return item.isReplacementDay == true && this.userLeaveData?.isReplacementDay == true 
+    return item.isReplacementDay == true && this.userLeaveData?.isReplacementDay == true
   }
 
 }
