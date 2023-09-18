@@ -3,26 +3,23 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { RouterModule } from '@angular/router';
 import { map, merge, startWith, switchMap } from 'rxjs';
-import { NotificationDetailsDialogComponent } from 'src/app/components/dialog/notification-details-dialog/notification-details-dialog.component';
+import { ContractDetailDialogComponent } from 'src/app/components/dialog/contract-detail-dialog/contract-detail-dialog.component';
 import { MaterialsModule } from 'src/app/materials/materials.module';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { NotificationService } from 'src/app/services/notification/notification.service';
+import { ContractService } from 'src/app/services/contract/contract.service';
 
 @Component({
-  selector: 'app-notification',
+  selector: 'app-manager-contract-list',
   standalone: true,
   imports: [
     CommonModule,
-    MaterialsModule,
-    RouterModule
+    MaterialsModule
   ],
-  templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.scss']
+  templateUrl: './manager-contract-list.component.html',
+  styleUrls: ['./manager-contract-list.component.scss']
 })
-export class NotificationComponent implements AfterViewInit {
-  displayedColumns: string[] = ['updatedAt', 'title', 'category', 'writer', 'detail'];
+export class ManagerContractListComponent implements AfterViewInit {
+  displayedColumns: string[] = ['updatedAt', 'title', 'writer', 'employee', 'detail', 'download'];
   leaveDatabase: any | null;
   data: any = [];
 
@@ -33,15 +30,9 @@ export class NotificationComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  isManager: boolean = false;
+  constructor(private contractService: ContractService, public dialog: MatDialog) { }
 
-  constructor(private notificationService: NotificationService
-    , private authService: AuthService
-    , public dialog: MatDialog) {
-    this.isManager = this.authService.getTokenInfo().isManager;
-  }
-
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.getData()
   }
 
@@ -54,7 +45,7 @@ export class NotificationComponent implements AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.notificationService.findNotifications(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.isManager).pipe()
+          return this.contractService.managerContractList(this.sort.active, this.sort.direction, this.paginator.pageIndex).pipe()
         }),
         map((data: any) => {
           // Flip flag to show that loading has finished.
@@ -75,11 +66,9 @@ export class NotificationComponent implements AfterViewInit {
       )
       .subscribe(data => (this.data = data));
   }
-
-
   openDetailDialog(data: any) {
-    const dialogRef = this.dialog.open(NotificationDetailsDialogComponent, {
-      maxWidth: '1300px',
+    const dialogRef = this.dialog.open(ContractDetailDialogComponent, {
+      maxWidth: '800px',
       width: '100%',
       data
     });

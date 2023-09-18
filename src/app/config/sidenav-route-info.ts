@@ -138,6 +138,34 @@ export const sidenavRouteInfo: NavigationItem[] = [
                     //     isReplacementDay: false 
                     // }
                 ]
+            },
+            {
+                type: 'dropdown',
+                label: 'Contract Management',
+                icon: 'manage_search',
+                isSuperManager: true,
+                children: [{
+                    type: 'link',
+                    label: 'Contract List',
+                    route: '/contract-management/manager-contract-list',
+                    icon: 'format_list_bulleted',
+                    isManager: true,
+                    isReplacementDay: false
+                },]
+            },
+            {
+                type: 'dropdown',
+                label: 'Contract Management',
+                icon: 'manage_search',
+                isManager: false,
+                children: [{
+                    type: 'link',
+                    label: 'Contract List',
+                    route: '/contract-management/contract-list',
+                    icon: 'format_list_bulleted',
+                    isManager: true,
+                    isReplacementDay: false
+                },]
             }
         ]
     }

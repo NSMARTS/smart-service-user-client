@@ -1,11 +1,12 @@
 <div>
     <div class="page_header">
-        <h1 class="page_title">Notification</h1>
+        <h1 class="page_title">Contract List</h1>
     </div>
 
     <section class="search_seaction">
 
     </section>
+
 
     <section class="table_section mat-elevation-z1">
         <div class="example-table-container">
@@ -18,7 +19,7 @@
             <div class="example-table-container">
                 <table mat-table [dataSource]="data" class="" matSort matSortActive="updatedAt" matSortDisableClear
                     matSortDirection="desc">
-                    <!-- createdAt -->
+                    <!-- updatedAt -->
                     <ng-container matColumnDef="updatedAt">
                         <th mat-header-cell *matHeaderCellDef disableClear mat-sort-header>
                             Uploaded Date
@@ -38,17 +39,14 @@
 
 
                     <!-- category -->
-                    <ng-container matColumnDef="category">
-                        <th mat-header-cell *matHeaderCellDef>Category</th>
-                        <td mat-cell *matCellDef="let row">{{row.category}}</td>
-                    </ng-container>
-
-                    <!-- Taken/RD -->
                     <ng-container matColumnDef="writer">
                         <th mat-header-cell *matHeaderCellDef>Writer</th>
-                        <td mat-cell *matCellDef="let row">
-                            {{row.writer.username}}
-                        </td>
+                        <td mat-cell *matCellDef="let row">{{row.writer.username}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="employee">
+                        <th mat-header-cell *matHeaderCellDef>Employee</th>
+                        <td mat-cell *matCellDef="let row">{{row.employee.username}}</td>
                     </ng-container>
 
 
@@ -59,13 +57,14 @@
                             <button mat-flat-button color="primary" (click)="openDetailDialog(row)">detail</button>
                         </td>
                     </ng-container>
-                    <!-- detail -->
-                    <!-- <ng-container matColumnDef="note">
-                        <th mat-header-cell *matHeaderCellDef>Note</th>
+
+                    <ng-container matColumnDef="download">
+                        <th mat-header-cell *matHeaderCellDef> Download </th>
                         <td mat-cell *matCellDef="let row">
-                            <span *ngIf="row.updator">Revised in {{row.updatedAt | date}}</span>
+                            <a [href]="row.location" target="_blank"> <mat-icon>cloud_download</mat-icon></a>
                         </td>
-                    </ng-container> -->
+                    </ng-container>
+
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

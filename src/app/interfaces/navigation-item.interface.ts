@@ -29,7 +29,8 @@ export interface NavigationDropdown {
     label: string;
     icon?: string;
     children: Array<NavigationLink | NavigationDropdown>;
-    isManager?: boolean
+    isManager?: boolean,
+    isSuperManager?: boolean
 }
 
 /**

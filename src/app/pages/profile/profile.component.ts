@@ -56,7 +56,7 @@ export class ProfileComponent implements OnInit {
 
         this.profileData = res.managerInfo;
         this.employees = res.managersEmployee;
-
+        this.getManagerProfileData();
       })
     } else {
       this.employeeService.about().subscribe((res: any) => {
@@ -70,6 +70,7 @@ export class ProfileComponent implements OnInit {
         let tenureMonth = t.toFixed(1) * 10;
 
         this.tenure = `${tenureYear} Years ${tenureMonth} Months`
+        this.getUserProfileData();
       })
     }
   }

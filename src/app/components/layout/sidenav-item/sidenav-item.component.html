@@ -17,7 +17,8 @@
 
 <!-- 드롭다운 -->
 <ng-container *ngIf="isDropdown(item)">
-    <div *ngIf="item.isManager == flag.isManager">
+    <div
+        *ngIf="(item.isManager == false && flag.isManager == false) || (item.isManager == true && flag.isManager == true) || (item.isSuperManager == true && flag.isSuperManager == true)">
         <div matRipple class="item" (click)="toggleOpen()" [class.active]="isOpen || isActive" [class.open]="isOpen">
             <mat-icon class="item_icon">{{item.icon}}</mat-icon>
             <span class="item_label" style="flex: 1;">{{item.label}}</span>

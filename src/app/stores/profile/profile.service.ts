@@ -56,7 +56,6 @@ export class ProfileService {
         //     res.profileData.user.profile_img = '/assets/images/person.png'
         //   }
         // }
-
         this.updateUserProfile(res);
         return res.result = true;
       })

@@ -38,11 +38,11 @@ const routes: Routes = [
     canActivate: [signInGuard]
   },
   // 로그인 페이지 입니다.
-  { 
+  {
     path: 'sign-in',
     component: SignInComponent,
     canActivate: [signInGuard]
-  },  
+  },
   // 비밀번호 찾기 페이지 입니다.
   {
     path: 'find-password',
@@ -85,6 +85,10 @@ const routes: Routes = [
       {
         path: 'employee-management', canActivate: [myManagerGuard],
         loadChildren: () => import('./pages/employee-management/routes').then(mod => mod.EMPLOYEE_MANAGEMENT_ROUTES)
+      },
+      {
+        path: 'contract-management',
+        loadChildren: () => import('./pages/contract-management/routes').then(mod => mod.CONTRACT_MANAGEMENT_ROUTES)
       },
       // space에 대한 컴포넌트를 모아놓은 것입니다.
       {

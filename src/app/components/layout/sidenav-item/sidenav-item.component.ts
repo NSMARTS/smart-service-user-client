@@ -48,7 +48,8 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy {
   //메니저 구분
   flag = {
     isReplacementDay: null,
-    isManager: null
+    isManager: null,
+    isSuperManager: null
   }
 
   //열려있는지 파악하기 위함
@@ -78,7 +79,8 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy {
       this.userLeaveData = this.profileService.userProfile().personalLeaveData;
       if (this.profileService.userProfile().profileData?.user !== undefined) {
         this.flag.isManager = this.profileService.userProfile().profileData?.user.isManager;
-
+        // console.log(this.profileService.userProfile().profileData?.user.isSuperManager)
+        this.flag.isSuperManager = this.profileService.userProfile().profileData?.user.isSuperManager;
       }
     })
   }

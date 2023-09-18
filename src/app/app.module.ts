@@ -16,8 +16,10 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { ENV } from './config/config';
 
 
+
+
 export function tokenGetter() {
-	return localStorage.getItem(ENV.tokenName);
+  return localStorage.getItem(ENV.tokenName);
 }
 @NgModule({
   declarations: [
@@ -25,6 +27,7 @@ export function tokenGetter() {
     SpaceComponent,
     CreateSpaceDialogComponent,
     MainComponent,
+
   ],
   imports: [
     BrowserModule,
