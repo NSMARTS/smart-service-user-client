@@ -10,8 +10,8 @@ export class EmployeeService {
   private baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  employeeList(sort: string, order: SortDirection, page: number) {
-    return this.http.get(this.baseUrl + `/manager/employee?sort=${sort}&order=${order}&page=${page + 1}`);
+  employeeList(sort: string, order: SortDirection, page: number, username: string) {
+    return this.http.get(this.baseUrl + `/manager/employee?sort=${sort}&order=${order}&page=${page + 1}&username=${username}`);
   }
 
 

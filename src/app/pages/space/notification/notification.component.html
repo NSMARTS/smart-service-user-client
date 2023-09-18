@@ -3,8 +3,46 @@
         <h1 class="page_title">Notification</h1>
     </div>
 
-    <section class="search_seaction">
-
+    <section class="search_section">
+        <mat-card>
+            <form [formGroup]="searchForm" (ngSubmit)="SearchRequest()">
+                <mat-card-content>
+                    <div class="search_container">
+                        <div>
+                            <div class="search_tile">
+                                <span class="search_title">Title</span>
+                                <!-- 언제 부터 언제 까지 휴가 검색 -->
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Title</mat-label>
+                                    <input matInput formControlName="title" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="search_tile">
+                                <span class="search_title">category</span>
+                                <!-- 상태  -->
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Category</mat-label>
+                                    <mat-select formControlName="category">
+                                        <mat-option value="">All</mat-option>
+                                        <mat-option value="Notice">Notice</mat-option>
+                                        <mat-option value="Meeting">Meeting</mat-option>
+                                        <mat-option value="Pay">Pay</mat-option>
+                                        <mat-option value="Policy">Policy</mat-option>
+                                        <mat-option value="Issue">Issue</mat-option>
+                                        <mat-option value="Etc">Etc</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button mat-flat-button color="primary" type="submit">SEARCH</button>
+                </mat-card-actions>
+            </form>
+        </mat-card>
     </section>
 
     <section class="table_section mat-elevation-z1">

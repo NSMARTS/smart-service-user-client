@@ -9,6 +9,10 @@
             <mat-spinner></mat-spinner>
         </div>
 
+        <div *ngIf="meetings.length == 0">
+            The meeting does not exist.
+        </div>
+
         <div *ngFor="let meet of meetings">
             <mat-card>
                 <mat-card-header>
@@ -22,10 +26,13 @@
                     <mat-card-subtitle>
                         <div>
                             <div class='participants'>
-                                Manager: <p *ngFor="let manager of meet.managers">{{manager.username}}</p>
+                                <b>Manager:</b>
+                                <p class="participants_user" *ngFor="let manager of meet.managers">
+                                    {{manager.username}}</p>
                             </div>
                             <div class='participants'>
-                                Employees: <p class="participants_user" *ngFor=" let employee of meet.employees">
+                                <b>Employees:</b>
+                                <p class="participants_user" *ngFor=" let employee of meet.employees">
                                     {{employee.username}}</p>
                             </div>
                         </div>

@@ -77,7 +77,7 @@ export const sidenavRouteInfo: NavigationItem[] = [
                         type: 'link',
                         label: 'Leave Request',
                         route: '/leave/leave-request-list',
-                        icon: 'request_page',
+                        icon: 'event_note',
                         isManager: false,
                         isReplacementDay: false,
                     },
@@ -85,7 +85,7 @@ export const sidenavRouteInfo: NavigationItem[] = [
                         type: 'link',
                         label: 'Replacement Day Request',
                         route: '/leave/rd-request-list',
-                        icon: 'find_replace',
+                        icon: 'date_range',
                         isManager: false,
                         isReplacementDay: true
                     }

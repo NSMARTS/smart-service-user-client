@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -7,13 +9,17 @@ import { map, merge, startWith, switchMap } from 'rxjs';
 import { ContractDetailDialogComponent } from 'src/app/components/dialog/contract-detail-dialog/contract-detail-dialog.component';
 import { MaterialsModule } from 'src/app/materials/materials.module';
 import { ContractService } from 'src/app/services/contract/contract.service';
-
+interface FormData {
+  updatedAt: FormControl;
+  title: FormControl;
+}
 @Component({
   selector: 'app-contract-list',
   standalone: true,
   imports: [
     CommonModule,
-    MaterialsModule
+    MaterialsModule,
+    MatNativeDateModule,
   ],
 
   templateUrl: './contract-list.component.html',
@@ -35,11 +41,17 @@ export class ContractListComponent implements AfterViewInit {
   constructor(private contractService: ContractService, public dialog: MatDialog) {
 
   }
+  searchForm: FormGroup = new FormGroup<FormData>({
+    updatedAt: new FormControl<Date | null>(null),
+    title: new FormControl(''),
+  })
 
   ngAfterViewInit(): void {
     this.getData();
   }
-
+  SearchRequest() {
+    this.getData();
+  }
   getData() {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
@@ -48,7 +60,8 @@ export class ContractListComponent implements AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.contractService.contractList(this.sort.active, this.sort.direction, this.paginator.pageIndex).pipe()
+          return this.contractService.contractList(this.sort.active, this.sort.direction, this.paginator.pageIndex,
+            this.searchForm.value.updatedAt, this.searchForm.value.title).pipe()
         }),
         map((data: any) => {
           // Flip flag to show that loading has finished.

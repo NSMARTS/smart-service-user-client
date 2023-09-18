@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -9,7 +10,10 @@ import { NotificationDetailsDialogComponent } from 'src/app/components/dialog/no
 import { MaterialsModule } from 'src/app/materials/materials.module';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { NotificationService } from 'src/app/services/notification/notification.service';
-
+interface FormData {
+  title: FormControl;
+  category: FormControl;
+}
 @Component({
   selector: 'app-notification',
   standalone: true,
@@ -40,7 +44,14 @@ export class NotificationComponent implements AfterViewInit {
     , public dialog: MatDialog) {
     this.isManager = this.authService.getTokenInfo().isManager;
   }
+  searchForm: FormGroup = new FormGroup<FormData>({
+    title: new FormControl('',),
+    category: new FormControl('',)
+  })
 
+  SearchRequest() {
+    this.getData();
+  }
   ngAfterViewInit() {
     this.getData()
   }
@@ -54,7 +65,7 @@ export class NotificationComponent implements AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.notificationService.findNotifications(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.isManager).pipe()
+          return this.notificationService.findNotifications(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.isManager, this.searchForm.value.title, this.searchForm.value.category).pipe()
         }),
         map((data: any) => {
           // Flip flag to show that loading has finished.

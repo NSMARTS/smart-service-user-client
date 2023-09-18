@@ -10,7 +10,7 @@ export class NotificationService {
 
   constructor(private http: HttpClient) { }
 
-  findNotifications(sort: string, order: SortDirection, page: number, isManager: boolean) {
-    return this.http.get(this.baseUrl + `/notification?sort=${sort}&order=${order}&page=${page + 1}&isManager=${isManager}`)
+  findNotifications(sort: string, order: SortDirection, page: number, isManager: boolean, title: string, category: string) {
+    return this.http.get(this.baseUrl + `/notification?sort=${sort}&order=${order}&page=${page + 1}&isManager=${isManager}&title=${title}&category=${category}`)
   }
 }
