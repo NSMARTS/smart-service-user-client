@@ -39,8 +39,8 @@ export class LeaveService {
    * @param status 현재 상태
    * @returns 위 정보에 해당하는 데이터
    */
-  searchLeaves(sort: string, order: SortDirection, page: number, leaveType: string, leaveDay: string, leaveStartDate: Date, leaveEndDate: Date, status: string) {
-    return this.http.get(this.baseUrl + `/leave?sort=${sort}&order=${order}&page=${page + 1}&leaveType=${leaveType}&leaveDay=${leaveDay}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}`).pipe()
+  searchLeaves(sort: string, order: SortDirection, page: number, pageSize: number, leaveType: string, leaveDay: string, leaveStartDate: Date, leaveEndDate: Date, status: string) {
+    return this.http.get(this.baseUrl + `/leave?sort=${sort}&order=${order}&page=${page + 1}&pageSize=${pageSize}&leaveType=${leaveType}&leaveDay=${leaveDay}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}`).pipe()
   }
 
   /**
@@ -51,8 +51,8 @@ export class LeaveService {
    * @param page 몇 페이지
    * @returns 
    */
-  searchLeavesThreeMonth(sort: string, order: SortDirection, page: number) {
-    return this.http.get(this.baseUrl + `/leave/threeMonthAgo?sort=${sort}&order=${order}&page=${page + 1}`).pipe()
+  searchLeavesThreeMonth(sort: string, order: SortDirection, page: number, pageSize: number) {
+    return this.http.get(this.baseUrl + `/leave/threeMonthAgo?sort=${sort}&order=${order}&page=${page + 1}&pageSize=${pageSize}`).pipe()
   }
 
   leaveInformation() {
@@ -99,9 +99,9 @@ export class LeaveService {
   //manager
   //======================================================================================================================
 
-  getLeaveList(sort: string, order: SortDirection, page: number, leaveType: string, leaveDay: string, leaveStartDate: Date, leaveEndDate: Date, status: string, email: string) {
+  getLeaveList(sort: string, order: SortDirection, page: number, pageSize: number, leaveType: string, leaveDay: string, leaveStartDate: Date, leaveEndDate: Date, status: string, email: string) {
 
-    return this.http.get(this.baseUrl + `/manager/leave?sort=${sort}&order=${order}&page=${page + 1}&leaveType=${leaveType}&leaveDay=${leaveDay}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}&email=${email}`);
+    return this.http.get(this.baseUrl + `/manager/leave?sort=${sort}&order=${order}&page=${page + 1}&pageSize=${pageSize}&leaveType=${leaveType}&leaveDay=${leaveDay}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}&email=${email}`);
   }
 
 
@@ -111,13 +111,13 @@ export class LeaveService {
     return this.http.post(this.baseUrl + '/leave/rdRequestConfirm', data)
   }
 
-  replacementConfirmList(sort: string, order: SortDirection, page: number) {
-    return this.http.get(this.baseUrl + `/manager/leave/replacementConfirmList?sort=${sort}&order=${order}&page=${page + 1}`)
+  replacementConfirmList(sort: string, order: SortDirection, page: number, pageSize: number) {
+    return this.http.get(this.baseUrl + `/manager/leave/replacementConfirmList?sort=${sort}&order=${order}&page=${page + 1}&pageSize=${pageSize}`)
   }
 
 
-  replacementList(sort: string, order: SortDirection, page: number, leaveStartDate: Date, leaveEndDate: Date, status: string,) {
-    return this.http.get(this.baseUrl + `/leave/rdList?sort=${sort}&order=${order}&page=${page + 1}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}`)
+  replacementList(sort: string, order: SortDirection, page: number, pageSize: number, leaveStartDate: Date, leaveEndDate: Date, status: string,) {
+    return this.http.get(this.baseUrl + `/leave/rdList?sort=${sort}&order=${order}&page=${page + 1}&pageSize=${pageSize}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}`)
   }
 
   replacementInfo(_id: string) {

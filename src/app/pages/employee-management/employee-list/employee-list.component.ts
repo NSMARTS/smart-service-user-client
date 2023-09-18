@@ -47,6 +47,10 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
   SearchRequest() {
     this.getData();
   }
+
+  handlePageEvent() {
+    this.getData();
+  }
   getData() {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     merge(this.sort.sortChange, this.paginator.page)
@@ -54,7 +58,7 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.employeeService.employeeList(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.searchForm.value.username).pipe()
+          return this.employeeService.employeeList(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.searchForm.value.username).pipe()
         }),
         map((data: any) => {
           // Flip flag to show that loading has finished.

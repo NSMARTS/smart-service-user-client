@@ -49,9 +49,15 @@ export class ContractListComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.getData();
   }
+
   SearchRequest() {
     this.getData();
   }
+
+  handlePageEvent() {
+    this.getData();
+  }
+
   getData() {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
@@ -60,7 +66,7 @@ export class ContractListComponent implements AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.contractService.contractList(this.sort.active, this.sort.direction, this.paginator.pageIndex,
+          return this.contractService.contractList(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize,
             this.searchForm.value.updatedAt, this.searchForm.value.title).pipe()
         }),
         map((data: any) => {

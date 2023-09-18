@@ -63,6 +63,10 @@ export class RdRequestListComponent implements AfterViewInit {
     this.getData()
   }
 
+  handlePageEvent() {
+    this.getData();
+  }
+
   getData() {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
@@ -71,7 +75,7 @@ export class RdRequestListComponent implements AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.leaveService.replacementList(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.searchForm.value.leaveStartDate, this.searchForm.value.leaveEndDate, this.searchForm.value.status).pipe()
+          return this.leaveService.replacementList(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.searchForm.value.leaveStartDate, this.searchForm.value.leaveEndDate, this.searchForm.value.status).pipe()
         }),
         map((data: any) => {
           // Flip flag to show that loading has finished.

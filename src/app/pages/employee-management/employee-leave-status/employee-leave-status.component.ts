@@ -68,6 +68,10 @@ export class EmployeeLeaveStatusComponent implements AfterViewInit, OnInit {
     this.getData();
   }
 
+  handlePageEvent() {
+    this.getData();
+  }
+
   getData() {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     merge(this.sort.sortChange, this.paginator.page)
@@ -76,7 +80,7 @@ export class EmployeeLeaveStatusComponent implements AfterViewInit, OnInit {
         switchMap(() => {
           this.isLoadingResults = true;
 
-          return this.leaveService.getLeaveList(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.searchForm.value.leaveType, this.searchForm.value.leaveDay, this.searchForm.value.leaveStartDate, this.searchForm.value.leaveEndDate, this.searchForm.value.status, this.searchForm.value.email._id).pipe()
+          return this.leaveService.getLeaveList(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.searchForm.value.leaveType, this.searchForm.value.leaveDay, this.searchForm.value.leaveStartDate, this.searchForm.value.leaveEndDate, this.searchForm.value.status, this.searchForm.value.email._id).pipe()
         }),
         map((data: any) => {
           // Flip flag to show that loading has finished.

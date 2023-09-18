@@ -52,7 +52,9 @@ export class ManagerContractListComponent implements AfterViewInit {
   SearchRequest() {
     this.getData();
   }
-
+  handlePageEvent() {
+    this.getData();
+  }
   getData() {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     console.log(this.searchForm.value)
@@ -61,7 +63,7 @@ export class ManagerContractListComponent implements AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.contractService.managerContractList(this.sort.active, this.sort.direction, this.paginator.pageIndex,
+          return this.contractService.managerContractList(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize,
             this.searchForm.value.updatedAt, this.searchForm.value.title, this.searchForm.value.email._id
           ).pipe()
         }),

@@ -63,8 +63,8 @@
                     </tr>
                 </table>
             </div>
-            <mat-paginator [length]="resultsLength" [pageSize]="30"
-                aria-label="Select page of GitHub search results"></mat-paginator>
+            <mat-paginator [length]="resultsLength" (page)="handlePageEvent()" [pageSize]="10"
+                [pageSizeOptions]="[10, 30, 50]" aria-label="Select page of GitHub search results"></mat-paginator>
         </div>
     </section>
 </div>

@@ -55,7 +55,9 @@ export class NotificationComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.getData()
   }
-
+  handlePageEvent() {
+    this.getData()
+  }
 
   getData() {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
@@ -65,7 +67,7 @@ export class NotificationComponent implements AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.notificationService.findNotifications(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.isManager, this.searchForm.value.title, this.searchForm.value.category).pipe()
+          return this.notificationService.findNotifications(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.isManager, this.searchForm.value.title, this.searchForm.value.category).pipe()
         }),
         map((data: any) => {
           // Flip flag to show that loading has finished.
