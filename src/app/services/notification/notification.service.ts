@@ -13,4 +13,9 @@ export class NotificationService {
   findNotifications(sort: string, order: SortDirection, page: number, pageSize: number, isManager: boolean, title: string, category: string) {
     return this.http.get(this.baseUrl + `/notification?sort=${sort}&order=${order}&page=${page + 1}&pageSize=${pageSize}&isManager=${isManager}&title=${title}&category=${category}`)
   }
+
+
+  notificationContents(_id: string) {
+    return this.http.get(this.baseUrl + `/notification/contents?_id=${_id}`)
+  }
 }

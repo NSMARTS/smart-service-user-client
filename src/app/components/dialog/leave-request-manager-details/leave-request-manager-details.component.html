@@ -81,10 +81,10 @@
                     </td>
                 </tr>
                 <tr>
-                    <th *ngIf="data.status == 'approve' || data.status == 'rejected'">
+                    <th *ngIf="data.status == 'approve' || data.status == 'rejected' || data.status == 'pending'">
                         <b>Rejected Reason</b>
                     </th>
-                    <td *ngIf=" data.status=='approve'">
+                    <td *ngIf="data.status=='approve' || data.status == 'pending'">
                         <mat-form-field style=" width: 100%;">
                             <mat-label>Reason</mat-label>
                             <textarea [formControl]="rejectedReason" matInput rows="6"></textarea>
@@ -102,7 +102,7 @@
         <div>
             <button *ngIf="data.status == 'pending'" color="primary" mat-flat-button
                 (click)="approveRequest()">approve</button>
-            <button *ngIf="data.status == 'approve'" color="accent" mat-flat-button
+            <button *ngIf="data.status == 'approve' || data.status == 'pending'" color="accent" mat-flat-button
                 (click)="rejectRequest()">reject</button>
         </div>
 

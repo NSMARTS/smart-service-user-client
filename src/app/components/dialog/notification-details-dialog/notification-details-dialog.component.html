@@ -3,7 +3,7 @@
     <div mat-dialog-content>
         <p>created by : {{data.createdAt | date}}, {{data.writer.username}}</p>
         <p>updated by : {{data.updatedAt | date}}, {{data.updator.username}}</p>
-        <quill-view-html [content]="data.contents" theme="snow"></quill-view-html>
+        <quill-view-html [content]="contents" theme="snow"></quill-view-html>
     </div>
     <div mat-dialog-actions style="display: flex; justify-content: space-between">
         <button mat-flat-button mat-dialog-close>Close</button>
