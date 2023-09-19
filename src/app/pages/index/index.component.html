@@ -1,5 +1,5 @@
 <div class="index_page">
-    <section>
+    <section style="position: absolute; z-index: 10; width: 100%;">
         <mat-toolbar color="primary" class="toolbar mat-elevation-z6">
             <button mat-button>
                 <h1>SMART SERVICE</h1>
@@ -11,5 +11,9 @@
                 <button mat-button [routerLink]="['/sign-in']">SIGN IN</button>
             </div>
         </mat-toolbar>
+    </section>
+    <section class="welcome">
+        <h1>START SMART SERVICE</h1>
+        <button [routerLink]="['/sign-in']" mat-flat-button color="primary">go to signIn</button>
     </section>
 </div>

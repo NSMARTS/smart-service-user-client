@@ -5,8 +5,11 @@
             <div class="full-loading-shade" *ngIf="isStatusLoading">
                 <mat-spinner></mat-spinner>
             </div>
-            <mat-card-header>
+            <mat-card-header style="display: flex; justify-content: space-between;">
                 <mat-card-title>Profile</mat-card-title>
+                <mat-chip *ngIf="info?.manager?.isSuperManager" class="chip">
+                    <p style="margin: 0; font-size: 8pt;">super</p>
+                </mat-chip>
             </mat-card-header>
             <mat-card-content>
                 <div style="display: flex;" class="card_content">
