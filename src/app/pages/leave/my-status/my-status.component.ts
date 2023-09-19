@@ -91,4 +91,14 @@ export class MyStatusComponent implements AfterViewInit, OnInit {
       )
       .subscribe(data => (this.data = data));
   }
+
+  //status에 따른 색 변화
+  getColor(status: string) {
+    if (status == 'approve') {
+      return 'blue'
+    } else if (status == 'rejected') {
+      return 'red'
+    }
+    return ''
+  }
 }

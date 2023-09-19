@@ -116,4 +116,15 @@ export class RdRequestListComponent implements AfterViewInit {
       }
     })
   }
+
+
+  //status에 따른 색 변화
+  getColor(status: string) {
+    if (status == 'approve') {
+      return 'blue'
+    } else if (status == 'rejected') {
+      return 'red'
+    }
+    return ''
+  }
 }
