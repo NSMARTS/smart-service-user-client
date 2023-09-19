@@ -1,0 +1,81 @@
+.card_layout {
+    display: grid;
+    grid-gap: 20px;
+
+    @media (min-width: 1024px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 1023px) and (min-width: 817px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 816px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.card_content {
+    height: 120px;
+}
+
+.dashboard_number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30pt;
+    font-weight: bold;
+
+}
+
+
+.profile_image {
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background-color: #fff;
+}
+
+.info_line {
+    display: flex;
+    font-weight: bold;
+    font-size: 8pt;
+
+    p {
+        font-weight: 400;
+        margin: 0px;
+        margin-left: 5px;
+    }
+}
+
+.annual_info_line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h3 {
+        font-weight: bold;
+        font-size: 10pt;
+        margin: 0px;
+    }
+
+    p {
+        font-weight: 400;
+        margin: 0px;
+        margin-left: 5px;
+        font-size: 9pt;
+    }
+}
+
+.full-loading-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

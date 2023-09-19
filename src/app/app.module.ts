@@ -7,7 +7,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialsModule } from './materials/materials.module';
 import { SpaceComponent } from './pages/space/space.component';
 import { CreateSpaceDialogComponent } from './components/dialog/create-space-dialog/create-space-dialog.component';
-import { MainComponent } from './pages/main/main.component';
 import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
 
@@ -26,7 +25,6 @@ export function tokenGetter() {
     AppComponent,
     SpaceComponent,
     CreateSpaceDialogComponent,
-    MainComponent,
 
   ],
   imports: [

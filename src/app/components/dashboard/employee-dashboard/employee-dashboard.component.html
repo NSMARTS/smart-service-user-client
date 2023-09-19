@@ -1,0 +1,104 @@
+<div class="card_layout">
+    <!-- 프로필 정보 -->
+    <div>
+        <mat-card>
+            <div class="full-loading-shade" *ngIf="isStatusLoading">
+                <mat-spinner></mat-spinner>
+            </div>
+            <mat-card-header>
+                <mat-card-title>Profile</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div style="display: flex;" class="card_content">
+                    <!-- 이미지 들어갈 자리 -->
+                    <section style="padding:8px; padding-right: 20px;">
+                        <img class="profile_image" [src]="info?.employee.profileImgPath" alt="" />
+                    </section>
+                    <!-- 내용들 들어갈 자리 -->
+                    <section
+                        style="flex: 1; display: flex; justify-content: center;  flex-direction: column; gap: 3px;">
+                        <div class="info_line">Name: <p>{{info?.employee?.username}}</p>
+                        </div>
+                        <div class="info_line">Email: <p>{{info?.employee?.email}}</p>
+                        </div>
+                        <div class="info_line">Contract Start: <p>{{info?.employee?.empStartDate | date}}</p>
+                        </div>
+                        <div class="info_line">Company: <p>{{info?.employee?.company.companyName}}</p>
+                        </div>
+                        <div class="info_line">Country: <p>{{info?.employee?.country.countryName}}</p>
+                        </div>
+                    </section>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <!-- 멤버 수 -->
+    <!-- 누르면 employee list로 -->
+    <div>
+        <mat-card>
+            <div class="full-loading-shade" *ngIf="isStatusLoading">
+                <mat-spinner></mat-spinner>
+            </div>
+            <mat-card-header>
+                <mat-card-title>My Leave Status</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div style="display: flex;" class="card_content">
+                    <section
+                        style="flex: 1; display: flex; justify-content: center;  flex-direction: column; gap: 3px;">
+                        <div class="annual_info_line">
+                            <h3>Annual Leave:</h3>
+                            <p>{{info?.myLeaveStatus.AnnualLeave}} Day(s)</p>
+                        </div>
+                        <div class="annual_info_line">
+                            <h3>Sick Leave:</h3>
+                            <p>{{info?.myLeaveStatus.SickLeave}} Day(s)</p>
+                        </div>
+                        <div class="annual_info_line">
+                            <h3>Rollover:</h3>
+                            <p>{{info?.myLeaveStatus.Rollover}} Day(s)</p>
+                        </div>
+                        <div class="annual_info_line">
+                            <h3>Replacement:</h3>
+                            <p>{{info?.myLeaveStatus.Replacement}} Day(s)</p>
+                        </div>
+                    </section>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <!-- 휴가 요청 정보 -->
+    <!-- 누르면 employee leave status로 -->
+    <div>
+        <mat-card>
+            <div class="full-loading-shade" *ngIf="isStatusLoading">
+                <mat-spinner></mat-spinner>
+            </div>
+            <mat-card-header>
+                <mat-card-title>Leave Request</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="dashboard_number card_content">
+                    {{info?.leaveRequests}}
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <!-- 대체 휴가 요청 정보 -->
+    <!-- 누르면 rd confirm request로 -->
+    <div>
+        <mat-card>
+            <div class="full-loading-shade" *ngIf="isStatusLoading">
+                <mat-spinner></mat-spinner>
+            </div>
+            <mat-card-header>
+                <mat-card-title>RD Request</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="dashboard_number card_content">
+                    {{info?.rdRequest}}
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

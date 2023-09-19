@@ -1,1 +1,15 @@
-<p>main works!</p>
+<div>
+    <div class="page_header">
+        <h1 class="page_title">Dashboard</h1>
+    </div>
+
+    <section class="search_section">
+        <div *ngIf="isManager">
+            <app-manager-dashboard></app-manager-dashboard>
+        </div>
+
+        <div *ngIf="!isManager">
+            <app-employee-dashboard></app-employee-dashboard>
+        </div>
+    </section>
+</div>
