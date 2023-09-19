@@ -54,11 +54,11 @@
                             <h3>Sick Leave:</h3>
                             <p>{{info?.myLeaveStatus.SickLeave}} Day(s)</p>
                         </div>
-                        <div class="annual_info_line">
+                        <div *ngIf="info?.myLeaveStatus.isRollover" class="annual_info_line">
                             <h3>Rollover:</h3>
                             <p>{{info?.myLeaveStatus.Rollover}} Day(s)</p>
                         </div>
-                        <div class="annual_info_line">
+                        <div *ngIf="info?.myLeaveStatus.isReplacementDay" class="annual_info_line">
                             <h3>Replacement:</h3>
                             <p>{{info?.myLeaveStatus.Replacement}} Day(s)</p>
                         </div>
