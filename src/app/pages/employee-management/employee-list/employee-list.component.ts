@@ -23,7 +23,7 @@ interface FormData {
   styleUrls: ['./employee-list.component.scss']
 })
 export class EmployeeListComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['username', 'email', 'department', 'year', 'taken/Entitlement', 'taken/Rollover', 'taken/SickLeave', 'RD', 'tenure'];
+  displayedColumns: string[] = ['username', 'email', 'department', 'year', 'taken/Entitlement', 'taken/SickLeave', 'taken/Rollover', 'RD', 'tenure'];
   leaveDatabase: any | null;
   data: any = [];
 

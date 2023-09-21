@@ -6,8 +6,13 @@
     <span style="flex: 1"></span>
 
     <div style="display: flex; align-items: center; gap: 10px;">
-        <button mat-icon-button>
-            <mat-icon>notifications</mat-icon>
+        <button mat-icon-button [matMenuTriggerFor]="notification">
+            <div *ngIf="alertInfo?.count > 0">
+                <mat-icon [matBadge]="alertInfo?.count" matBadgeColor="accent">notifications</mat-icon>
+            </div>
+            <div *ngIf="alertInfo?.count == 0">
+                <mat-icon matBadgeColor="accent">notifications</mat-icon>
+            </div>
         </button>
         <button mat-button [matMenuTriggerFor]="profile">
             <div class="profile_button">
@@ -18,10 +23,36 @@
     </div>
 
     <!-- 알람 부분 -->
+    <mat-menu #notification xPosition="before" class="my-class">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Notification</mat-card-title>
+                <mat-card-subtitle>You have {{alertInfo?.count}} new notification</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list role="list">
+                    <div *ngFor="let info of alertInfo?.info">
+                        <mat-list-item role="listitem" (click)="clickAlert(info)">
+                            <mat-icon matListItemIcon>{{info.iconText}}</mat-icon>
+                            <div matListItemTitle style="white-space: pre-wrap !important; font-size: 14px;">
+                                {{info.alertLabel}}
+                            </div>
+
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                    </div>
+
+                </mat-list>
+            </mat-card-content>
+            <mat-card-actions style="display: flex; flex-direction: column;">
+                <button (click)="clickAllRead()" mat-flat-button color="primary">MARK ALL AS READ</button>
+            </mat-card-actions>
+        </mat-card>
+    </mat-menu>
 
     <!-- 로그아웃 메뉴 부분 -->
     <mat-menu #profile>
-        <button mat-menu-item [routerLink]="['/profile']">
+        <button mat-menu-item [routerLink]=" ['/profile']">
             <mat-icon>info</mat-icon>
             <span>About</span>
         </button>

@@ -13,6 +13,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { Router, RouterModule } from '@angular/router';
 import { UserProfileData } from 'src/app/interfaces/user-profile-data.interface';
 import { MaterialsModule } from 'src/app/materials/materials.module';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SidenavService } from 'src/app/stores/layout/sidenav.service';
 import { ProfileService } from 'src/app/stores/profile/profile.service';
@@ -33,10 +34,13 @@ export class ToolbarComponent implements OnInit {
   userProfileData: UserProfileData | undefined;
   userProfile$ = toObservable(this.profileService.userProfile);
 
+  alertInfo: any;
+
   constructor(
     private sidenavService: SidenavService,
     private authService: AuthService,
     private profileService: ProfileService,
+    private alertService: AlertService,
     private router: Router) {
 
     this.userProfile$.subscribe(() => {
@@ -52,10 +56,25 @@ export class ToolbarComponent implements OnInit {
   ngOnInit(): void {
     if (this.authService.getTokenInfo().isManager) {
       this.getManagerProfileData()
-    } else {
-      this.getUserProfileData()
-    }
 
+    } else {
+      this.getUserProfileData();
+    }
+    this.getData()
+  }
+
+
+  getData() {
+    if (this.authService.getTokenInfo().isManager) {
+      this.alertService.findManagerAlert().subscribe((res: any) => {
+        this.alertInfo = res;
+      })
+    }
+    else {
+      this.alertService.findEmployeeAlert().subscribe((res: any) => {
+        this.alertInfo = res;
+      })
+    }
   }
 
   /**
@@ -97,6 +116,42 @@ export class ToolbarComponent implements OnInit {
   signOut(): void {
     this.authService.signOut();
     this.router.navigate(['welcome'])
+  }
+
+
+
+
+  clickAlert(info: any) {
+    this.router.navigate([info.navigate])
+    if (this.authService.getTokenInfo().isManager) {
+      this.alertService.readOneManagerAlert(info._id).subscribe((res: any) => {
+        if (res.message == 'success') {
+          this.getData();
+        }
+      })
+    } else {
+      this.alertService.readOneEmployeeAlert(info._id).subscribe((res: any) => {
+        if (res.message == 'success') {
+          this.getData();
+        }
+      })
+    }
+  }
+
+  clickAllRead() {
+    if (this.authService.getTokenInfo().isManager) {
+      this.alertService.readAllManagerAlert().subscribe((res: any) => {
+        if (res.message == 'success') {
+          this.getData();
+        }
+      })
+    } else {
+      this.alertService.readAllEmployeeAlert().subscribe((res: any) => {
+        if (res.message == 'success') {
+          this.getData();
+        }
+      })
+    }
   }
 }
 

@@ -19,3 +19,15 @@
     background: $smart_service_primary_color;
     color: #fff;
 }
+
+
+::ng-deep .mat-mdc-menu-content {
+    padding: 0 !important;
+    max-width: none !important;
+}
+
+::ng-deep {
+    .mat-mdc-menu-panel.my-class {
+        max-width: none !important;
+    }
+}

@@ -23,6 +23,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatBadgeModule } from '@angular/material/badge';
 @NgModule({
   exports: [
     MatToolbarModule,
@@ -49,7 +50,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatCheckboxModule,
     MatDividerModule,
     MatAutocompleteModule,
-    MatChipsModule
+    MatChipsModule,
+    MatBadgeModule
   ]
 })
 export class MaterialsModule { }
