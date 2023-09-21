@@ -39,30 +39,34 @@ export class ReplacementDayConfirmingRequestComponent {
   })
 
   constructor(
-    private profileService: ProfileService, 
+    private profileService: ProfileService,
     private leaveService: LeaveService,
     private dialogService: DialogService,
     private router: Router,
   ) {
-      this.userProfile$.subscribe(() => {
-        this.userProfileData = this.profileService.userProfile().profileData?.user;
-      })
+    this.userProfile$.subscribe(() => {
+      this.userProfileData = this.profileService.userProfile().profileData?.user;
+    })
 
-      this.requestLeaveForm.get('leaveStartDate')?.valueChanges.subscribe(newValue => {
-        if (!this.requestLeaveForm.get('leaveEndDate')?.value) {
-          this.requestLeaveForm.get('leaveEndDate')?.setValue(newValue);
-        }
-      });
+    this.requestLeaveForm.get('leaveStartDate')?.valueChanges.subscribe(newValue => {
+      if (!this.requestLeaveForm.get('leaveEndDate')?.value) {
+        this.requestLeaveForm.get('leaveEndDate')?.setValue(newValue);
+      }
+    });
   }
 
   requestConfirm() {
-    const data = this.requestLeaveForm.value;
-    this.leaveService.requestReplacementConfirm(data).subscribe((res:any) => {
-      if(res.message == 'success'){
-        this.dialogService.openDialogPositive('request success');
-          this.router.navigate(['/leave/rd-request-list'])
-      }else{
-        this.dialogService.openDialogNegative(res.message);
+    this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
+      if (answer) {
+        const data = this.requestLeaveForm.value;
+        this.leaveService.requestReplacementConfirm(data).subscribe((res: any) => {
+          if (res.message == 'success') {
+            this.dialogService.openDialogPositive('request success');
+            this.router.navigate(['/leave/rd-request-list'])
+          } else {
+            this.dialogService.openDialogNegative(res.message);
+          }
+        })
       }
     })
   }

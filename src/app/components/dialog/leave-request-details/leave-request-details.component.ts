@@ -15,15 +15,15 @@ import { DialogService } from 'src/app/services/dialog/dialog.service';
   templateUrl: './leave-request-details.component.html',
   styleUrls: ['./leave-request-details.component.scss']
 })
-export class LeaveRequestDetailsComponent implements OnInit{
+export class LeaveRequestDetailsComponent implements OnInit {
 
   userProfileData: UserProfileData | undefined;
   userProfile$ = toObservable(this.profileService.userProfile);
-  
+
   constructor(
     public dialogRef: MatDialogRef<LeaveRequestDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private profileService: ProfileService, 
+    private profileService: ProfileService,
     private leaveService: LeaveService,
     private dialogService: DialogService
   ) {
@@ -31,19 +31,24 @@ export class LeaveRequestDetailsComponent implements OnInit{
       this.userProfileData = this.profileService.userProfile().profileData?.user;
     })
   }
-  
+
 
   ngOnInit(): void {
     // console.log(this.data)
   }
 
   cancelRequest() {
-    return this.leaveService.cancelLeaveRequest(this.data._id).subscribe((res: any) => {
-      if(res.message == 'update success'){
-        this.dialogService.openDialogPositive('Your vacation has been cancelled normally.').subscribe(() => {
-          this.dialogRef.close('success')
-        }) 
+    this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
+      if (answer) {
+        this.leaveService.cancelLeaveRequest(this.data._id).subscribe((res: any) => {
+          if (res.message == 'update success') {
+            this.dialogService.openDialogPositive('Your vacation has been cancelled normally.').subscribe(() => {
+              this.dialogRef.close('success')
+            })
+          }
+        })
       }
     })
+
   }
 }

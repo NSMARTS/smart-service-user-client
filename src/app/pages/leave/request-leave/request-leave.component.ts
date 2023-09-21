@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MaterialsModule } from 'src/app/materials/materials.module';
-import {MatNativeDateModule} from '@angular/material/core';
+import { MatNativeDateModule } from '@angular/material/core';
 import { UserProfileData } from 'src/app/interfaces/user-profile-data.interface';
 import { ProfileService } from 'src/app/stores/profile/profile.service';
 import { toObservable } from '@angular/core/rxjs-interop';
@@ -43,7 +43,7 @@ interface FormData {
 })
 export class RequestLeaveComponent {
   userProfileData: UserProfileData | undefined;
-  userLeaveData : any;
+  userLeaveData: any;
 
   userProfile$ = toObservable(this.profileService.userProfile);
   requestLeaveForm: FormGroup = new FormGroup<FormData>({
@@ -64,37 +64,37 @@ export class RequestLeaveComponent {
   leaveLoadingStatus: boolean = true;
 
   constructor(
-    private profileService: ProfileService, 
+    private profileService: ProfileService,
     private leaveService: LeaveService,
     private holidayService: HolidayService,
     private dialogService: DialogService,
     private router: Router,
   ) {
-      this.userProfile$.subscribe(() => {
-        this.userProfileData = this.profileService.userProfile().profileData?.user;
-        this.userLeaveData = this.profileService.userProfile().personalLeaveData;
+    this.userProfile$.subscribe(() => {
+      this.userProfileData = this.profileService.userProfile().profileData?.user;
+      this.userLeaveData = this.profileService.userProfile().personalLeaveData;
 
-      })
+    })
 
-      this.requestLeaveForm.get('leaveStartDate')?.valueChanges.subscribe(newValue => {
-        // Set the same value for leaveEndDate when leaveStartDate changes
-          if (!this.requestLeaveForm.get('leaveEndDate')?.value) {
-            this.requestLeaveForm.get('leaveEndDate')?.setValue(newValue);
-          }
-      });
+    this.requestLeaveForm.get('leaveStartDate')?.valueChanges.subscribe(newValue => {
+      // Set the same value for leaveEndDate when leaveStartDate changes
+      if (!this.requestLeaveForm.get('leaveEndDate')?.value) {
+        this.requestLeaveForm.get('leaveEndDate')?.setValue(newValue);
+      }
+    });
 
-      this.requestCountryHoliday();
-      this.requestCompanyHoliday();
+    this.requestCountryHoliday();
+    this.requestCompanyHoliday();
 
-      this.leaveLoadingStatus = true;
-      this.leaveService.leaveInformation().subscribe((res:any) => {
-        this.employeeAnnualLeave = res.employeeAnnualLeave;
-        this.employeeRollover = res.employeeRollover;
-        this.employeeSickLeave = res.employeeSickLeave;
-        this.leaveLoadingStatus = false;
-      });
+    this.leaveLoadingStatus = true;
+    this.leaveService.leaveInformation().subscribe((res: any) => {
+      this.employeeAnnualLeave = res.employeeAnnualLeave;
+      this.employeeRollover = res.employeeRollover;
+      this.employeeSickLeave = res.employeeSickLeave;
+      this.leaveLoadingStatus = false;
+    });
   }
-  
+
   myFilter = (d: Date | null): boolean => {
     const day = (d || new Date()).getDay();
 
@@ -126,23 +126,29 @@ export class RequestLeaveComponent {
   }
 
   requestLeave() {
-    this.leaveService.requestLeave({...this.requestLeaveForm.value, 
-      employeeAnnualLeave: this.employeeAnnualLeave, 
-      employeeRollover: this.employeeRollover,
-      employeeSickLeave: this.employeeSickLeave
-    }).subscribe({
-      next: (res: any) => {
-        if(res.message == 'success') {
-          this.dialogService.openDialogPositive('request success').subscribe(() => {
-            this.router.navigate(['/leave/leave-request-list'])
-          })
-        }else{
-          this.dialogService.openDialogNegative(res.message);
-        }
-      },
-      error: (e) => {
-        // console.error(e)
-        this.dialogService.openDialogNegative(e)
+    this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
+      if (answer) {
+        this.leaveService.requestLeave({
+          ...this.requestLeaveForm.value,
+          employeeAnnualLeave: this.employeeAnnualLeave,
+          employeeRollover: this.employeeRollover,
+          employeeSickLeave: this.employeeSickLeave
+        }).subscribe({
+          next: (res: any) => {
+            if (res.message == 'success') {
+
+              this.dialogService.openDialogPositive('request success').subscribe(() => {
+                this.router.navigate(['/leave/leave-request-list'])
+              })
+            } else {
+              this.dialogService.openDialogNegative(res.message);
+            }
+          },
+          error: (e) => {
+            // console.error(e)
+            this.dialogService.openDialogNegative(e)
+          }
+        })
       }
     })
   }

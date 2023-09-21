@@ -21,7 +21,7 @@ interface FormData {
   templateUrl: './replace-day-confirming-request-dialog.component.html',
   styleUrls: ['./replace-day-confirming-request-dialog.component.scss']
 })
-export class ReplaceDayConfirmingRequestDialogComponent  implements OnInit{
+export class ReplaceDayConfirmingRequestDialogComponent implements OnInit {
   rejectedReason = new FormControl<any>('');
   ConfirmForm: FormGroup = new FormGroup<FormData>({
     duration: new FormControl(0),
@@ -31,11 +31,11 @@ export class ReplaceDayConfirmingRequestDialogComponent  implements OnInit{
   userProfileData: UserProfileData | undefined;
   userProfile$ = toObservable(this.profileService.userProfile);
 
-  
+
   constructor(
     public dialogRef: MatDialogRef<ReplaceDayConfirmingRequestDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private profileService: ProfileService, 
+    private profileService: ProfileService,
     private leaveService: LeaveService,
     private dialogService: DialogService
   ) {
@@ -52,14 +52,16 @@ export class ReplaceDayConfirmingRequestDialogComponent  implements OnInit{
    * 휴일 신청 승인
    */
   acceptRequest() {
-    const data: any = this.ConfirmForm.value;
-    data._id = this.data._id;
-    return this.leaveService.acceptReplacementConfirm({data}).subscribe((res: any) => {
-      if(res.message == 'update success'){
-        this.dialogService.openDialogPositive('Your vacation has been accepted normally.').subscribe(() => {
-          this.dialogRef.close('success')
-        }) 
-      }
+    this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
+      const data: any = this.ConfirmForm.value;
+      data._id = this.data._id;
+      this.leaveService.acceptReplacementConfirm({ data }).subscribe((res: any) => {
+        if (res.message == 'update success') {
+          this.dialogService.openDialogPositive('Your vacation has been accepted normally.').subscribe(() => {
+            this.dialogRef.close('success')
+          })
+        }
+      })
     })
   }
 
@@ -67,14 +69,19 @@ export class ReplaceDayConfirmingRequestDialogComponent  implements OnInit{
    * 휴일 신청 거절
    */
   rejectRequest() {
-    const data: any = this.ConfirmForm.value;
-    data._id = this.data._id;
-    return this.leaveService.rejectReplacementConfirm({data}).subscribe((res: any) => {
-      if(res.message == 'update success'){
-        this.dialogService.openDialogPositive('Your vacation has been cancelled normally.').subscribe(() => {
-          this.dialogRef.close('success')
-        }) 
+    this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
+      if (answer) {
+        const data: any = this.ConfirmForm.value;
+        data._id = this.data._id;
+        this.leaveService.rejectReplacementConfirm({ data }).subscribe((res: any) => {
+          if (res.message == 'update success') {
+            this.dialogService.openDialogPositive('Your vacation has been cancelled normally.').subscribe(() => {
+              this.dialogRef.close('success')
+            })
+          }
+        })
       }
     })
+
   }
 }

@@ -22,8 +22,8 @@ interface FormData {
   templateUrl: './leave-request-manager-details.component.html',
   styleUrls: ['./leave-request-manager-details.component.scss']
 })
-export class LeaveRequestManagerDetailsComponent implements OnInit{
-  
+export class LeaveRequestManagerDetailsComponent implements OnInit {
+
 
   rejectedReason = new FormControl<any>('');
 
@@ -32,11 +32,11 @@ export class LeaveRequestManagerDetailsComponent implements OnInit{
   userProfileData: UserProfileData | undefined;
   userProfile$ = toObservable(this.profileService.userProfile);
 
-  
+
   constructor(
     public dialogRef: MatDialogRef<LeaveRequestManagerDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private profileService: ProfileService, 
+    private profileService: ProfileService,
     private leaveService: LeaveService,
     private dialogService: DialogService
   ) {
@@ -53,11 +53,15 @@ export class LeaveRequestManagerDetailsComponent implements OnInit{
    * 휴가 승인
    */
   approveRequest() {
-    return this.leaveService.approveLeaveRequest(this.data._id).subscribe((res: any) => {
-      if(res.message == 'update success'){
-        this.dialogService.openDialogPositive('Your vacation has been cancelled normally.').subscribe(() => {
-          this.dialogRef.close('success')
-        }) 
+    this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
+      if (answer) {
+        this.leaveService.approveLeaveRequest(this.data._id).subscribe((res: any) => {
+          if (res.message == 'update success') {
+            this.dialogService.openDialogPositive('Your vacation has been cancelled normally.').subscribe(() => {
+              this.dialogRef.close('success')
+            })
+          }
+        })
       }
     })
   }
@@ -66,11 +70,15 @@ export class LeaveRequestManagerDetailsComponent implements OnInit{
    * 휴가 거절
    */
   rejectRequest() {
-    return this.leaveService.rejectLeaveRequest(this.data._id, this.rejectedReason.value).subscribe((res: any) => {
-      if(res.message == 'update success'){
-        this.dialogService.openDialogPositive('Your vacation has been cancelled normally.').subscribe(() => {
-          this.dialogRef.close('success')
-        }) 
+    this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
+      if (answer) {
+        this.leaveService.rejectLeaveRequest(this.data._id, this.rejectedReason.value).subscribe((res: any) => {
+          if (res.message == 'update success') {
+            this.dialogService.openDialogPositive('Your vacation has been cancelled normally.').subscribe(() => {
+              this.dialogRef.close('success')
+            })
+          }
+        })
       }
     })
   }

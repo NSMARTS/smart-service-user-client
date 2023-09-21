@@ -45,30 +45,33 @@ export class ChangePasswordDialogComponent implements OnInit {
   ngOnInit(): void { }
 
   onSubmit() {
-
-    if (this.data.isManager) {
-      //비밀번호를 바꾸려는 사람이 매니저이면
-      this.employeeService.changeManagerPassword(this.passwordForm.value.password).subscribe((res: any) => {
-        if (res.message == 'success') {
-          this.dialogService.openDialogPositive('Password change succeeded. Please log in again.').subscribe(() => {
-            this.authService.signOut();
-            this.router.navigate(['welcome'])
-            this.dialogRef.close();
+    this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
+      if (answer) {
+        if (this.data.isManager) {
+          //비밀번호를 바꾸려는 사람이 매니저이면
+          this.employeeService.changeManagerPassword(this.passwordForm.value.password).subscribe((res: any) => {
+            if (res.message == 'success') {
+              this.dialogService.openDialogPositive('Password change succeeded. Please log in again.').subscribe(() => {
+                this.authService.signOut();
+                this.router.navigate(['welcome'])
+                this.dialogRef.close();
+              })
+            }
+          })
+        } else {
+          //아니면
+          this.employeeService.changePassword(this.passwordForm.value.password).subscribe((res: any) => {
+            if (res.message == 'success') {
+              this.dialogService.openDialogPositive('Password change succeeded. Please log in again.').subscribe(() => {
+                this.authService.signOut();
+                this.router.navigate(['welcome'])
+                this.dialogRef.close();
+              })
+            }
           })
         }
-      })
-    } else {
-      //아니면
-      this.employeeService.changePassword(this.passwordForm.value.password).subscribe((res: any) => {
-        if (res.message == 'success') {
-          this.dialogService.openDialogPositive('Password change succeeded. Please log in again.').subscribe(() => {
-            this.authService.signOut();
-            this.router.navigate(['welcome'])
-            this.dialogRef.close();
-          })
-        }
-      })
-    }
+      }
+    })
   }
 
   onNoClick(): void {

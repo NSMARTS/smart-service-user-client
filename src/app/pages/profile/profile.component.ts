@@ -170,21 +170,26 @@ export class ProfileComponent implements OnInit {
    */
   resetProfileImage() {
     //이미지를 설정하기 전의 상태로 초기화
-    if (this.isManager) {
-      this.employeeService.resetManagerProfileImage().subscribe((res: any) => {
-        if (res.message == 'success') {
-          this.getManagerProfileData();
-          this.getData();
+    this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
+      if (answer) {
+        if (this.isManager) {
+          this.employeeService.resetManagerProfileImage().subscribe((res: any) => {
+            if (res.message == 'success') {
+              this.getManagerProfileData();
+              this.getData();
+            }
+          })
+        } else {
+          this.employeeService.resetEmployeeProfileImage().subscribe((res: any) => {
+            if (res.message == 'success') {
+              this.getUserProfileData();
+              this.getData();
+            }
+          })
         }
-      })
-    } else {
-      this.employeeService.resetEmployeeProfileImage().subscribe((res: any) => {
-        if (res.message == 'success') {
-          this.getUserProfileData();
-          this.getData();
-        }
-      })
-    }
+      }
+    })
+
   }
 
 

@@ -86,25 +86,36 @@ export class ProfileEditComponent {
 
 
   employeeSubmit() {
-    this.employeeService.changeEmployeeInfo(this.employeeForm.value).subscribe((res: any) => {
-      console.log(res);
-      if (res.message == 'success') [
-        this.dialogService.openDialogPositive('Profile change succeeded.').subscribe(() => {
-          this.router.navigate(['profile'])
+    this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
+      if (answer) {
+        this.employeeService.changeEmployeeInfo(this.employeeForm.value).subscribe((res: any) => {
+
+          if (res.message == 'success') [
+            this.dialogService.openDialogPositive('Profile change succeeded.').subscribe(() => {
+              this.router.navigate(['profile'])
+            })
+          ]
         })
-      ]
+      }
+
     })
+
   }
 
 
   managerSubmit() {
-    this.employeeService.changeMangerInfo(this.managerForm.value).subscribe((res: any) => {
-      console.log(res);
-      if (res.message == 'success') {
-        this.dialogService.openDialogPositive('Profile change succeeded.').subscribe(() => {
-          this.router.navigate(['profile'])
+    this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
+      if (answer) {
+        this.employeeService.changeMangerInfo(this.managerForm.value).subscribe((res: any) => {
+
+          if (res.message == 'success') {
+            this.dialogService.openDialogPositive('Profile change succeeded.').subscribe(() => {
+              this.router.navigate(['profile'])
+            })
+          }
         })
       }
+
     })
   }
 }
