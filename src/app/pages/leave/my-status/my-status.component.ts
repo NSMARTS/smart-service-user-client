@@ -17,7 +17,7 @@ import { LeaveService } from 'src/app/services/leave/leave.service';
   styleUrls: ['./my-status.component.scss']
 })
 export class MyStatusComponent implements AfterViewInit, OnInit {
-  displayedColumns: string[] = ['createdAt', 'period', 'year', 'day', 'type', 'status'];
+  displayedColumns: string[] = ['createdAt', 'period', 'duration', 'year', 'day', 'type', 'status'];
   leaveDatabase: any | null;
   data: any = [];
 

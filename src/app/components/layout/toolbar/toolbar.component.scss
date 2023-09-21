@@ -31,3 +31,14 @@
         max-width: none !important;
     }
 }
+
+.alert_list_item:hover {
+    cursor: pointer;
+}
+
+.alert_list_item_text {
+    white-space: pre !important;
+    font-size: 12px;
+    font-weight: bold;
+    color: gray
+}

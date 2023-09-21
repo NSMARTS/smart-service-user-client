@@ -32,10 +32,9 @@
             <mat-card-content>
                 <mat-list role="list">
                     <div *ngFor="let info of alertInfo?.info">
-                        <mat-list-item role="listitem" (click)="clickAlert(info)">
+                        <mat-list-item role="listitem" (click)="clickAlert(info)" class="alert_list_item">
                             <mat-icon matListItemIcon>{{info.iconText}}</mat-icon>
-                            <div matListItemTitle style="white-space: pre-wrap !important; font-size: 14px;">
-                                {{info.alertLabel}}
+                            <div matListItemTitle class="alert_list_item_text">{{info.alertLabel}}
                             </div>
 
                         </mat-list-item>

@@ -85,7 +85,8 @@
                             </th>
                             <td>
                                 <div>
-                                    <p *ngFor="let manager of managers">{{manager?.managerId?.username}}</p>
+                                    <p *ngFor="let manager of managers">{{manager?.managerId?.username}}
+                                        ({{manager?.managerId?.email}})</p>
                                 </div>
                             </td>
                         </tr>
@@ -129,6 +130,7 @@
                             </th>
                             <td>
                                 <div>
+
                                     <div>
                                         <img class="profile_image" [src]="profileData?.profileImgPath" alt="" />
                                     </div>
@@ -148,7 +150,8 @@
                                 <div>Email</div>
                             </th>
                             <td>
-                                <div>{{profileData?.email}}</div>
+                                <div>{{profileData?.email}} <b *ngIf="profileData?.isSuperManager">(super manager)</b>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -189,7 +192,8 @@
                             </th>
                             <td style="border-bottom: none;">
                                 <div>
-                                    <p *ngFor="let employee of employees">{{employee?.employeeId?.username}}</p>
+                                    <p *ngFor="let employee of employees">{{employee?.employeeId?.username}}
+                                        ({{employee?.employeeId?.email}})</p>
                                 </div>
                             </td>
                         </tr>

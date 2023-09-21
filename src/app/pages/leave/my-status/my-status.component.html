@@ -172,7 +172,11 @@
                         <td mat-cell *matCellDef="let row">{{row.leaveStartDate | date }} ~ {{row.leaveEndDate | date}}
                         </td>
                     </ng-container>
-
+                    <!-- duration -->
+                    <ng-container matColumnDef="duration">
+                        <th mat-header-cell *matHeaderCellDef>duration</th>
+                        <td mat-cell *matCellDef="let row">{{row.leaveDuration }}</td>
+                    </ng-container>
                     <!-- year -->
                     <ng-container matColumnDef="year">
                         <th mat-header-cell *matHeaderCellDef>year</th>
