@@ -14,6 +14,7 @@ import { Subscription, filter } from 'rxjs';
 import { dropdownAnimation } from 'src/app/animations/dropdown.animation';
 import { NavigationDropdown, NavigationLink } from 'src/app/interfaces/navigation-item.interface';
 import { MaterialsModule } from 'src/app/materials/materials.module';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { NavigationService } from 'src/app/stores/layout/navigation.service';
 import { ProfileService } from 'src/app/stores/profile/profile.service';
 
@@ -73,15 +74,19 @@ export class SidenavItemComponent implements OnInit, OnChanges, OnDestroy {
   userLeaveData: any;
   constructor(
     private profileService: ProfileService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private authService: AuthService
   ) {
+    // console.log(this.authService.getTokenInfo().isManager, this.authService.getTokenInfo().isSuperManager)
+    this.flag.isManager = this.authService.getTokenInfo().isManager;
+    this.flag.isSuperManager = this.authService.getTokenInfo().isSuperManager;
     this.userProfile$.subscribe(() => {
       this.userLeaveData = this.profileService.userProfile().personalLeaveData;
-      if (this.profileService.userProfile().profileData?.user !== undefined) {
-        this.flag.isManager = this.profileService.userProfile().profileData?.user.isManager;
-        // console.log(this.profileService.userProfile().profileData?.user.isSuperManager)
-        this.flag.isSuperManager = this.profileService.userProfile().profileData?.user.isSuperManager;
-      }
+      // if (this.profileService.userProfile().profileData?.user !== undefined) {
+      //   this.flag.isManager = this.profileService.userProfile().profileData?.user.isManager;
+      //   // console.log(this.profileService.userProfile().profileData?.user.isSuperManager)
+      //   this.flag.isSuperManager = this.profileService.userProfile().profileData?.user.isSuperManager;
+      // }
     })
   }
 

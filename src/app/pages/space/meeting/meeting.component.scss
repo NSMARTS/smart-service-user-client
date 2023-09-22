@@ -19,12 +19,15 @@
 .participants {
     display: flex;
     gap: 4px;
+    flex-wrap: wrap;
 
-
-
+    margin-bottom: 5px;
 }
 
 .participants_user {
+    margin: 0;
+    font-size: 12px;
+
     &::after {
         content: ',';
     }
