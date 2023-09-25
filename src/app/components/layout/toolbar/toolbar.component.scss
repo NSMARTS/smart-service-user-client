@@ -32,6 +32,12 @@
     }
 }
 
+.alert_list_item {
+    display: flex;
+    justify-content: center !important;
+
+}
+
 .alert_list_item:hover {
     cursor: pointer;
 }
@@ -41,4 +47,15 @@
     font-size: 12px;
     font-weight: bold;
     color: gray
+}
+
+.sub_header {
+    font-weight: bold;
+    margin: 0px;
+    color: $smart_service_primary_color;
+}
+
+.no_notification {
+    font-size: 12px;
+    color: gray;
 }

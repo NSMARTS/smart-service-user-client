@@ -138,7 +138,7 @@ export class ToolbarComponent implements OnInit {
     }
   }
 
-  clickAllRead() {
+  AllRead() {
     if (this.authService.getTokenInfo().isManager) {
       this.alertService.readAllManagerAlert().subscribe((res: any) => {
         if (res.message == 'success') {

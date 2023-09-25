@@ -120,7 +120,7 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
 
   //===============================================================
   setYear(normalizedYear: any, datepicker: MatDatepicker<moment.Moment>) {
-    this.searchForm.controls['date'].setValue(normalizedYear)
     datepicker.close();
+    this.searchForm.controls['date'].setValue(normalizedYear)
   }
 }

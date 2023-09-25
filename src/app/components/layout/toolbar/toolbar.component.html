@@ -6,7 +6,7 @@
     <span style="flex: 1"></span>
 
     <div style="display: flex; align-items: center; gap: 10px;">
-        <button mat-icon-button [matMenuTriggerFor]="notification">
+        <button mat-icon-button [matMenuTriggerFor]="notification" (click)="AllRead()">
             <div *ngIf="alertInfo?.count > 0">
                 <mat-icon [matBadge]="alertInfo?.count" matBadgeColor="accent">notifications</mat-icon>
             </div>
@@ -24,28 +24,47 @@
 
     <!-- 알람 부분 -->
     <mat-menu #notification xPosition="before" class="my-class">
-        <mat-card>
+        <mat-card style="width: 400px;">
             <mat-card-header>
                 <mat-card-title>Notification</mat-card-title>
-                <mat-card-subtitle>You have {{alertInfo?.count}} new notification</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
-                <mat-list role="list">
-                    <div *ngFor="let info of alertInfo?.info">
-                        <mat-list-item role="listitem" (click)="clickAlert(info)" class="alert_list_item">
-                            <mat-icon matListItemIcon>{{info.iconText}}</mat-icon>
-                            <div matListItemTitle class="alert_list_item_text">{{info.alertLabel}}
-                            </div>
+                <div style="max-height: 720px; overflow: auto;">
+                    <h3 class="sub_header">Today Notification</h3>
+                    <mat-list role="list">
+                        <div *ngFor="let info of alertInfo?.todayInfo">
+                            <mat-list-item role="listitem" (click)="clickAlert(info)" class="alert_list_item">
+                                <mat-icon matListItemIcon>{{info.iconText}}</mat-icon>
+                                <div matListItemTitle class="alert_list_item_text">{{info.alertLabel}}
+                                </div>
+                                <div matListItemLine>{{info.createdAt | date:'short'}}</div>
+                            </mat-list-item>
+                        </div>
+                        <div class="no_notification" *ngIf=" alertInfo?.todayInfo.length == 0">
+                            There is no notification
+                        </div>
+                    </mat-list>
+                    <h3 class="sub_header">Previous Notification</h3>
+                    <mat-list role="list">
 
-                        </mat-list-item>
-                        <mat-divider></mat-divider>
-                    </div>
+                        <div *ngFor="let info of alertInfo?.info">
+                            <mat-list-item role="listitem" (click)="clickAlert(info)" class="alert_list_item">
+                                <mat-icon matListItemIcon>{{info.iconText}}</mat-icon>
+                                <div matListItemTitle class="alert_list_item_text">{{info.alertLabel}}
+                                </div>
+                                <div matListItemLine>{{info.createdAt | date:'short'}}</div>
+                            </mat-list-item>
+                        </div>
+                        <div class="no_notification" *ngIf=" alertInfo?.info.length == 0">
+                            There is no notification
+                        </div>
+                    </mat-list>
+                </div>
 
-                </mat-list>
             </mat-card-content>
-            <mat-card-actions style="display: flex; flex-direction: column;">
+            <!-- <mat-card-actions style="display: flex; flex-direction: column;">
                 <button (click)="clickAllRead()" mat-flat-button color="primary">MARK ALL AS READ</button>
-            </mat-card-actions>
+            </mat-card-actions> -->
         </mat-card>
     </mat-menu>
 
