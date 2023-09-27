@@ -9,5 +9,6 @@ export interface UserProfileData {
     //프로필 이미지 
     profileImgPath: string,
     //매니저 여부
-    isManager: boolean
+    isManager: boolean,
+    empStartDate: Date
 }

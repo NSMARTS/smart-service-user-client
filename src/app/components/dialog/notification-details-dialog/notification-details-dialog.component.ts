@@ -27,7 +27,6 @@ export class NotificationDetailsDialogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.data['_id'])
     this.notificationService.notificationContents(this.data['_id']).subscribe((res: any) => {
       this.contents = res.contents;
     })

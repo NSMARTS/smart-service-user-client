@@ -62,6 +62,9 @@ export class RequestLeaveComponent {
   employeeSickLeave: number | undefined;
 
   leaveLoadingStatus: boolean = true;
+  tempDate: any;
+  rolloverStartMonth: Date = new Date()
+  rolloverMaxMonth: Date = new Date()
 
   constructor(
     private profileService: ProfileService,
@@ -73,14 +76,30 @@ export class RequestLeaveComponent {
     this.userProfile$.subscribe(() => {
       this.userProfileData = this.profileService.userProfile().profileData?.user;
       this.userLeaveData = this.profileService.userProfile().personalLeaveData;
+      if (this.userProfileData) {
+
+        this.rolloverMaxMonth.setMonth(new Date(this.userProfileData!.empStartDate).getMonth() + this.userLeaveData.rolloverMaxMonth)
+        this.rolloverMaxMonth.setDate(new Date(this.userProfileData!.empStartDate).getDate())
+
+        this.rolloverStartMonth.setMonth(new Date(this.userProfileData!.empStartDate).getMonth())
+        this.rolloverStartMonth.setDate(new Date(this.userProfileData!.empStartDate).getDate())
+      }
 
     })
 
     this.requestLeaveForm.get('leaveStartDate')?.valueChanges.subscribe(newValue => {
+
+      if (this.userLeaveData.annualPolicy != 'byContract') {
+        this.tempDate = moment(this.userProfileData?.empStartDate).set('year', moment(this.requestLeaveForm.get('leaveStartDate')?.value).year()).set('month', 1).set('date', 1)
+      } else {
+        this.tempDate = moment(this.userProfileData?.empStartDate).set('year', moment(this.requestLeaveForm.get('leaveStartDate')?.value).year())
+      }
+
       // Set the same value for leaveEndDate when leaveStartDate changes
       if (!this.requestLeaveForm.get('leaveEndDate')?.value) {
         this.requestLeaveForm.get('leaveEndDate')?.setValue(newValue);
       }
+
     });
 
     this.requestCountryHoliday();
@@ -108,8 +127,12 @@ export class RequestLeaveComponent {
       return moment(d).isSame(holiday.companyHolidayDate)
     })
 
+    const isRolloverBefore = moment(this.rolloverStartMonth).isBefore(moment(d))
+    const isRolloverAfter = moment(this.rolloverMaxMonth).isAfter(moment(d))
+
     // Prevent Saturday and Sunday from being selected.
-    return day !== 0 && day !== 6 && !isCountryHoliday.length && !isCompanyHoliday.length;
+    return day !== 0 && day !== 6 && !isCountryHoliday.length && !isCompanyHoliday.length
+      && (this.requestLeaveForm.get('leaveType')?.value == 'rollover' ? isRolloverBefore && isRolloverAfter : true);
   };
 
 
@@ -126,30 +149,91 @@ export class RequestLeaveComponent {
   }
 
   requestLeave() {
-    this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
-      if (answer) {
-        this.leaveService.requestLeave({
-          ...this.requestLeaveForm.value,
-          employeeAnnualLeave: this.employeeAnnualLeave,
-          employeeRollover: this.employeeRollover,
-          employeeSickLeave: this.employeeSickLeave
-        }).subscribe({
-          next: (res: any) => {
-            if (res.message == 'success') {
+    const isContain = this.tempDate.isBetween(this.requestLeaveForm.get('leaveStartDate')?.value, this.requestLeaveForm.get('leaveEndDate')?.value, 'day', '[]');
 
-              this.dialogService.openDialogPositive('request success').subscribe(() => {
-                this.router.navigate(['/leave/leave-request-list'])
-              })
-            } else {
-              this.dialogService.openDialogNegative(res.message);
+    if (isContain
+      && moment(this.requestLeaveForm.get('leaveStartDate')?.value).diff(this.requestLeaveForm.get('leaveEndDate')?.value, 'day') != 0
+      && (!moment(this.requestLeaveForm.get('leaveStartDate')?.value).isSame(moment(new Date(this.tempDate.year(), this.tempDate.month(), this.tempDate.date()))))
+    ) {
+
+      console.log(this.requestLeaveForm.get('leaveStartDate')?.value, this.requestLeaveForm.get('leaveEndDate')?.value, new Date(this.tempDate.year(), this.tempDate.month(), this.tempDate.date()), new Date(this.tempDate.year(), this.tempDate.month(), this.tempDate.date() - 1))
+
+      this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
+        if (answer) {
+          this.leaveService.requestLeave({
+            ...this.requestLeaveForm.value,
+            leaveStartDate: this.requestLeaveForm.get('leaveStartDate')?.value,
+            leaveEndDate: new Date(this.tempDate.year(), this.tempDate.month(), this.tempDate.date() - 1),
+            employeeAnnualLeave: this.employeeAnnualLeave,
+            employeeRollover: this.employeeRollover,
+            employeeSickLeave: this.employeeSickLeave
+          }).subscribe({
+            next: (res: any) => {
+              if (res.message == 'success') {
+
+                this.leaveService.requestLeave({
+                  ...this.requestLeaveForm.value,
+                  leaveStartDate: new Date(this.tempDate.year(), this.tempDate.month(), this.tempDate.date()),
+                  leaveEndDate: this.requestLeaveForm.get('leaveEndDate')?.value,
+                  employeeAnnualLeave: this.employeeAnnualLeave,
+                  employeeRollover: this.employeeRollover,
+                  employeeSickLeave: this.employeeSickLeave
+                }).subscribe({
+                  next: (res: any) => {
+                    if (res.message == 'success') {
+
+                      this.dialogService.openDialogPositive('request success').subscribe(() => {
+                        this.router.navigate(['/leave/leave-request-list'])
+                      })
+                    } else {
+                      this.dialogService.openDialogNegative(res.message);
+                    }
+                  },
+                  error: (e) => {
+                    console.error(e)
+                    this.dialogService.openDialogNegative(e)
+                  }
+                })
+              } else {
+                this.dialogService.openDialogNegative(res.message);
+              }
+            },
+            error: (e) => {
+              console.error(e)
+              this.dialogService.openDialogNegative(e)
             }
-          },
-          error: (e) => {
-            // console.error(e)
-            this.dialogService.openDialogNegative(e)
-          }
-        })
-      }
-    })
+          })
+        }
+      })
+
+    } else {
+      this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
+        if (answer) {
+          this.leaveService.requestLeave({
+            ...this.requestLeaveForm.value,
+            employeeAnnualLeave: this.employeeAnnualLeave,
+            employeeRollover: this.employeeRollover,
+            employeeSickLeave: this.employeeSickLeave
+          }).subscribe({
+            next: (res: any) => {
+              if (res.message == 'success') {
+
+                this.dialogService.openDialogPositive('request success').subscribe(() => {
+                  this.router.navigate(['/leave/leave-request-list'])
+                })
+              } else {
+                this.dialogService.openDialogNegative(res.message);
+              }
+            },
+            error: (e) => {
+              console.error(e)
+              this.dialogService.openDialogNegative(e)
+            }
+          })
+        }
+      })
+    }
+
+
   }
 }
