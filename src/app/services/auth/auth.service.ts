@@ -4,13 +4,12 @@
  * 작성일시: 2023-08-22
  * 작성자: 임호균
  * 설명: 로그인 백엔드 연동 로직
- * 
- * 
+ *
+ *
  * 수정일시: 2023-0823
  * 수정자: 임호균
- * 수정 내용: 로그인 리다이렉트, 다이어로그 작업 
+ * 수정 내용: 로그인 리다이렉트, 다이어로그 작업
  */
-
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -19,7 +18,7 @@ import { Observable } from 'rxjs';
 import { shareReplay, tap } from 'rxjs/operators';
 
 import { ENV } from 'src/app/config/config';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 
 //토큰 타입
 interface Token {
@@ -33,11 +32,11 @@ interface SignInData {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private baseUrl = environment.apiUrl;
-  constructor(private http: HttpClient, private jwtHelper: JwtHelperService ) { }
+  constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {}
 
   /**
    * @작성일 2023-08-22
@@ -46,34 +45,35 @@ export class AuthService {
    * @param loginData SignInData [email: string, password: string]
    * @returns Observable<Token>
    */
-  signIn(loginData : SignInData) : Observable<Token>{
-    return this.http.post<Token>(this.baseUrl + `/employee/auth/signIn`, loginData).pipe(
-      shareReplay(),
-      tap(
-        (res: any) => {
-          this.setToken(res.token)
+  signIn(loginData: SignInData): Observable<Token> {
+    return this.http
+      .post<Token>(this.baseUrl + `/employee/auth/signIn`, loginData)
+      .pipe(
+        shareReplay(),
+        tap((res: any) => {
+          this.setToken(res.token);
         }),
         shareReplay()
-    )
+      );
   }
 
   /**
-* @작성일 2023-09-04
+   * @작성일 2023-09-04
    * @작성장 임호균
    * @description 매니저 로그인 로직
    * @param loginData SignInData [email: string, password: string]
    * @returns Observable<Token>
    */
-  managerSignIn(loginData: SignInData) : Observable<Token> {
-    return this.http.post<Token>(this.baseUrl + `/manager/auth/managerSignIn`, loginData).pipe(
-      shareReplay(),
-      tap(
-        (res: any) => {
-          this.setToken(res.token)
-        }
-      ),
-      shareReplay()
-    )
+  managerSignIn(loginData: SignInData): Observable<Token> {
+    return this.http
+      .post<Token>(this.baseUrl + `/manager/auth/managerSignIn`, loginData)
+      .pipe(
+        shareReplay(),
+        tap((res: any) => {
+          this.setToken(res.token);
+        }),
+        shareReplay()
+      );
   }
 
   /**
@@ -100,7 +100,7 @@ export class AuthService {
    * @작성일 2023-08-22
    * @작성장 임호균
    * @description 로컬 스토리지에서 토큰 가져오기
-   * @returns 
+   * @returns
    */
   getToken(): string | null {
     return localStorage.getItem(ENV.tokenName);
@@ -109,18 +109,18 @@ export class AuthService {
   /**
    * @작성일 2023-08-22
    * @작성장 임호균
-   * @description 로컬 스토리리지에 토근 설정하기 
-   * @returns 
+   * @description 로컬 스토리리지에 토근 설정하기
+   * @returns
    */
   setToken(token: string): void {
-    localStorage.setItem(ENV.tokenName, token)
-  } 
+    localStorage.setItem(ENV.tokenName, token);
+  }
 
   /**
    * @작성일 2023-08-22
    * @작성장 임호균
    * @description 로컬 스토리지에 저장된 토큰 정보 삭제하기
-   * @returns 
+   * @returns
    */
   removeToken(): void {
     localStorage.removeItem(ENV.tokenName);
@@ -131,24 +131,19 @@ export class AuthService {
    * @작성일 2023-08-22
    * @작성장 임호균
    * @description 로컬 스토리지에 저장된 토큰 정보 유효성 검사
-   * @returns 
+   * @returns
    */
   isTokenExpired(token: string) {
-    return this.jwtHelper.isTokenExpired(token)
+    return this.jwtHelper.isTokenExpired(token);
   }
 
   /**
    * @작성일 2023-08-22
    * @작성장 임호균
-   * @description 로컬 스토리지에 저장된 토큰 정보 복호화 
-   * @returns 
+   * @description 로컬 스토리지에 저장된 토큰 정보 복호화
+   * @returns
    */
   getTokenInfo() {
     return this.jwtHelper.decodeToken(this.getToken()!);
   }
-
-
-
-  
-
 }

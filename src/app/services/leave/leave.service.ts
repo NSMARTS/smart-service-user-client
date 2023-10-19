@@ -2,33 +2,31 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SortDirection } from '@angular/material/sort';
 import { RequestLeaveData } from 'src/app/interfaces/request-leave.interface';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LeaveService {
   private baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
-
-  /**
- * @작성일 2023-08-29
- * @작성장 임호균
- * @description 로그인 로직
- * @param loginData RequestLeaveData []
- * @returns Observable<Token>
- */
-  requestLeave(leaveData: RequestLeaveData) {
-    return this.http.post(this.baseUrl + `/leave`, leaveData).pipe(
-    )
-  }
-
+  constructor(private http: HttpClient) {}
 
   /**
    * @작성일 2023-08-29
-  * @작성장 임호균
-  * @description 로그인 로직
+   * @작성장 임호균
+   * @description 로그인 로직
+   * @param loginData RequestLeaveData []
+   * @returns Observable<Token>
+   */
+  requestLeave(leaveData: RequestLeaveData) {
+    return this.http.post(this.baseUrl + `/leave`, leaveData).pipe();
+  }
+
+  /**
+   * @작성일 2023-08-29
+   * @작성장 임호균
+   * @description 로그인 로직
    * @param sort 오름차순 내림차순
    * @param order 오름차순 내림차순
    * @param page 몇 페이지
@@ -39,20 +37,49 @@ export class LeaveService {
    * @param status 현재 상태
    * @returns 위 정보에 해당하는 데이터
    */
-  searchLeaves(sort: string, order: SortDirection, page: number, pageSize: number, leaveType: string, leaveDay: string, leaveStartDate: Date, leaveEndDate: Date, status: string) {
-    return this.http.get(this.baseUrl + `/leave?sort=${sort}&order=${order}&page=${page + 1}&pageSize=${pageSize}&leaveType=${leaveType}&leaveDay=${leaveDay}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}`).pipe()
+  searchLeaves(
+    sort: string,
+    order: SortDirection,
+    page: number,
+    pageSize: number,
+    leaveType: string,
+    leaveDay: string,
+    leaveStartDate: Date,
+    leaveEndDate: Date,
+    status: string
+  ) {
+    return this.http
+      .get(
+        this.baseUrl +
+          `/leave?sort=${sort}&order=${order}&page=${
+            page + 1
+          }&pageSize=${pageSize}&leaveType=${leaveType}&leaveDay=${leaveDay}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}`
+      )
+      .pipe();
   }
 
   /**
-  * @작성일 2023-08-29
-  * @작성장 임호균
+   * @작성일 2023-08-29
+   * @작성장 임호균
    * @param sort 오름차순 내림차순
    * @param order 오름차순 내림차순
    * @param page 몇 페이지
-   * @returns 
+   * @returns
    */
-  searchLeavesThreeMonth(sort: string, order: SortDirection, page: number, pageSize: number) {
-    return this.http.get(this.baseUrl + `/leave/threeMonthAgo?sort=${sort}&order=${order}&page=${page + 1}&pageSize=${pageSize}`).pipe()
+  searchLeavesThreeMonth(
+    sort: string,
+    order: SortDirection,
+    page: number,
+    pageSize: number
+  ) {
+    return this.http
+      .get(
+        this.baseUrl +
+          `/leave/threeMonthAgo?sort=${sort}&order=${order}&page=${
+            page + 1
+          }&pageSize=${pageSize}`
+      )
+      .pipe();
   }
 
   leaveInformation() {
@@ -67,12 +94,13 @@ export class LeaveService {
    * @작성자 임호균
    * @작성일 2023-09-04
    * @param leaveId 취소하려는 휴가의 데이터베이스 아이디
-   * @returns 
+   * @returns
    */
   cancelLeaveRequest(leaveId: string) {
-    return this.http.post(this.baseUrl + '/leave/cancelLeave', { _id: leaveId })
+    return this.http.post(this.baseUrl + '/leave/cancelLeave', {
+      _id: leaveId,
+    });
   }
-
 
   //================================================manager==================================
 
@@ -80,48 +108,87 @@ export class LeaveService {
    * @작성자 임호균
    * @작성일 2023-09-05
    * @param leaveId 승인하려는 휴가의 데이터베이스 아이디
-   * @returns 
+   * @returns
    */
   approveLeaveRequest(leaveId: string) {
-    return this.http.post(this.baseUrl + '/manager/leave/approveLeave', { _id: leaveId })
+    return this.http.post(this.baseUrl + '/manager/leave/approveLeave', {
+      _id: leaveId,
+    });
   }
 
   /**
    * @작성자 임호균
    * @작성일 2023-09-05
    * @param leaveId 거절하려는 휴가의 데이터베이스 아이디
-   * @returns 
+   * @returns
    */
   rejectLeaveRequest(leaveId: string, rejectedReason: string) {
-    return this.http.post(this.baseUrl + '/manager/leave/rejectLeave', { _id: leaveId, rejectedReason })
+    return this.http.post(this.baseUrl + '/manager/leave/rejectLeave', {
+      _id: leaveId,
+      rejectedReason,
+    });
   }
 
   //manager
   //======================================================================================================================
 
-  getLeaveList(sort: string, order: SortDirection, page: number, pageSize: number, leaveType: string, leaveDay: string, leaveStartDate: Date, leaveEndDate: Date, status: string, email: string) {
-
-    return this.http.get(this.baseUrl + `/manager/leave?sort=${sort}&order=${order}&page=${page + 1}&pageSize=${pageSize}&leaveType=${leaveType}&leaveDay=${leaveDay}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}&email=${email}`);
+  getLeaveList(
+    sort: string,
+    order: SortDirection,
+    page: number,
+    pageSize: number,
+    leaveType: string,
+    leaveDay: string,
+    leaveStartDate: Date,
+    leaveEndDate: Date,
+    status: string,
+    email: string
+  ) {
+    return this.http.get(
+      this.baseUrl +
+        `/manager/leave?sort=${sort}&order=${order}&page=${
+          page + 1
+        }&pageSize=${pageSize}&leaveType=${leaveType}&leaveDay=${leaveDay}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}&email=${email}`
+    );
   }
-
-
-
 
   requestReplacementConfirm(data: any) {
-    return this.http.post(this.baseUrl + '/leave/rdRequestConfirm', data)
+    return this.http.post(this.baseUrl + '/leave/rdRequestConfirm', data);
   }
 
-  replacementConfirmList(sort: string, order: SortDirection, page: number, pageSize: number) {
-    return this.http.get(this.baseUrl + `/manager/leave/replacementConfirmList?sort=${sort}&order=${order}&page=${page + 1}&pageSize=${pageSize}`)
+  replacementConfirmList(
+    sort: string,
+    order: SortDirection,
+    page: number,
+    pageSize: number
+  ) {
+    return this.http.get(
+      this.baseUrl +
+        `/manager/leave/replacementConfirmList?sort=${sort}&order=${order}&page=${
+          page + 1
+        }&pageSize=${pageSize}`
+    );
   }
 
-
-  replacementList(sort: string, order: SortDirection, page: number, pageSize: number, leaveStartDate: Date, leaveEndDate: Date, status: string,) {
-    return this.http.get(this.baseUrl + `/leave/rdList?sort=${sort}&order=${order}&page=${page + 1}&pageSize=${pageSize}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}`)
+  replacementList(
+    sort: string,
+    order: SortDirection,
+    page: number,
+    pageSize: number,
+    leaveStartDate: Date,
+    leaveEndDate: Date,
+    status: string
+  ) {
+    return this.http.get(
+      this.baseUrl +
+        `/leave/rdList?sort=${sort}&order=${order}&page=${
+          page + 1
+        }&pageSize=${pageSize}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}`
+    );
   }
 
   replacementInfo(_id: string) {
-    return this.http.get(this.baseUrl + `/leave/rdOne?_id=${_id}`)
+    return this.http.get(this.baseUrl + `/leave/rdOne?_id=${_id}`);
   }
 
   requestReplacementLeave(data: any) {
@@ -129,10 +196,16 @@ export class LeaveService {
   }
 
   acceptReplacementConfirm(data: any) {
-    return this.http.post(this.baseUrl + '/manager/leave/acceptRdRequestConfirm', data)
+    return this.http.post(
+      this.baseUrl + '/manager/leave/acceptRdRequestConfirm',
+      data
+    );
   }
 
   rejectReplacementConfirm(data: any) {
-    return this.http.post(this.baseUrl + '/manager/leave/rejectRdRequestConfirm', data);
+    return this.http.post(
+      this.baseUrl + '/manager/leave/rejectRdRequestConfirm',
+      data
+    );
   }
 }

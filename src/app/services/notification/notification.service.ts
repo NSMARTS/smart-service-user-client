@@ -1,21 +1,33 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SortDirection } from '@angular/material/sort';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NotificationService {
   private baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  findNotifications(sort: string, order: SortDirection, page: number, pageSize: number, isManager: boolean, title: string, category: string) {
-    return this.http.get(this.baseUrl + `/notification?sort=${sort}&order=${order}&page=${page + 1}&pageSize=${pageSize}&isManager=${isManager}&title=${title}&category=${category}`)
+  findNotifications(
+    sort: string,
+    order: SortDirection,
+    page: number,
+    pageSize: number,
+    isManager: boolean,
+    title: string,
+    category: string
+  ) {
+    return this.http.get(
+      this.baseUrl +
+        `/notification?sort=${sort}&order=${order}&page=${
+          page + 1
+        }&pageSize=${pageSize}&isManager=${isManager}&title=${title}&category=${category}`
+    );
   }
 
-
   notificationContents(_id: string) {
-    return this.http.get(this.baseUrl + `/notification/contents?_id=${_id}`)
+    return this.http.get(this.baseUrl + `/notification/contents?_id=${_id}`);
   }
 }

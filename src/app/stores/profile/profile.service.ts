@@ -4,7 +4,7 @@
  * 작성일시: 2023-08-23
  * 작성자: 임호균
  * 설명: 유저 프로필 정보 저장 서비스
- * 
+ *
  * 수정자: 임호균
  * 수정 일시: 2023-08-25
  * 수정 내용: checkRole 추가
@@ -13,15 +13,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProfileService {
   private baseUrl = environment.apiUrl;
   userProfile = signal<any>({});
 
-  constructor(public http: HttpClient) { }
+  constructor(public http: HttpClient) {}
 
   getUserProfile() {
     return this.http.get(this.baseUrl + '/employee/profile').pipe(
@@ -35,16 +35,16 @@ export class ProfileService {
         // }
 
         this.updateUserProfile(res);
-        return res.result = true;
+        return (res.result = true);
       })
-    )
+    );
   }
 
   /**
    * @작성자 임호균
    * @작성일 2023-09-04
    * @description 매니저 프로필 정보 받아오는 로직 추가
-   * @returns 
+   * @returns
    */
   getManagerProfile() {
     return this.http.get(this.baseUrl + '/manager/profile').pipe(
@@ -57,13 +57,12 @@ export class ProfileService {
         //   }
         // }
         this.updateUserProfile(res);
-        return res.result = true;
+        return (res.result = true);
       })
-    )
+    );
   }
 
   updateUserProfile(profile: any) {
-
     this.userProfile.set(profile);
   }
 
