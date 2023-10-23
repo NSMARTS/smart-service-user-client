@@ -21,14 +21,9 @@ import { ProfileService } from 'src/app/stores/profile/profile.service';
 @Component({
   selector: 'app-toolbar',
   standalone: true,
-  imports: [
-    CommonModule,
-    MaterialsModule,
-    RouterModule,
-    FlexLayoutModule,
-  ],
+  imports: [CommonModule, MaterialsModule, RouterModule, FlexLayoutModule],
   templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.scss', '../../../../styles.scss']
+  styleUrls: ['./toolbar.component.scss', '../../../../styles.scss'],
 })
 export class ToolbarComponent implements OnInit {
   userProfileData: UserProfileData | undefined;
@@ -41,39 +36,37 @@ export class ToolbarComponent implements OnInit {
     private authService: AuthService,
     private profileService: ProfileService,
     private alertService: AlertService,
-    private router: Router) {
-
+    private router: Router
+  ) {
     this.userProfile$.subscribe(() => {
-      this.userProfileData = this.profileService.userProfile().profileData?.user;
-    })
+      this.userProfileData =
+        this.profileService.userProfile().profileData?.user;
+    });
   }
 
   /**
    * @작성자 임호균
    * @작성일 2023-08-25
-   * @description 툴팁이 생성될 때 유저 데이터를 가져온다 
+   * @description 툴팁이 생성될 때 유저 데이터를 가져온다
    */
   ngOnInit(): void {
     if (this.authService.getTokenInfo().isManager) {
-      this.getManagerProfileData()
-
+      this.getManagerProfileData();
     } else {
       this.getUserProfileData();
     }
-    this.getData()
+    this.getData();
   }
-
 
   getData() {
     if (this.authService.getTokenInfo().isManager) {
       this.alertService.findManagerAlert().subscribe((res: any) => {
         this.alertInfo = res;
-      })
-    }
-    else {
+      });
+    } else {
       this.alertService.findEmployeeAlert().subscribe((res: any) => {
         this.alertInfo = res;
-      })
+      });
     }
   }
 
@@ -83,9 +76,8 @@ export class ToolbarComponent implements OnInit {
    * @description 사이드 네비게이션 컨트롤 함수 (햄버거 버튼을 눌렀을 경우 사이드 네비게이션이 오픈되어야 한다)
    */
   openSidenav(): void {
-    this.sidenavService.openSidenav()
+    this.sidenavService.openSidenav();
   }
-
 
   /**
    * @작성자 임호균
@@ -94,7 +86,7 @@ export class ToolbarComponent implements OnInit {
    * @reference profile.service.ts
    */
   getUserProfileData() {
-    this.profileService.getUserProfile().subscribe()
+    this.profileService.getUserProfile().subscribe();
   }
 
   /**
@@ -104,7 +96,7 @@ export class ToolbarComponent implements OnInit {
    * @reference profile.service.ts
    */
   getManagerProfileData() {
-    this.profileService.getManagerProfile().subscribe()
+    this.profileService.getManagerProfile().subscribe();
   }
 
   /**
@@ -115,26 +107,23 @@ export class ToolbarComponent implements OnInit {
    */
   signOut(): void {
     this.authService.signOut();
-    this.router.navigate(['welcome'])
+    this.router.navigate(['sign-in']);
   }
 
-
-
-
   clickAlert(info: any) {
-    this.router.navigate([info.navigate])
+    this.router.navigate([info.navigate]);
     if (this.authService.getTokenInfo().isManager) {
       this.alertService.readOneManagerAlert(info._id).subscribe((res: any) => {
         if (res.message == 'success') {
           this.getData();
         }
-      })
+      });
     } else {
       this.alertService.readOneEmployeeAlert(info._id).subscribe((res: any) => {
         if (res.message == 'success') {
           this.getData();
         }
-      })
+      });
     }
   }
 
@@ -144,14 +133,13 @@ export class ToolbarComponent implements OnInit {
         if (res.message == 'success') {
           this.getData();
         }
-      })
+      });
     } else {
       this.alertService.readAllEmployeeAlert().subscribe((res: any) => {
         if (res.message == 'success') {
           this.getData();
         }
-      })
+      });
     }
   }
 }
-

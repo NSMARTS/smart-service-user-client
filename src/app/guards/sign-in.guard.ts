@@ -7,18 +7,18 @@ export const signInGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
   const routePath = route.routeConfig?.path ?? '';
-  if(!authService.isAuthenticated()) {
+  if (!authService.isAuthenticated()) {
     if (['welcome', 'sign-in', 'sign-up', 'find-pw'].includes(routePath)) {
       return true;
     } else if (routePath === '' && state.url === '/main') {
-      router.navigate(['welcome']);
+      router.navigate(['sign-in']);
     } else {
-      router.navigate(['sign-in'], { queryParams: { 'redirectURL': state.url } });
+      router.navigate(['sign-in'], { queryParams: { redirectURL: state.url } });
     }
     return true;
   } else {
-    if(['sign-in', 'welcome', 'find-pw', 'sign-up'].includes(routePath)) {
-      router.navigate(['main'])
+    if (['sign-in', 'welcome', 'find-pw', 'sign-up'].includes(routePath)) {
+      router.navigate(['main']);
     }
     return true;
   }

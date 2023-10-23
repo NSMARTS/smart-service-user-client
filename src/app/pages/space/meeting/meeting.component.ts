@@ -10,29 +10,40 @@ import { ProfileService } from 'src/app/stores/profile/profile.service';
   standalone: true,
   imports: [CommonModule, MaterialsModule],
   templateUrl: './meeting.component.html',
-  styleUrls: ['./meeting.component.scss']
+  styleUrls: ['./meeting.component.scss'],
 })
-export class MeetingComponent implements OnInit{
+export class MeetingComponent implements OnInit {
   meetings: any = [];
 
   leaveLoadingStatus: boolean = true;
-  constructor(private employeeService: EmployeeService, private authService: AuthService) {}
+  constructor(
+    private employeeService: EmployeeService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    
-    if(this.authService.getTokenInfo().isManager) {
-      this.employeeService.managerMeetingList().subscribe((res: any)=> {
+    if (this.authService.getTokenInfo().isManager) {
+      this.employeeService.managerMeetingList().subscribe((res: any) => {
         this.meetings = res;
-        this.leaveLoadingStatus = false
-      })
-    }else{
-      this.employeeService.meetingList().subscribe((res: any)=> {
+        this.leaveLoadingStatus = false;
+      });
+    } else {
+      this.employeeService.meetingList().subscribe((res: any) => {
         this.meetings = res;
-        this.leaveLoadingStatus = false
-      })
+        this.leaveLoadingStatus = false;
+      });
     }
   }
   enterMeeting(data: any) {
-    window.open(data.meetingLink);
+    let meetingLink = data.meetingLink;
+    if (meetingLink != null) {
+      if (
+        meetingLink.indexOf('http://') !== 0 &&
+        meetingLink.indexOf('https://') !== 0
+      ) {
+        meetingLink = 'http://' + meetingLink;
+      }
+    }
+    window.open(meetingLink);
   }
 }
