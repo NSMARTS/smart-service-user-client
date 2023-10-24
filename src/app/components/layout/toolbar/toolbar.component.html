@@ -26,11 +26,11 @@
     <mat-menu #notification xPosition="before" class="my-class">
         <mat-card style="width: 400px;">
             <mat-card-header>
-                <mat-card-title>Notification</mat-card-title>
+                <mat-card-title>Alarm</mat-card-title>
             </mat-card-header>
             <mat-card-content>
                 <div style="max-height: 720px; overflow: auto;">
-                    <h3 class="sub_header">Today Notification</h3>
+                    <h3 class="sub_header">Today Alarm</h3>
                     <mat-list role="list">
                         <div *ngFor="let info of alertInfo?.todayInfo">
                             <mat-list-item role="listitem" (click)="clickAlert(info)" class="alert_list_item">
@@ -41,10 +41,10 @@
                             </mat-list-item>
                         </div>
                         <div class="no_notification" *ngIf=" alertInfo?.todayInfo.length == 0">
-                            There is no notification
+                            There is no alarm
                         </div>
                     </mat-list>
-                    <h3 class="sub_header">Previous Notification</h3>
+                    <h3 class="sub_header">Previous Alarm</h3>
                     <mat-list role="list">
 
                         <div *ngFor="let info of alertInfo?.info">
@@ -56,7 +56,7 @@
                             </mat-list-item>
                         </div>
                         <div class="no_notification" *ngIf=" alertInfo?.info.length == 0">
-                            There is no notification
+                            There is no alarm
                         </div>
                     </mat-list>
                 </div>
