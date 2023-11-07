@@ -64,7 +64,7 @@ export class ReplaceDayConfirmingRequestDialogComponent implements OnInit {
           }
         },
         error: (err) => {
-          this.dialogService.openDialogNegative(err.message)
+          this.dialogService.openDialogNegative(err.error.message)
         }
       })
     })
@@ -74,23 +74,24 @@ export class ReplaceDayConfirmingRequestDialogComponent implements OnInit {
    * 휴일 신청 거절
    */
   rejectRequest() {
-    this.dialogService.openDialogConfirm('').subscribe({
-      next: (answer: any) => {
-        if (answer) {
-          const data: any = this.ConfirmForm.value;
-          data._id = this.data._id;
-          this.leaveService.rejectReplacementConfirm({ data }).subscribe((res: any) => {
+    this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
+      if (answer) {
+        const data: any = this.ConfirmForm.value;
+        data._id = this.data._id;
+        this.leaveService.rejectReplacementConfirm({ data }).subscribe({
+          next: (res: any) => {
             if (res.message == 'update success') {
               this.dialogService.openDialogPositive('Your vacation has been cancelled normally.').subscribe(() => {
                 this.dialogRef.close('success')
               })
             }
-          })
-        }
-      },
-      error: (err) => {
-        this.dialogService.openDialogNegative(err.message)
+          },
+          error: (err) => {
+            this.dialogService.openDialogNegative(err.error.message)
+          }
+        })
       }
-    })
+    }
+    )
   }
 }

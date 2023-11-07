@@ -55,15 +55,21 @@ export class LeaveRequestManagerDetailsComponent implements OnInit {
   approveRequest() {
     this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
       if (answer) {
-        this.leaveService.approveLeaveRequest(this.data._id).subscribe((res: any) => {
-          if (res.message == 'update success') {
-            this.dialogService.openDialogPositive('Your vacation has been cancelled normally.').subscribe(() => {
-              this.dialogRef.close('success')
-            })
+        this.leaveService.approveLeaveRequest(this.data._id).subscribe({
+          next: (res: any) => {
+            if (res.message == 'update success') {
+              this.dialogService.openDialogPositive('Your   vacation has been cancelled normally.').subscribe(() => {
+                this.dialogRef.close('success')
+              })
+            }
+          },
+          error: (err: any) => {
+            this.dialogService.openDialogNegative(err.error.message)
           }
         })
       }
-    })
+    }
+    )
   }
 
   /**
@@ -72,11 +78,16 @@ export class LeaveRequestManagerDetailsComponent implements OnInit {
   rejectRequest() {
     this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
       if (answer) {
-        this.leaveService.rejectLeaveRequest(this.data._id, this.rejectedReason.value).subscribe((res: any) => {
-          if (res.message == 'update success') {
-            this.dialogService.openDialogPositive('Your vacation has been cancelled normally.').subscribe(() => {
-              this.dialogRef.close('success')
-            })
+        this.leaveService.rejectLeaveRequest(this.data._id, this.rejectedReason.value).subscribe({
+          next: (res: any) => {
+            if (res.message == 'update success') {
+              this.dialogService.openDialogPositive('Your vacation has been cancelled normally.').subscribe(() => {
+                this.dialogRef.close('success')
+              })
+            }
+          },
+          error: (err) => {
+            this.dialogService.openDialogNegative(err.error.message)
           }
         })
       }
