@@ -5,7 +5,7 @@ import { PdfViewerModule, PdfViewerComponent } from 'ng2-pdf-viewer';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-contract-detail-dialog',
+  selector: 'app-pay-stubs-detail-dialog',
   standalone: true,
   providers: [PdfViewerComponent],
   imports: [
@@ -13,8 +13,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
     MaterialsModule,
     PdfViewerModule
   ],
-  templateUrl: './contract-detail-dialog.component.html',
-  styleUrls: ['./contract-detail-dialog.component.scss']
+  templateUrl: './pay-stubs-detail-dialog.component.html',
+  styleUrls: ['./pay-stubs-detail-dialog.component.scss']
 })
 export class ContractDetailDialogComponent {
   constructor(

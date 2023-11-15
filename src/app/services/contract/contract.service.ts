@@ -8,9 +8,9 @@ import { environment } from 'src/environments/environment';
 })
 export class ContractService {
   private baseUrl = environment.apiUrl;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  contractList(
+  payStubsList(
     sort: string,
     order: SortDirection,
     page: number,
@@ -20,13 +20,12 @@ export class ContractService {
   ) {
     return this.http.get(
       this.baseUrl +
-        `/employee/contract?sort=${sort}&order=${order}&page=${
-          page + 1
-        }&pageSize=${pageSize}&updatedAt=${updatedAt}&title=${title}`
+      `/employee/pay_stubs?sort=${sort}&order=${order}&page=${page + 1
+      }&pageSize=${pageSize}&updatedAt=${updatedAt}&title=${title}`
     );
   }
 
-  managerContractList(
+  managerPayStubList(
     sort: string,
     order: SortDirection,
     page: number,
@@ -37,9 +36,25 @@ export class ContractService {
   ) {
     return this.http.get(
       this.baseUrl +
-        `/manager/contract?sort=${sort}&order=${order}&page=${
-          page! + 1
-        }&pageSize=${pageSize}&updatedAt=${updatedAt}&title=${title}&email=${email}`
+      `/manager/pay_stubs?sort=${sort}&order=${order}&page=${page! + 1
+      }&pageSize=${pageSize}&updatedAt=${updatedAt}&title=${title}&email=${email}`
+    );
+  }
+
+  getManagerContractList(
+    sort: string,
+    order: SortDirection,
+    page: number,
+    pageSize: number,
+    uploadStartDate: string,
+    uploadEndDate: string,
+    title: string,
+    email: string
+  ) {
+    return this.http.get(
+      this.baseUrl +
+      `/manager/contract?sort=${sort}&order=${order}&page=${page! + 1
+      }&pageSize=${pageSize}&uploadStartDate=${uploadStartDate}&uploadEndDate=${uploadEndDate}&title=${title}&email=${email}`
     );
   }
 }

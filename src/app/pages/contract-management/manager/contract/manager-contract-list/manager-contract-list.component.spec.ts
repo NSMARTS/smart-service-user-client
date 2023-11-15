@@ -8,7 +8,7 @@ describe('ManagerContractListComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ManagerContractListComponent]
+      imports: [ManagerContractListComponent]
     });
     fixture = TestBed.createComponent(ManagerContractListComponent);
     component = fixture.componentInstance;

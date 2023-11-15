@@ -25,7 +25,6 @@ export function tokenGetter() {
     AppComponent,
     SpaceComponent,
     CreateSpaceDialogComponent,
-
   ],
   imports: [
     BrowserModule,
