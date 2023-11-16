@@ -142,16 +142,16 @@ export class ManagerContractListComponent {
     );
   }
 
-  detail(_id: string) {
-
+  handleContractDetailClick(_id: string) {
+    this.router.navigate([`contract-management/manager-contract/detail/${_id}`])
   }
 
   download(key: string) {
 
   }
 
-  editContract(_id: string) {
-
+  handleContractSignClick(_id: string) {
+    this.router.navigate([`contract-management/manager-contract/sign/${_id}`])
   }
 
   deleteContract(_id: string) {

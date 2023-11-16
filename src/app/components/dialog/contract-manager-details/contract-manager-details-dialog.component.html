@@ -1,0 +1,116 @@
+<div>
+  <h1 mat-dialog-title>Leave Request Details</h1>
+  <div mat-dialog-content>
+    <table class="modal-table">
+      <colgroup>
+        <col style="width:120px">
+        <col style="width:300px">
+      </colgroup>
+      <tbody>
+        <tr>
+          <th>
+            <b>Upload Date</b>
+          </th>
+          <td>
+            {{data.createdAt | date}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Title</b>
+          </th>
+          <td>
+            {{data?.title}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>description</b>
+          </th>
+          <td>
+            {{data.description}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Writer</b>
+          </th>
+          <td>
+            {{data.writer?.email}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Manager</b>
+          </th>
+          <td *ngIf="contractMod() === 'sign'">
+            {{ data.manager ? data.manager.email + ' (' + data.manager.username + ')'
+            : userProfileData.email + ' (' +userProfileData.username + ')' }}
+
+          </td>
+          <td *ngIf="contractMod() === 'detail'">
+            {{data.manager ? data.manager.email + ' (' + data.manager.username + ')' : '-'}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b> Manager Sign</b>
+          </th>
+          <div #canvasContainer class="canvas-container">
+            <div class="canvasTeacher">
+              <canvas #managerCanvas></canvas>
+            </div>
+            <div class="cover" id="canvas">
+              <canvas #managerCanvasCover></canvas>
+            </div>
+          </div>
+        </tr>
+        <tr>
+          <th>
+            <b>Employee</b>
+          </th>
+          <td>
+            {{data.employee.email}} ({{data.employee.username}})
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b> Employee Sign </b>
+          </th>
+          <div #canvasContainer class="canvas-container">
+            <div class="canvasTeacher">
+              <canvas #employeeCanvas></canvas>
+            </div>
+            <div class="cover" id="canvas">
+              <canvas #employeeCanvasCover></canvas>
+            </div>
+          </div>
+        </tr>
+
+
+        <tr *ngIf="data.employeeStatus === 'rejected' || data.managerStatus == 'rejected'">
+          <th>
+            <b>Rejected Reason</b>
+          </th>
+          <td>
+            <mat-form-field style=" width: 100%;">
+              <mat-label>Reason</mat-label>
+              <textarea [formControl]="rejectedReason" matInput rows="6"></textarea>
+            </mat-form-field>
+          </td>
+          <td>
+            {{data?.rejectedReason}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div mat-dialog-actions style="display: flex; justify-content: space-between;">
+    <button mat-flat-button mat-dialog-close>Close</button>
+    <div>
+      <button *ngIf="contractMod() === 'sign' && data.managerStatus !=='signed'" color="primary" mat-flat-button
+        (click)="signManager()">Sign</button>
+    </div>
+
+  </div>
+</div>

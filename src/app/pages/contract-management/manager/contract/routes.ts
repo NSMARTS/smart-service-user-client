@@ -17,5 +17,6 @@ import { ManagerContractDetailComponent } from "./manager-contract-detail/manage
 export const CONTRACT_MANAGER_MANAGEMENT_ROUTES: Route[] = [
   { path: '', component: ManagerContractListComponent },
   { path: 'detail/:id', component: ManagerContractDetailComponent },
+  { path: 'sign/:id', component: ManagerContractDetailComponent },
   { path: '**', component: PageNotFoundComponent }
 ]

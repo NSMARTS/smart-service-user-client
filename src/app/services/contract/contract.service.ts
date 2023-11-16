@@ -1,12 +1,16 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable, signal } from '@angular/core';
 import { SortDirection } from '@angular/material/sort';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContractService {
+
+  contractMod = signal<string>('') // detail //sign
+
   private baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
@@ -56,5 +60,29 @@ export class ContractService {
       `/manager/contract?sort=${sort}&order=${order}&page=${page! + 1
       }&pageSize=${pageSize}&uploadStartDate=${uploadStartDate}&uploadEndDate=${uploadEndDate}&title=${title}&email=${email}`
     );
+  }
+
+  getManagerContract(
+    contractId: string
+  ) {
+    return this.http.get(
+      this.baseUrl +
+      `/manager/contract/${contractId}`);
+  }
+
+  downloadManagerContract(key: string): Observable<Blob> {
+    const encodedUrl = encodeURIComponent(key);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/pdf',
+      'Accept': 'application/pdf'
+    });
+    return this.http.get(this.baseUrl + `/manager/contract/download/${encodedUrl}`, {
+      headers: headers,
+      responseType: 'blob'
+    })
+  }
+
+  signManagerContract(body: any) {
+    return this.http.post(this.baseUrl + '/manager/contract', body)
   }
 }
