@@ -37,15 +37,13 @@ export interface DrawVar {
 })
 export class DrawStoreService {
 
-  // drawVar: DrawVar[] = [];
   drawVar = signal<DrawVar[]>([])
-  // pageDrawingEvent: PageDrawingEvent = {} as PageDrawingEvent;
   pageDrawingEvent = signal<PageDrawingEvent>({} as PageDrawingEvent)
+
   constructor() {
     effect(() => {
       console.log('drawVar : ', this.drawVar())
       console.log('pageDrawingEvent : ', this.pageDrawingEvent())
-
     })
 
   }

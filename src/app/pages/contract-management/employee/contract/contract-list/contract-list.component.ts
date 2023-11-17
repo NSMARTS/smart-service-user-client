@@ -12,6 +12,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { map, merge, startWith, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-contract-list',
@@ -32,6 +34,11 @@ export class ContractListComponent {
   // ---------- 변수 선언 ------------------
   searchContractForm: FormGroup;
   companyId: string;
+
+  resultsLength = 0;
+  isLoadingResults = false;
+  isRateLimitReached = false;
+
   dataSource: MatTableDataSource<Employee> = new MatTableDataSource<Employee>([]);
   destroyRef = inject(DestroyRef);
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
@@ -44,15 +51,10 @@ export class ContractListComponent {
     'employeeStatus',
     'managerName',
     'managerStatus',
-    'download',
-    'detail',
-    'menu',
+    'menu'
   ];
-  resultsLength = 0;
 
   // ---------- 시그널 변수 -----------------
-  filteredEmployee = signal<any[]>([]); // 자동완성에 들어갈 emploeeList
-  employees = signal<any[]>([]);
 
   constructor() {
     this.companyId = this.route.snapshot.params['id'];
@@ -64,33 +66,68 @@ export class ContractListComponent {
 
     this.searchContractForm = this.fb.group({
       titleFormControl: new FormControl(''),
-      emailFormControl: new FormControl(''),
       uploadStartDate: new FormControl(startOfMonth),
       uploadEndDate: new FormControl(endOfMonth),
     })
   }
   ngAfterViewInit(): void {
-    // this.getData()
+    this.searchRequest()
   }
 
-
-  getContractsByQuery() {
-
+  searchRequest() {
+    const formValue = this.searchContractForm.value;
+    const convertedContractStartDate = this.commonService.dateFormatting(
+      this.searchContractForm.controls['uploadStartDate'].value
+    );
+    // 검색 범위 마지막 일을 YYYY-MM-DD 포맷으로 변경
+    const convertedContractEndDate = this.commonService.dateFormatting(
+      this.searchContractForm.controls['uploadEndDate'].value
+    );
+    // 조건에 따른 사원들 휴가 가져오기
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          return this.contractService.getContractList(
+            this.sort.active,
+            this.sort.direction,
+            this.paginator.pageIndex,
+            this.paginator.pageSize,
+            convertedContractStartDate,
+            convertedContractEndDate,
+            formValue.titleFormControl,
+          ).pipe(
+            map((res: any) => {
+              // Flip flag to show that loading has finished.
+              //   this.isRateLimitReached = res.data === null;
+              console.log(res);
+              this.resultsLength = res.total_count;
+              this.dataSource = new MatTableDataSource<any>(res.items);
+              return res.items;
+            })
+          );
+        }),
+      ).subscribe();
   }
 
-  detail(_id: string) {
-
+  handleContractDetailClick(_id: string) {
+    this.router.navigate([`contract-management/contract/detail/${_id}`])
   }
 
   download(key: string) {
 
   }
 
-  editContract(_id: string) {
-
+  handleContractSignClick(_id: string) {
+    this.router.navigate([`contract-management/contract/sign/${_id}`])
   }
 
   deleteContract(_id: string) {
 
   }
+
+  openDetailDialog(row: any) { }
+
+  handlePageEvent() { }
 }

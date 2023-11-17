@@ -1,4 +1,4 @@
-import { DrawStoreService } from './../../service/draw-store/draw-store.service';
+import { DrawStoreService } from '../draw-store/draw-store.service';
 import { DestroyRef, Injectable, WritableSignal, inject, signal } from '@angular/core';
 import { PdfService } from '../pdf/pdf.service';
 import { ZoomService } from '../zoom/zoom.service';

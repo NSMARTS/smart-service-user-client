@@ -1,99 +1,123 @@
 <div>
-    <h1 mat-dialog-title>Leave Request Details</h1>
-    <div mat-dialog-content>
-        <table class="modal-table">
-            <colgroup>
-                <col style="width:120px">
-                <col style="width:380px">
-            </colgroup>
-            <tbody>
-                <tr>
-                    <th>
-                        <b>Status</b>
-                    </th>
-                    <td>
-                        {{data.status}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <b>Requestor</b>
-                    </th>
-                    <td>
-                        {{userProfileData?.username}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <b>Request day</b>
-                    </th>
-                    <td>
-                        {{data.createdAt | date}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <b>Leave Type</b>
-                    </th>
-                    <td>
-                        {{data.leaveType}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <b>Period</b>
-                    </th>
-                    <td>
-                        {{data.leaveStartDate | date }} ~ {{data.leaveEndDate |
-                        date}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <b>Leave of used</b>
-                    </th>
-                    <td>
-                        {{data.leaveDuration}}day(s)
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <b>Reason</b>
-                    </th>
-                    <td>
-                        {{data.leaveReason}}
-                    </td>
-                </tr>
-                <tr *ngIf="data.approver">
-                    <th>
-                        <b>Approver</b>
-                    </th>
-                    <td>
-                        {{data.approver.username}}
-                    </td>
-                </tr>
-                <tr *ngIf="data.rejector">
-                    <th>
-                        <b>Rejector</b>
-                    </th>
-                    <td>
-                        {{data.rejector.username}}
-                    </td>
-                </tr>
-                <tr *ngIf="data.rejectedReason">
-                    <th>
-                        <b>Rejected Reason</b>
-                    </th>
-                    <td>
-                        {{data.rejectedReason}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+  <h1 *ngIf="contractMod()==='detail'" mat-dialog-title>Contract Details</h1>
+  <h1 *ngIf="contractMod()==='sign' && !data.rejectMod" mat-dialog-title>Contract Sign</h1>
+  <h1 *ngIf="contractMod()==='sign' && data.rejectMod" mat-dialog-title>Contract Reject</h1>
+
+
+  <div mat-dialog-content>
+    <table class="modal-table">
+      <colgroup>
+        <col style="width:120px">
+        <col style="width:300px">
+      </colgroup>
+      <tbody>
+        <tr>
+          <th>
+            <b>Upload Date</b>
+          </th>
+          <td>
+            {{data.createdAt | date}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Title</b>
+          </th>
+          <td>
+            {{data?.title}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>description</b>
+          </th>
+          <td>
+            {{data.description}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Writer</b>
+          </th>
+          <td>
+            {{data.writer?.email}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Employee</b>
+          </th>
+          <td>
+            {{data.employee.email}} ({{data.employee.username}})
+          </td>
+        </tr>
+        <!-- employee reject -->
+        <tr *ngIf="data.rejectMod || data.rejectedReason">
+          <th>
+            <b>Rejected Reason</b>
+          </th>
+          <td *ngIf="data.rejectMod && !data.rejectedReason">
+            <mat-form-field style=" width: 100%;">
+              <mat-label>Reason</mat-label>
+              <textarea [formControl]="rejectedReason" matInput rows="6"></textarea>
+            </mat-form-field>
+          </td>
+          <td *ngIf="data.rejectMod && data.rejectedReason">
+            <mat-form-field style=" width: 100%;">
+              <mat-label>Reason</mat-label>
+              {{data.employeeRejectReason}}
+            </mat-form-field>
+          </td>
+        </tr>
+        <!-- employee sign -->
+        <tr *ngIf="!data.rejectMod">
+          <th>
+            <b> Employee Sign </b>
+          </th>
+          <div #canvasContainer class="canvas-container">
+            <div class="canvasTeacher">
+              <canvas #employeeCanvas></canvas>
+            </div>
+            <div class="cover" id="canvas">
+              <canvas #employeeCanvasCover></canvas>
+            </div>
+          </div>
+        </tr>
+        <!-- manager -->
+        <tr *ngIf="!data.rejectMod">
+          <th>
+            <b>Manager</b>
+          </th>
+          <td>
+            {{data.manager ? data.manager.email + ' (' + data.manager.username + ')' : '-'}}
+          </td>
+        </tr>
+        <!-- manager sign -->
+        <tr *ngIf="!data.rejectMod">
+          <th>
+            <b> Manager Sign</b>
+          </th>
+          <div #canvasContainer class="canvas-container">
+            <div class="canvasTeacher">
+              <canvas #managerCanvas></canvas>
+            </div>
+            <div class="cover" id="canvas">
+              <canvas #managerCanvasCover></canvas>
+            </div>
+          </div>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div mat-dialog-actions style="display: flex; justify-content: space-between;">
+    <button mat-flat-button mat-dialog-close>Close</button>
+    <div>
+      <button *ngIf="contractMod() === 'sign' && data.employeeStatus !=='signed' && !data.rejectMod " color="primary"
+        mat-flat-button (click)="openConfirmDialog()">Sign</button>
+
+      <button *ngIf="contractMod() === 'sign' && data.employeeStatus !=='signed' && data.rejectMod" color="warn"
+        mat-flat-button (click)="openRejectContractDialog()">Reject </button>
     </div>
-    <div mat-dialog-actions style="display: flex; justify-content: space-between;">
-        <button mat-flat-button mat-dialog-close>close</button>
-        <button *ngIf="data.status == 'pending'" color="accent" mat-flat-button
-            (click)="cancelRequest()">Cancel</button>
-    </div>
+
+  </div>
 </div>

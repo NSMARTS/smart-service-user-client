@@ -2,7 +2,7 @@ import { ContractManagerDetailsComponent } from './../../../../components/dialog
 import { lastValueFrom } from 'rxjs';
 import { Component, OnInit, WritableSignal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import * as moment from 'moment';
 import { MaterialsModule } from 'src/app/materials/materials.module';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { PdfInfo, PdfService } from 'src/app/services/pdf/pdf.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ContractService } from 'src/app/services/contract/contract.service';
+import { ContractDetailsComponent } from 'src/app/components/dialog/contract-details/contract-details-dialog.component';
 
 
 @Component({
@@ -35,6 +36,7 @@ export class BoardNavComponent {
   contractId: string;
   contractInfo: any;
   contract: any;
+  currentUrl: string; // 현재 url이 'contract' 인지, 'manager contract'인지 확인
 
   // 상태관리 --------------------------
   pdfInfo: WritableSignal<PdfInfo> = this.pdfService.pdfInfo;
@@ -42,43 +44,74 @@ export class BoardNavComponent {
   currentPage: WritableSignal<number> = this.pdfService.currentPage;
 
   userInfoStore = this.authService.getTokenInfo();
-  contractMod: WritableSignal<string> = this.contractService.contractMod;
+  contractMod: WritableSignal<string> = this.contractService.contractMod; //
 
 
   constructor() {
+    // 현재 url이 'contract' 인지, 'manager contract'인지 확인
+    this.currentUrl = this.router.url.split('/')[2];
     this.contractId = this.route.snapshot.params['id'];
     this.contractMod.set(this.route.snapshot.url[0].path)
     this.getPdf()
   }
 
   async getPdf() {
-    if (this.contractMod() === 'sign' || this.contractMod() === 'detail') {
-      this.contractInfo = await lastValueFrom(this.contractService.getManagerContract(this.contractId))
-      this.contract = await lastValueFrom(this.contractService.downloadManagerContract(this.contractInfo?.data?.key))
-      this.pdfService.readFile(this.contract)
-    }
+    this.contractInfo = await lastValueFrom(this.contractService.getContract(this.contractId))
+    this.contract = await lastValueFrom(this.contractService.downloadContract(this.contractInfo?.data?.key))
+    this.pdfService.readFile(this.contract)
+
   }
 
   // back page
   backPage() {
-    // this.router.navigate([`/company/${this.companyId}/contract`]);
+    if (this.currentUrl === 'contract') {
+      this.router.navigate(['/contract-management/contract']);
+    }
+    if (this.currentUrl === 'manager-contract') {
+      this.router.navigate(['/contract-management/manager-contract']);
+    }
   }
 
   // modal Contract save
-  openSignContract() {
+  openSignContract(rejectMod: boolean) {
 
-    const dialogRef = this.dialog.open(ContractManagerDetailsComponent, {
-      data: {
-        ...this.contractInfo.data,
-      }
-    });
+    if (this.currentUrl === 'contract') {
+      const dialogRef = this.dialog.open(ContractDetailsComponent, {
+        data: {
+          ...this.contractInfo.data,
+          currentUrl: this.currentUrl,
+          rejectMod: rejectMod
+        }
+      });
+    }
+    if (this.currentUrl === 'manager-contract') {
+      const dialogRef = this.dialog.open(ContractManagerDetailsComponent, {
+        data: {
+          ...this.contractInfo.data,
+          currentUrl: this.currentUrl,
+          rejectMod: rejectMod
+        }
+      });
+    }
+
   }
 
   openDetailContract() {
-    const dialogRef = this.dialog.open(ContractManagerDetailsComponent, {
-      data: {
-        ...this.contractInfo.data,
-      }
-    });
+    if (this.currentUrl === 'contract') {
+      const dialogRef = this.dialog.open(ContractDetailsComponent, {
+        data: {
+          ...this.contractInfo.data,
+          currentUrl: this.currentUrl,
+        }
+      });
+    }
+    if (this.currentUrl === 'manager-contract') {
+      const dialogRef = this.dialog.open(ContractManagerDetailsComponent, {
+        data: {
+          ...this.contractInfo.data,
+          currentUrl: this.currentUrl,
+        }
+      });
+    }
   }
 }

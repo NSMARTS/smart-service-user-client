@@ -9,11 +9,14 @@
 import { Route } from "@angular/router";
 import { ContractListComponent } from "./contract-list/contract-list.component";
 import { PageNotFoundComponent } from "src/app/pages/page-not-found/page-not-found.component";
+import { ContractDetailComponent } from "./contract-detail/contract-detail.component";
 
 
 
 
 export const CONTRACT_MANAGEMENT_ROUTES: Route[] = [
   { path: '', component: ContractListComponent },
+  { path: 'detail/:id', component: ContractDetailComponent },
+  { path: 'sign/:id', component: ContractDetailComponent },
   { path: '**', component: PageNotFoundComponent }
 ]

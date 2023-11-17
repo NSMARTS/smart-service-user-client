@@ -5,7 +5,8 @@
   </div>
 
   <div *ngIf="contractMod() === 'sign'">
-    <button mat-raised-button class="saveBtn" (click)="openSignContract()">Sign</button>
+    <button mat-raised-button class="rejectBtn" (click)="openSignContract(true)">Reject</button>
+    <button mat-raised-button class="saveBtn" (click)="openSignContract(false)">Sign</button>
   </div>
 
   <div *ngIf="contractMod() === 'detail'">

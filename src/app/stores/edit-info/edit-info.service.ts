@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { DrawTool } from 'src/app/service/draw-store/draw-store.service';
+import { DrawTool } from 'src/app/services/draw-store/draw-store.service';
 
 type ToolName = 'pointer' | 'pen' | 'highlighter' | 'eraser' | 'line' | 'circle' | 'rectangle' | 'roundedRectangle';
 

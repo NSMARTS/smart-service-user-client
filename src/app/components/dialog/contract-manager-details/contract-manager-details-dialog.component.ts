@@ -1,5 +1,5 @@
 import { RenderingService } from './../../../services/rendering/rendering.service';
-import { DrawStoreService } from './../../../service/draw-store/draw-store.service';
+import { DrawStoreService } from '../../../services/draw-store/draw-store.service';
 import { EditInfo, EditInfoService } from './../../../stores/edit-info/edit-info.service';
 import { ContractService } from 'src/app/services/contract/contract.service';
 import { CommonModule } from '@angular/common';
@@ -14,7 +14,7 @@ import { LeaveService } from 'src/app/services/leave/leave.service';
 import { ProfileService } from 'src/app/stores/profile/profile.service';
 import { CANVAS_CONFIG } from 'src/app/config/canvas-css';
 import { CanvasService } from 'src/app/services/canvas/canvas.service';
-import { DrawTool } from 'src/app/service/draw-store/draw-store.service';
+import { DrawTool } from 'src/app/services/draw-store/draw-store.service';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
 
@@ -93,7 +93,7 @@ export class ContractManagerDetailsComponent {
     }
 
     // 직원 서명이 존재하면 매니저 서명 draw
-    if (this.data?.employeeSigned === 'signed') {
+    if (this.data?.employeeStatus === 'signed') {
       this.drawStoreService.drawVar.set(this.data?.employeeSign)
       this.pageRender(this.employeeCanvas)
       this.drawStoreService.resetDrawingEvents(); // 직원 서명을 그리고 나면 초기화
@@ -101,9 +101,9 @@ export class ContractManagerDetailsComponent {
 
     // 서명은 무조건 펜으로
     const currentTool = this.editInfo().toolsConfig['pen'];
-
-    // 매니저 사인이 없으면
-    if (this.data?.managerStatus !== 'signed') {
+    console.log(this.data?.managerStatus)
+    // 매니저 사인이 없으면 
+    if (this.data?.managerStatus !== 'signed' && this.contractMod() === "sign") {
       // 캔버스에 드로우 이벤트를 연결
       this.canvasService.addEventHandler(this.managerCanvasCover, this.managerCanvas, currentTool, 1);
     }
@@ -151,57 +151,84 @@ export class ContractManagerDetailsComponent {
     this.renderingService.renderBoard(canvas, 1, drawingEvents);
   }
 
+
   /**
-   * 매니저 서명!
+   * 확인 다이얼로그!
    */
-  signManager() {
+  openConfirmDialog() {
     const requestBody = {
       contractId: this.data._id,
-      managerSign: this.drawStoreService.getDrawingEvents(1), // 첫번째 페이지의 드로잉 이벤트 
-      managerSignedTime: moment().format("YYYY-MM-DD HH:mm ddd")
+      employeeSign: this.drawStoreService.getDrawingEvents(1), // 첫번째 페이지의 드로잉 이벤트 
+      employeeSignedTime: moment().format("YYYY-MM-DD HH:mm ddd")
     }
 
     this.dialogService.openDialogConfirm('Would you like to proceed with the signature?').subscribe({
       next: (res) => {
         this.dialogRef.close()
-        this.contractService.signManagerContract(requestBody).subscribe({
-          next: (res: any) => {
-            this.dialogService.openDialogPositive('Contract signed successfully').subscribe({
-              next: (res) => {
-                this.dialogRef.close()
-              }
-            })
-            this.router.navigate(['contract-management/manager-contract'])
-          },
-          error: (err: any) => {
-            this.dialogService.openDialogNegative(err.error.message)
-          }
-        })
+        // 서명을 하지 않았을 경우 서명안했다고 경고문
+        if (res && !this.drawStoreService.getDrawingEvents(1)) {
+          this.dialogService.openDialogNegative('You did not sign.')
+        }
+        // 서명했을 경우 api 실행
+        else if (res) {
+          this.signConract(requestBody)
+        }
       }
     })
-
   }
 
   /**
-   * 휴가 거절
+   * 서명 시작
+   * @param requestBody {contractId, employeeSign, employeeSignedTime}
    */
-  rejectRequest() {
-    this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
-      if (answer) {
-        this.leaveService.rejectLeaveRequest(this.data._id, this.rejectedReason.value).subscribe({
-          next: (res: any) => {
-            if (res.message == 'update success') {
-              this.dialogService.openDialogPositive('Your vacation has been cancelled normally.').subscribe(() => {
-                this.dialogRef.close('success')
-              })
-            }
-          },
-          error: (err) => {
-            this.dialogService.openDialogNegative(err.error.message)
+  signConract(requestBody: any) {
+    this.contractService.signManagerContract(requestBody).subscribe({
+      next: (res: any) => {
+        this.dialogService.openDialogPositive('Contract signed successfully').subscribe({
+          next: (res) => {
+            this.dialogRef.close()
           }
         })
+        this.router.navigate(['contract-management/manager-contract'])
+      },
+      error: (err: any) => {
+        this.dialogService.openDialogNegative(err.error.message)
+      }
+    })
+  }
+  /** 
+   * 거절  
+   */
+  openRejectContractDialog() {
+    const requestBody = {
+      contractId: this.data._id,
+      managerRejectReason: this.rejectedReason.value,
+      managerSignedTime: moment().format("YYYY-MM-DD HH:mm ddd")
+    }
+    this.dialogService.openDialogConfirm('Do you really wish to refuse signing this document?').subscribe({
+      next: (res) => {
+        this.dialogRef.close()
+        // 거절 api 실행
+        if (res) {
+          this.rejectContract(requestBody)
+        }
       }
     })
   }
 
+  rejectContract(requestBody: any) {
+    this.contractService.rejectManagerContract(requestBody).subscribe({
+      next: (res: any) => {
+        this.dialogService.openDialogPositive('Contract rejected successfully').subscribe({
+          next: (res) => {
+            this.dialogRef.close()
+          }
+        })
+        this.router.navigate(['contract-management/manager-contract'])
+      },
+      error: (err: any) => {
+        this.dialogService.openDialogNegative(err.error.message)
+      }
+    })
+  }
 }

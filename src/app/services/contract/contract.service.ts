@@ -62,7 +62,7 @@ export class ContractService {
     );
   }
 
-  getManagerContract(
+  getContract(
     contractId: string
   ) {
     return this.http.get(
@@ -70,7 +70,7 @@ export class ContractService {
       `/manager/contract/${contractId}`);
   }
 
-  downloadManagerContract(key: string): Observable<Blob> {
+  downloadContract(key: string): Observable<Blob> {
     const encodedUrl = encodeURIComponent(key);
     const headers = new HttpHeaders({
       'Content-Type': 'application/pdf',
@@ -85,4 +85,33 @@ export class ContractService {
   signManagerContract(body: any) {
     return this.http.post(this.baseUrl + '/manager/contract', body)
   }
+
+  rejectManagerContract(body: any) {
+    return this.http.post(this.baseUrl + '/manager/contract/reject', body)
+  }
+
+  getContractList(
+    sort: string,
+    order: SortDirection,
+    page: number,
+    pageSize: number,
+    uploadStartDate: string,
+    uploadEndDate: string,
+    title: string,
+  ) {
+    return this.http.get(
+      this.baseUrl +
+      `/employee/contract?sort=${sort}&order=${order}&page=${page! + 1
+      }&pageSize=${pageSize}&uploadStartDate=${uploadStartDate}&uploadEndDate=${uploadEndDate}&title=${title}`
+    );
+  }
+
+  signContract(body: any) {
+    return this.http.post(this.baseUrl + '/employee/contract', body)
+  }
+
+  rejectContract(body: any) {
+    return this.http.post(this.baseUrl + '/employee/contract/reject', body)
+  }
+
 }
