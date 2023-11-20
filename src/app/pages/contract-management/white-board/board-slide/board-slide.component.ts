@@ -99,7 +99,6 @@ export class BoardSlideComponent {
      *  1. scroll에 필요한 ratio 계산(thumbnail과 canvas의 크기비율)은 여기서 수행
      *  2. thumbnail의 window size 계산 수행
      */
-
     this.containerSize$.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(() => {
@@ -154,7 +153,6 @@ export class BoardSlideComponent {
     if (pageNum == this.currentPage()) return; // 동일 page click은 무시
     console.log('>> [clickThumb] change Page to : ', pageNum);
     this.currentPage.update(() => pageNum);
-
   }
 
 

@@ -101,9 +101,9 @@ export class ContractManagerDetailsComponent {
 
     // 서명은 무조건 펜으로
     const currentTool = this.editInfo().toolsConfig['pen'];
-    console.log(this.data?.managerStatus)
-    // 매니저 사인이 없으면 
-    if (this.data?.managerStatus !== 'signed' && this.contractMod() === "sign") {
+    // 사인모드일 경우
+
+    if (this.contractMod() === 'sign') {
       // 캔버스에 드로우 이벤트를 연결
       this.canvasService.addEventHandler(this.managerCanvasCover, this.managerCanvas, currentTool, 1);
     }
@@ -143,6 +143,14 @@ export class ContractManagerDetailsComponent {
 
     this.managerCanvas.width = this.managerCanvasCover.width
     this.managerCanvas.height = this.managerCanvasCover.height
+
+    // 서명란 색감 주기
+    if (this.contractMod() === 'sign') {
+      const ctx = this.managerCanvas.getContext('2d');
+      ctx!.fillStyle = "#F5F5F5";
+      ctx!.fillRect(0, 0, this.managerCanvas.width, this.managerCanvas.height);
+    }
+
   }
 
 
@@ -158,8 +166,8 @@ export class ContractManagerDetailsComponent {
   openConfirmDialog() {
     const requestBody = {
       contractId: this.data._id,
-      employeeSign: this.drawStoreService.getDrawingEvents(1), // 첫번째 페이지의 드로잉 이벤트 
-      employeeSignedTime: moment().format("YYYY-MM-DD HH:mm ddd")
+      managerSign: this.drawStoreService.getDrawingEvents(1), // 첫번째 페이지의 드로잉 이벤트 
+      managerSignedTime: moment().format("YYYY-MM-DD HH:mm ddd")
     }
 
     this.dialogService.openDialogConfirm('Would you like to proceed with the signature?').subscribe({

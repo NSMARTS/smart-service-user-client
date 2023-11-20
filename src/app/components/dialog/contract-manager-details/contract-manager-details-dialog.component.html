@@ -1,6 +1,8 @@
 <div>
   <h1 *ngIf="contractMod()==='detail'" mat-dialog-title>Contract Details</h1>
-  <!-- <h1 *ngIf="contractMod()==='sign'" mat-dialog-title>Contract Sign</h1> -->
+  <h1 *ngIf="contractMod()==='sign' && !data.rejectFormMod" mat-dialog-title>Contract Sign</h1>
+  <h1 *ngIf="contractMod()==='sign' && data.rejectFormMod" mat-dialog-title>Contract Reject</h1>
+
   <div mat-dialog-content>
     <table class="modal-table">
       <colgroup>
@@ -53,27 +55,18 @@
             {{data.manager ? data.manager.email + ' (' + data.manager.username + ')' : '-'}}
           </td>
         </tr>
-
-        <!-- manager reject -->
-        <tr *ngIf="data.rejectMod || data.rejectedReason">
+        <!-- manager status -->
+        <tr>
           <th>
-            <b>Rejected Reason</b>
+            <b>Status</b>
           </th>
-          <td *ngIf="data.rejectMod && !data.rejectedReason">
-            <mat-form-field style=" width: 100%;">
-              <mat-label>Reason</mat-label>
-              <textarea [formControl]="rejectedReason" matInput rows="6"></textarea>
-            </mat-form-field>
-          </td>
-          <td *ngIf="data.rejectMod && data.rejectedReason">
-            <mat-form-field style=" width: 100%;">
-              <mat-label>Reason</mat-label>
-              {{data.managerRejectReason}}
-            </mat-form-field>
+          <td>
+            {{data.managerStatus}}
           </td>
         </tr>
 
-        <tr *ngIf="!data.rejectMod">
+        <!-- manager sign -->
+        <tr [hidden]="data.rejectFormMod || data.managerStatus === 'rejected' ">
           <th>
             <b> Manager Sign</b>
           </th>
@@ -86,7 +79,24 @@
             </div>
           </div>
         </tr>
-        <tr *ngIf="!data.rejectMod">
+
+        <!-- manager reject -->
+        <tr *ngIf="data.rejectFormMod || data.managerStatus==='rejected'">
+          <th>
+            <b>Rejected Reason</b>
+          </th>
+          <td>
+            <mat-form-field *ngIf="data.rejectFormMod" style=" width: 100%;">
+              <mat-label>Reason</mat-label>
+              <textarea [formControl]="rejectedReason" matInput rows="6"></textarea>
+            </mat-form-field>
+            {{ data.managerStatus==='rejected' ? data.managerRejectReason : null}}
+          </td>
+
+        </tr>
+
+        <!-- employee -->
+        <tr *ngIf="!data.rejectFormMod">
           <th>
             <b>Employee</b>
           </th>
@@ -94,7 +104,18 @@
             {{data.employee.email}} ({{data.employee.username}})
           </td>
         </tr>
-        <tr *ngIf="!data.rejectMod">
+        <!-- employee status -->
+        <tr *ngIf="!data.rejectFormMod">
+          <th>
+            <b>Status</b>
+          </th>
+          <td>
+            {{data.employeeStatus}}
+          </td>
+        </tr>
+
+        <!-- employee sign -->
+        <tr [hidden]="data.rejectFormMod || data.employeeStatus !== 'signed'">
           <th>
             <b> Employee Sign </b>
           </th>
@@ -107,17 +128,28 @@
             </div>
           </div>
         </tr>
+        <!-- employee reject reason -->
+        <tr *ngIf="data.employeeStatus==='rejected' && !data.rejectFormMod">
+          <th>
+            <b>Rejected Reason</b>
+          </th>
+          <td>
+            {{data.employeeRejectReason}}
+          </td>
+
+        </tr>
+
       </tbody>
     </table>
   </div>
   <div mat-dialog-actions style="display: flex; justify-content: space-between;">
     <button mat-flat-button mat-dialog-close>Close</button>
     <div>
-      <button *ngIf="contractMod() === 'sign' && data.managerStatus !=='signed' && !data.rejectMod" color="primary"
-        mat-flat-button (click)="openConfirmDialog()">Sign</button>
+      <button *ngIf="contractMod() === 'sign' && !data.rejectFormMod" color="primary" mat-flat-button
+        (click)="openConfirmDialog()">Sign</button>
 
-      <button *ngIf="contractMod() === 'sign' && data.managerStatus !=='signed' && data.rejectMod" color="warn"
-        mat-flat-button (click)="openRejectContractDialog()">Reject </button>
+      <button *ngIf="contractMod() === 'sign' && data.rejectFormMod" color="warn" mat-flat-button
+        (click)="openRejectContractDialog()">Reject </button>
     </div>
 
   </div>

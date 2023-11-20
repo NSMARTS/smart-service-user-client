@@ -37,6 +37,7 @@ export class BoardNavComponent {
   contractInfo: any;
   contract: any;
   currentUrl: string; // 현재 url이 'contract' 인지, 'manager contract'인지 확인
+  rejectMod: boolean = false;
 
   // 상태관리 --------------------------
   pdfInfo: WritableSignal<PdfInfo> = this.pdfService.pdfInfo;
@@ -48,16 +49,29 @@ export class BoardNavComponent {
 
 
   constructor() {
+    this.contractMod.set('')
     // 현재 url이 'contract' 인지, 'manager contract'인지 확인
     this.currentUrl = this.router.url.split('/')[2];
     this.contractId = this.route.snapshot.params['id'];
-    this.contractMod.set(this.route.snapshot.url[0].path)
     this.getPdf()
   }
 
   async getPdf() {
-    this.contractInfo = await lastValueFrom(this.contractService.getContract(this.contractId))
-    this.contract = await lastValueFrom(this.contractService.downloadContract(this.contractInfo?.data?.key))
+    // pdf정보 가져옴
+    const contract: any = await lastValueFrom(this.contractService.getContract(this.contractId))
+    this.contractInfo = contract.data
+
+    // url과 직원/매니저의 결제 상태에 따라 board-nav에서 상세보기 버튼을 보여줄지, 수락 or 거절 버튼을 보여줄지 결정.  
+    if (this.currentUrl === 'contract' && this.contractInfo.employeeStatus !== 'pending') {
+      this.contractMod.set('detail')
+    } else if (this.currentUrl === 'manager-contract' && this.contractInfo.managerStatus !== 'pending') {
+      this.contractMod.set('detail')
+    } else {
+      this.contractMod.set(this.route.snapshot.url[0].path)
+    }
+
+    // pdf 파일을 가져와 렌더링
+    this.contract = await lastValueFrom(this.contractService.downloadContract(this.contractInfo?.key))
     this.pdfService.readFile(this.contract)
 
   }
@@ -73,23 +87,48 @@ export class BoardNavComponent {
   }
 
   // modal Contract save
-  openSignContract(rejectMod: boolean) {
-
+  openSignContract() {
     if (this.currentUrl === 'contract') {
       const dialogRef = this.dialog.open(ContractDetailsComponent, {
         data: {
-          ...this.contractInfo.data,
+          ...this.contractInfo,
           currentUrl: this.currentUrl,
-          rejectMod: rejectMod
+          rejectFormMod: false
         }
       });
     }
     if (this.currentUrl === 'manager-contract') {
+      if (this.contractInfo.managerStatus === 'rejected') this.rejectMod = true
       const dialogRef = this.dialog.open(ContractManagerDetailsComponent, {
         data: {
-          ...this.contractInfo.data,
+          ...this.contractInfo,
           currentUrl: this.currentUrl,
-          rejectMod: rejectMod
+          rejectFormMod: false
+        }
+      });
+    }
+
+  }
+
+  // modal Contract save
+  openRejectContract() {
+
+    if (this.currentUrl === 'contract') {
+      const dialogRef = this.dialog.open(ContractDetailsComponent, {
+        data: {
+          ...this.contractInfo,
+          currentUrl: this.currentUrl,
+          rejectFormMod: true
+        }
+      });
+    }
+    if (this.currentUrl === 'manager-contract') {
+      if (this.contractInfo.managerStatus === 'rejected') this.rejectMod = true
+      const dialogRef = this.dialog.open(ContractManagerDetailsComponent, {
+        data: {
+          ...this.contractInfo,
+          currentUrl: this.currentUrl,
+          rejectFormMod: true
         }
       });
     }
@@ -100,7 +139,7 @@ export class BoardNavComponent {
     if (this.currentUrl === 'contract') {
       const dialogRef = this.dialog.open(ContractDetailsComponent, {
         data: {
-          ...this.contractInfo.data,
+          ...this.contractInfo,
           currentUrl: this.currentUrl,
         }
       });
@@ -108,7 +147,7 @@ export class BoardNavComponent {
     if (this.currentUrl === 'manager-contract') {
       const dialogRef = this.dialog.open(ContractManagerDetailsComponent, {
         data: {
-          ...this.contractInfo.data,
+          ...this.contractInfo,
           currentUrl: this.currentUrl,
         }
       });

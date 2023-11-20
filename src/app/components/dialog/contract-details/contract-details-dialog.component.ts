@@ -74,6 +74,7 @@ export class ContractDetailsComponent implements AfterViewInit {
 
 
   ngAfterViewInit() {
+
     this.setCanvasSize()
 
 
@@ -84,7 +85,7 @@ export class ContractDetailsComponent implements AfterViewInit {
       this.drawStoreService.resetDrawingEvents(); // 매니저 서명을 그리고 나면 초기화
     }
 
-    // 직원 서명이 존재하면 매니저 서명 draw
+    // 직원 서명이 존재하면 직원 서명 draw
     if (this.data?.employeeStatus === 'signed') {
       this.drawStoreService.drawVar.set(this.data?.employeeSign)
       this.pageRender(this.employeeCanvas)
@@ -94,8 +95,8 @@ export class ContractDetailsComponent implements AfterViewInit {
     // 서명은 무조건 펜으로
     const currentTool = this.editInfo().toolsConfig['pen'];
 
-    // 매니저 사인이 없으면
-    if (this.data?.employeeStatus !== 'signed') {
+    // 사인모드일 경우
+    if (this.contractMod() === 'sign') {
       // 캔버스에 드로우 이벤트를 연결
       this.canvasService.addEventHandler(this.employeeCanvasCover, this.employeeCanvas, currentTool, 1);
     }
@@ -128,7 +129,12 @@ export class ContractDetailsComponent implements AfterViewInit {
     this.employeeCanvas.width = this.employeeCanvasCover.width
     this.employeeCanvas.height = this.employeeCanvasCover.height
 
-
+    // 서명란 색감 주기
+    if (this.contractMod() === 'sign') {
+      const ctx = this.employeeCanvas.getContext('2d');
+      ctx!.fillStyle = "#F5F5F5";
+      ctx!.fillRect(0, 0, this.employeeCanvas.width, this.employeeCanvas.height);
+    }
     this.managerCanvasCover.width = 300
     this.managerCanvasCover.height = 150
 
@@ -171,7 +177,7 @@ export class ContractDetailsComponent implements AfterViewInit {
    * @param requestBody {contractId, employeeSign, employeeSignedTime}
    */
   signContract(requestBody: any) {
-    this.contractService.signManagerContract(requestBody).subscribe({
+    this.contractService.signContract(requestBody).subscribe({
       next: (res: any) => {
         this.dialogService.openDialogPositive('Contract signed successfully').subscribe({
           next: (res) => {
