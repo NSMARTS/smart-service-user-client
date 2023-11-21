@@ -1,5 +1,6 @@
+import { DrawStoreService } from './../../../../../services/draw-store/draw-store.service';
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -30,6 +31,8 @@ export class ManagerPayStubsListComponent implements AfterViewInit {
   displayedColumns: string[] = ['updatedAt', 'title', 'writer', 'employee', 'email', 'detail', 'download'];
   leaveDatabase: any | null;
   data: any = [];
+
+  drawStoreService = inject(DrawStoreService)
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -73,7 +76,7 @@ export class ManagerPayStubsListComponent implements AfterViewInit {
           this.isLoadingResults = false;
           this.isRateLimitReached = data === null;
 
-
+          console.log(data)
           this.options = data.emails;
           this.filteredOptions = this.searchForm.get('email')?.valueChanges.pipe(
             startWith(''),
@@ -111,10 +114,14 @@ export class ManagerPayStubsListComponent implements AfterViewInit {
 
 
   openDetailDialog(data: any) {
+    this.drawStoreService.resetDrawingEvents()
     const dialogRef = this.dialog.open(ContractDetailDialogComponent, {
       maxWidth: '800px',
       width: '100%',
-      data
+      data: {
+        ...data,
+        managerMode: true,
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result == 'success') {

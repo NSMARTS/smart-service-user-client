@@ -13,6 +13,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map, merge, startWith, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatDialog } from '@angular/material/dialog';
+import { ContractValidatorDialogComponent } from 'src/app/components/dialog/contract-validator/contract-validator-dialog.component';
 
 @Component({
   selector: 'app-manager-contract-list',
@@ -29,6 +31,7 @@ export class ManagerContractListComponent {
   commonService = inject(CommonService);
   contractService = inject(ContractService);
   dialogService = inject(DialogService);
+  dialog = inject(MatDialog)
 
   // ---------- 변수 선언 ------------------
   searchContractForm: FormGroup;
@@ -154,11 +157,18 @@ export class ManagerContractListComponent {
     this.router.navigate([`contract-management/manager-contract/sign/${_id}`])
   }
 
-  deleteContract(_id: string) {
-
+  handleContractValidateClick(_id: string) {
+    const dialogRef = this.dialog.open(ContractValidatorDialogComponent, {
+      width: '500px',
+      height: '220px',
+      data: {
+        id: _id,
+        contractMod: true,
+      }
+    });
   }
-
   openDetailDialog(row: any) { }
 
   handlePageEvent() { }
+
 }

@@ -1,3 +1,4 @@
+import { DrawStoreService } from 'src/app/services/draw-store/draw-store.service';
 import { ContractManagerDetailsComponent } from './../../../../components/dialog/contract-manager-details/contract-manager-details-dialog.component';
 import { lastValueFrom } from 'rxjs';
 import { Component, OnInit, WritableSignal, inject } from '@angular/core';
@@ -28,6 +29,7 @@ export class BoardNavComponent {
   dialog = inject(MatDialog)
 
   dialogService = inject(DialogService)
+  drawStoreService = inject(DrawStoreService)
   pdfService = inject(PdfService)
   authService = inject(AuthService)
   contractService = inject(ContractService)
@@ -96,6 +98,8 @@ export class BoardNavComponent {
           rejectFormMod: false
         }
       });
+      // 다이얼로그 나가면 드로우이벤트 리셋
+      dialogRef.afterClosed().subscribe(result => this.drawStoreService.resetDrawingEvents())
     }
     if (this.currentUrl === 'manager-contract') {
       if (this.contractInfo.managerStatus === 'rejected') this.rejectMod = true
@@ -106,6 +110,8 @@ export class BoardNavComponent {
           rejectFormMod: false
         }
       });
+      // 다이얼로그 나가면 드로우이벤트 리셋
+      dialogRef.afterClosed().subscribe(result => this.drawStoreService.resetDrawingEvents())
     }
 
   }
@@ -119,7 +125,7 @@ export class BoardNavComponent {
           ...this.contractInfo,
           currentUrl: this.currentUrl,
           rejectFormMod: true
-        }
+        },
       });
     }
     if (this.currentUrl === 'manager-contract') {

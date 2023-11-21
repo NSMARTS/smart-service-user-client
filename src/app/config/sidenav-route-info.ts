@@ -144,7 +144,7 @@ export const sidenavRouteInfo: NavigationItem[] = [
   },
   {
     type: 'subheading',
-    label: 'Contracts',
+    label: 'Contract',
     children: [{
       type: 'dropdown',
       label: 'Contract Management',

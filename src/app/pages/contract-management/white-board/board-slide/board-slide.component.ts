@@ -114,33 +114,33 @@ export class BoardSlideComponent {
 
   }
 
-  /**
-  * 새로운 File Load (Local)
-  * - @output으로 main component(white-board.component로 전달)
-  * @param event
-  * @returns
-  */
-  async handleUploadFileChanged(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
+  // /**
+  // * 새로운 File Load (Local)
+  // * - @output으로 main component(white-board.component로 전달)
+  // * @param event
+  // * @returns
+  // */
+  // async handleUploadFileChanged(event: Event) {
+  //   const inputElement = event.target as HTMLInputElement;
 
-    if (!inputElement || !inputElement.files || inputElement.files.length === 0) {
-      return;
-    }
-    const file: File = inputElement.files[0];
+  //   if (!inputElement || !inputElement.files || inputElement.files.length === 0) {
+  //     return;
+  //   }
+  //   const file: File = inputElement.files[0];
 
-    // 파일 유효성 검사
-    const ext = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase();
+  //   // 파일 유효성 검사
+  //   const ext = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase();
 
-    if (ext !== 'pdf') {
-      this.dialogService.openDialogNegative(`Please, upload the '.pdf' file.`);
-      return;
-    }
+  //   if (ext !== 'pdf') {
+  //     this.dialogService.openDialogNegative(`Please, upload the '.pdf' file.`);
+  //     return;
+  //   }
 
 
-    this.pdfService.readFile(file)
+  //   this.pdfService.readFile(file)
 
-    this.zoomService.setInitZoomScale()
-  }
+  //   this.zoomService.setInitZoomScale()
+  // }
 
 
   /**

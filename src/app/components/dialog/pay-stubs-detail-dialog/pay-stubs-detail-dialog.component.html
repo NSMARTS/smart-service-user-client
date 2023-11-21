@@ -1,6 +1,6 @@
 <div>
   <h1 mat-dialog-title>{{data.title}}</h1>
-  <div mat-dialog-content>
+  <div mat-dialog-content class="pay_stub_contents">
     <div id="outerContainer">
       <div class="pdf-container">
         <pdf-viewer [src]="data.location" [rotation]="0" [original-size]="false" [show-all]="true" [fit-to-page]="false"
@@ -12,5 +12,6 @@
   </div>
   <div mat-dialog-actions style="display: flex; justify-content: space-between">
     <button mat-flat-button mat-dialog-close>Close</button>
+    <button mat-flat-button (click)="openSignDialog()">Sign</button>
   </div>
 </div>

@@ -45,6 +45,19 @@ export class ContractService {
     );
   }
 
+  signPayStub(body: any) {
+    return this.http.post(this.baseUrl + '/employee/pay_stubs/sign', body)
+  }
+
+  verifyPayStub(id: string, file: File) {
+    const formData: FormData = new FormData();
+    formData.append("contractId", id);
+    formData.append("file", file, file?.name);
+
+    return this.http.post(this.baseUrl + '/employee/pay_stubs/verify', formData)
+  }
+
+
   getManagerContractList(
     sort: string,
     order: SortDirection,
@@ -112,6 +125,14 @@ export class ContractService {
 
   rejectContract(body: any) {
     return this.http.post(this.baseUrl + '/employee/contract/reject', body)
+  }
+
+  verifyContract(id: string, file: File) {
+    const formData: FormData = new FormData();
+    formData.append("contractId", id);
+    formData.append("file", file, file?.name);
+
+    return this.http.post(this.baseUrl + '/employee/contract/verify', formData)
   }
 
 }

@@ -1,14 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map, merge, startWith, switchMap } from 'rxjs';
+import { ContractValidatorDialogComponent } from 'src/app/components/dialog/contract-validator/contract-validator-dialog.component';
 import { ContractDetailDialogComponent } from 'src/app/components/dialog/pay-stubs-detail-dialog/pay-stubs-detail-dialog.component';
 import { MaterialsModule } from 'src/app/materials/materials.module';
 import { ContractService } from 'src/app/services/contract/contract.service';
+import { DrawStoreService } from 'src/app/services/draw-store/draw-store.service';
 interface FormData {
   updatedAt: FormControl;
   title: FormControl;
@@ -26,9 +28,12 @@ interface FormData {
   styleUrls: ['./pay-stubs-list.component.scss']
 })
 export class PayStubsListComponent implements AfterViewInit {
-  displayedColumns: string[] = ['updatedAt', 'title', 'writer', 'detail', 'download'];
+  displayedColumns: string[] = ['updatedAt', 'title', 'writer', 'detail', 'verify', 'download',];
   leaveDatabase: any | null;
   data: any = [];
+
+  drawStoreService = inject(DrawStoreService)
+
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -73,7 +78,6 @@ export class PayStubsListComponent implements AfterViewInit {
           // Flip flag to show that loading has finished.
           this.isLoadingResults = false;
           this.isRateLimitReached = data === null;
-
           if (data === null) {
             return [];
           }
@@ -91,15 +95,48 @@ export class PayStubsListComponent implements AfterViewInit {
 
 
   openDetailDialog(data: any) {
+    this.drawStoreService.resetDrawingEvents()
+    console.log(data)
     const dialogRef = this.dialog.open(ContractDetailDialogComponent, {
       maxWidth: '800px',
       width: '100%',
-      data
+      data: {
+        ...data,
+        signMode: false,
+        managerMod: false,
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result == 'success') {
         this.getData()
       }
     })
+  }
+
+
+  openSignDialog(data: any) {
+    const dialogRef = this.dialog.open(ContractDetailDialogComponent, {
+      maxWidth: '800px',
+      width: '100%',
+      data: {
+        ...data,
+        signMode: true
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == 'success') {
+        this.getData()
+      }
+    })
+  }
+  openVerifyDialog(data: any) {
+    const dialogRef = this.dialog.open(ContractValidatorDialogComponent, {
+      width: '500px',
+      height: '220px',
+      data: {
+        id: data._id,
+        contractMod: false,
+      }
+    });
   }
 }
