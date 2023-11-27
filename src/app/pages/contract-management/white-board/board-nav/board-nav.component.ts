@@ -60,8 +60,12 @@ export class BoardNavComponent {
 
   async getPdf() {
     // pdf정보 가져옴
-    const contract: any = await lastValueFrom(this.contractService.getContract(this.contractId))
-    this.contractInfo = contract.data
+    try {
+      const contract: any = await lastValueFrom(this.contractService.getContract(this.contractId))
+      this.contractInfo = contract.data
+    } catch (error: any) {
+      this.dialogService.openDialogNegative(error.error.message)
+    }
 
     // url과 직원/매니저의 결제 상태에 따라 board-nav에서 상세보기 버튼을 보여줄지, 수락 or 거절 버튼을 보여줄지 결정.  
     if (this.currentUrl === 'contract' && this.contractInfo.employeeStatus !== 'pending') {

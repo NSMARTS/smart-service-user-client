@@ -1,3 +1,5 @@
+import { DialogService } from 'src/app/services/dialog/dialog.service';
+import { map } from 'rxjs';
 import { DrawStoreService } from './../../../services/draw-store/draw-store.service';
 import { CommonModule } from '@angular/common';
 import { Component, Inject, inject } from '@angular/core';
@@ -5,6 +7,7 @@ import { MaterialsModule } from 'src/app/materials/materials.module';
 import { PdfViewerModule, PdfViewerComponent } from 'ng2-pdf-viewer';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PayStubsSignDialogComponent } from '../pay-stubs-sign-dialog/pay-stubs-sign-dialog.component';
+import { ContractService } from 'src/app/services/contract/contract.service';
 
 @Component({
   selector: 'app-pay-stubs-detail-dialog',
@@ -21,11 +24,23 @@ import { PayStubsSignDialogComponent } from '../pay-stubs-sign-dialog/pay-stubs-
 export class ContractDetailDialogComponent {
   dialog = inject(MatDialog)
   drawStoreService = inject(DrawStoreService)
+  dialogService = inject(DialogService)
+  contractService = inject(ContractService)
+  isLoadingResults = true;
   constructor(
     public dialogRef: MatDialogRef<ContractDetailDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
-    console.log(this.data)
+    this.contractService.getPayStubById(this.data._id).subscribe({
+      next: (res: any) => {
+        this.isLoadingResults = false;
+      },
+      error: (error: any) => {
+        this.isLoadingResults = false;
+        this.dialogService.openDialogNegative(error.error.message)
+        this.dialogRef.close('success')
+      }
+    })
   }
   openSignDialog() {
     const dialogRef = this.dialog.open(PayStubsSignDialogComponent, {

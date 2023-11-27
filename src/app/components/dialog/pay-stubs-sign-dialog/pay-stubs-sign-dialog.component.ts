@@ -11,6 +11,7 @@ import { EditInfo, EditInfoService } from 'src/app/stores/edit-info/edit-info.se
 import * as moment from 'moment';
 import { ContractService } from 'src/app/services/contract/contract.service';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 
 @Component({
@@ -23,6 +24,7 @@ import { Router } from '@angular/router';
 export class PayStubsSignDialogComponent {
 
   router = inject(Router)
+  authService = inject(AuthService)
   contractService = inject(ContractService)
   renderingService = inject(RenderingService)
   canvasService = inject(CanvasService)

@@ -1,4 +1,7 @@
-<div>
+<div class="pay_stubs__matcard">
+  <div class="example-loading-shade" *ngIf="isLoadingResults ">
+    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+  </div>
   <h1 mat-dialog-title>{{data.title}}</h1>
   <div mat-dialog-content class="pay_stub_contents">
     <div id="outerContainer">
@@ -10,8 +13,11 @@
       </div>
     </div>
   </div>
-  <div mat-dialog-actions style="display: flex; justify-content: space-between">
+  <div mat-dialog-actions class="pay_stubs__matcard__bottom" style="display: flex; justify-content: space-between; z-index: 1;
+  ">
     <button mat-flat-button mat-dialog-close>Close</button>
-    <button mat-flat-button (click)="openSignDialog()">Sign</button>
+    <button mat-flat-button *ngIf="!data.managerMode && data.status!=='signed'" (click)="openSignDialog()">Sign</button>
+    <button mat-flat-button *ngIf="data.managerMode || data.status==='signed'"
+      (click)="openSignDialog()">Detail</button>
   </div>
 </div>

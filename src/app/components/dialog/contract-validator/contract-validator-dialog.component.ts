@@ -31,6 +31,8 @@ export class ContractValidatorDialogComponent {
     private dialogService: DialogService
   ) {
     this.userProfileData = this.profileService.userProfile()?.profileData?.user
+    console.log(this.userProfileData)
+    console.log(this.data)
   }
 
   /**
@@ -66,9 +68,15 @@ export class ContractValidatorDialogComponent {
       return
     }
 
-    // 만약 contract 모드일경우
-    if (this.data.contractMod) {
+    // 만약 contract 모드면서 직원모드일 경우
+    if (this.data.contractMod && !this.userProfileData.isManager) {
       this.contractService.verifyContract(this.data.id, this.currentFile).subscribe({
+        next: (res: any) => { this.dialogService.openDialogPositive(res.message) },
+        error: (error) => { this.dialogService.openDialogNegative(error.error.message) }
+      })
+      // 만약 contract 모드면서 매니저모드일 경우
+    } else if (this.data.contractMod && this.userProfileData.isManager) {
+      this.contractService.verifyManagerContract(this.data.id, this.currentFile).subscribe({
         next: (res: any) => { this.dialogService.openDialogPositive(res.message) },
         error: (error) => { this.dialogService.openDialogNegative(error.error.message) }
       })

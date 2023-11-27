@@ -1,34 +1,34 @@
 <!-- 소제목 -->
-<ng-container *ngIf="isSubheading(item)" class="item">
-    <div class="subheading">{{item.label}}</div>
-    <sidenav-item class="side_nav_items" *ngFor="let subItem of item.children" [item]="subItem"
-        [level]=0></sidenav-item>
+<ng-container *ngIf="isSubheading(item)  && (item.label !== 'Contract' || !flag.isManager || flag.isSuperManager)"
+  class=" item">
+  <div class="subheading">{{item.label}}</div>
+  <sidenav-item class="side_nav_items" *ngFor="let subItem of item.children" [item]="subItem" [level]=0></sidenav-item>
 </ng-container>
 
 
 <!-- 링크 -->
 <ng-container *ngIf="isLink(item) && isReplacement(item)">
-    <a matRipple [routerLink]="item.route" class="item" routerLinkActive="active">
-        <mat-icon class="item_icon">{{item.icon}}</mat-icon>
-        <span class="item_label">{{item.label}}</span>
-    </a>
+  <a matRipple [routerLink]="item.route" class="item" routerLinkActive="active">
+    <mat-icon class="item_icon">{{item.icon}}</mat-icon>
+    <span class="item_label">{{item.label}}</span>
+  </a>
 </ng-container>
 
 
 <!-- 드롭다운 -->
 <ng-container *ngIf="isDropdown(item)">
-    <div
-        *ngIf="(item.isManager == false && flag.isManager == false) || (item.isManager == true && flag.isManager == true) || (item.isSuperManager == true && flag.isSuperManager == true)">
-        <div matRipple class="item" (click)="toggleOpen()" [class.active]="isOpen || isActive" [class.open]="isOpen">
-            <mat-icon class="item_icon">{{item.icon}}</mat-icon>
-            <span class="item_label" style="flex: 1;">{{item.label}}</span>
+  <div
+    *ngIf="(item.isManager == false && flag.isManager == false) || (item.isManager == true && flag.isManager == true) || (item.isSuperManager == true && flag.isSuperManager == true)">
+    <div matRipple class="item" (click)="toggleOpen()" [class.active]="isOpen || isActive" [class.open]="isOpen">
+      <mat-icon class="item_icon">{{item.icon}}</mat-icon>
+      <span class="item_label" style="flex: 1;">{{item.label}}</span>
 
-            <mat-icon class="item_dropdown_icon">keyboard_arrow_right</mat-icon>
-        </div>
-
-        <div [@dropdown]="isOpen?'open':'closed'" class="item_dropdown">
-            <sidenav-item class="side_nav_items" *ngFor="let subItem of item.children" [item]="subItem"
-                [level]="level + 1"></sidenav-item>
-        </div>
+      <mat-icon class="item_dropdown_icon">keyboard_arrow_right</mat-icon>
     </div>
+
+    <div [@dropdown]="isOpen?'open':'closed'" class="item_dropdown">
+      <sidenav-item class="side_nav_items" *ngFor="let subItem of item.children" [item]="subItem"
+        [level]="level + 1"></sidenav-item>
+    </div>
+  </div>
 </ng-container>

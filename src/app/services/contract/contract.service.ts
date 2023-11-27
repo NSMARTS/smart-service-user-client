@@ -19,14 +19,20 @@ export class ContractService {
     order: SortDirection,
     page: number,
     pageSize: number,
-    updatedAt: Date,
-    title: string
+    uploadStartDate: string,
+    uploadEndDate: string,
+    title: string,
+    email: string
   ) {
     return this.http.get(
       this.baseUrl +
-      `/employee/pay_stubs?sort=${sort}&order=${order}&page=${page + 1
-      }&pageSize=${pageSize}&updatedAt=${updatedAt}&title=${title}`
+      `/employee/pay_stubs?sort=${sort}&order=${order}&page=${page! + 1
+      }&pageSize=${pageSize}&uploadStartDate=${uploadStartDate}&uploadEndDate=${uploadEndDate}&title=${title}&email=${email}`
     );
+  }
+
+  getPayStubById(id: string) {
+    return this.http.get(this.baseUrl + '/employee/pay_stubs/' + id)
   }
 
   managerPayStubList(
@@ -34,15 +40,20 @@ export class ContractService {
     order: SortDirection,
     page: number,
     pageSize: number,
-    updatedAt: Date,
+    uploadStartDate: string,
+    uploadEndDate: string,
     title: string,
     email: string
   ) {
     return this.http.get(
       this.baseUrl +
       `/manager/pay_stubs?sort=${sort}&order=${order}&page=${page! + 1
-      }&pageSize=${pageSize}&updatedAt=${updatedAt}&title=${title}&email=${email}`
+      }&pageSize=${pageSize}&uploadStartDate=${uploadStartDate}&uploadEndDate=${uploadEndDate}&title=${title}&email=${email}`
     );
+  }
+
+  getManagerPayStubById(id: string) {
+    return this.http.get(this.baseUrl + '/manager/pay_stubs/' + id)
   }
 
   signPayStub(body: any) {
@@ -102,6 +113,14 @@ export class ContractService {
   rejectManagerContract(body: any) {
     return this.http.post(this.baseUrl + '/manager/contract/reject', body)
   }
+
+  verifyManagerContract(id: string, file: File) {
+    const formData: FormData = new FormData();
+    formData.append("contractId", id);
+    formData.append("file", file, file?.name);
+    return this.http.post(this.baseUrl + '/manager/contract/verify', formData)
+  }
+
 
   getContractList(
     sort: string,

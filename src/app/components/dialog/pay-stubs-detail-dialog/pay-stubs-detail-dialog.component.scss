@@ -1,3 +1,23 @@
 ::ng-deep .pay_stub_contents .mat-mdc-dialog-container .mdc-dialog__content {
   overflow: hidden !important;
 }
+
+.pay_stubs__matcard {
+  position: relative;
+}
+
+
+/* 로딩 쉐이드에 높은 z-index 값 부여 */
+.example-loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  /* 높은 값으로 설정 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
