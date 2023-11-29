@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, DestroyRef, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, WritableSignal, effect, inject } from "@angular/core";
+import { Component, DestroyRef, ElementRef, OnDestroy, OnInit, Renderer2, Signal, ViewChild, WritableSignal, computed, effect, inject } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { combineLatest, skip } from "rxjs";
 import { CANVAS_CONFIG } from "src/app/config/canvas-css";
@@ -55,19 +55,18 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
   bgCanvas!: HTMLCanvasElement;
   tmpCanvas!: HTMLCanvasElement;
 
+  ratio = { w: 0, h: 0 }
+
   constructor() {
 
-    /**
-     * pdf가 변경되거나,
-     * 현재 페이지가 변경되거나
-     * zoom이 됐을 경우
-     * 렌더링 함수 실행.
-     */
+    // pdf 변경, 혹은 page 변경 시 onChangePage
     effect(() => {
       this.currentPage()
       if (this.pdfInfo().pdfPages.length > 0) {
         this.onChangePage();
       }
+      // allowSignalWrites effect() 안에 시그널 변수를 
+      // 변경(set, update, mutate)하고 싶은 경우.
     }, { allowSignalWrites: true })
   }
 
@@ -154,13 +153,13 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
 
     // Resize시 container size 조절.
     const ratio = this.canvasService.setContainerSize(this.canvasContainer);
-
     this.containerSize.update(() => {
       return {
         ratio,
         coverWidth: this.canvasService.canvasFullSize.width,
       }
     })
+
   }
 
   /**

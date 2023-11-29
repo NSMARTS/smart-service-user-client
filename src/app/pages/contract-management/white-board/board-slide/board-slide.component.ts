@@ -1,4 +1,4 @@
-import { Component, ElementRef, QueryList, ViewChildren, inject, WritableSignal, effect, DestroyRef } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren, inject, WritableSignal, effect, DestroyRef, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import * as pdfjsLib from 'pdfjs-dist';
@@ -42,14 +42,9 @@ export class BoardSlideComponent {
 
   // 사이드 바 썸네일 윈도우 좌표
   containerScroll: WritableSignal<ContainerScroll> = this.canvasService.containerScroll
-  containerScroll$ = toObservable(this.containerScroll)
   // 사이드 바 썸네일 윈도우 크기
-  containerSize: WritableSignal<ContainerSize> = this.canvasService.containerSize
-  containerSize$ = toObservable(this.containerSize)
-
+  containerSize: Signal<ContainerSize> = this.canvasService.containerSize
   pdfInfo: WritableSignal<PdfInfo> = this.pdfService.pdfInfo;
-  pdfInfo$ = this.pdfService.pdfInfo$;
-
   pdfLength: WritableSignal<number> = this.pdfService.pdfLength
   currentPage: WritableSignal<number> = this.pdfService.currentPage
   zoomScale: WritableSignal<number> = this.zoomService.zoomScale
@@ -80,6 +75,7 @@ export class BoardSlideComponent {
      *  --> broadcast from comclass component
      */
     effect(() => {
+      // console.log('this.containerScroll : ', this.containerScroll())
       this.containerScroll()
       if (this.thumbWindowRef) {
         this.thumbWindow = this.thumbWindowRef.last.nativeElement;
@@ -95,6 +91,7 @@ export class BoardSlideComponent {
      *  2. thumbnail의 window size 계산 수행
      */
     effect(() => {
+      // console.log('containerSize : ', this.containerSize())
       this.containerSize()
       if (this.thumbArray.length > 0) {
         this.scrollRatio = this.thumbArray[this.currentPage() - 1].width / this.containerSize().coverWidth;
