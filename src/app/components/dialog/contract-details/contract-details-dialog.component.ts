@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UserProfileData } from 'src/app/interfaces/user-profile-data.interface';
 import { MaterialsModule } from 'src/app/materials/materials.module';
 import { ProfileService } from 'src/app/stores/profile/profile.service';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { LeaveService } from 'src/app/services/leave/leave.service';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';

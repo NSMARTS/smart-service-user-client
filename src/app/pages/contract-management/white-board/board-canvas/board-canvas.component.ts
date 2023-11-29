@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, DestroyRef, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, WritableSignal, inject } from "@angular/core";
+import { Component, DestroyRef, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, WritableSignal, effect, inject } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { combineLatest, skip } from "rxjs";
 import { CANVAS_CONFIG } from "src/app/config/canvas-css";
@@ -33,14 +33,14 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
   rendererEvent!: () => void;
 
   pdfInfo: WritableSignal<PdfInfo> = this.pdfService.pdfInfo; // 업로드한 pdf 
-  pdfInfo$ = this.pdfService.pdfInfo$; // 업로드한 pdf 
+  // pdfInfo$ = this.pdfService.pdfInfo$; // 업로드한 pdf 
 
   pdfLength: WritableSignal<number> = this.pdfService.pdfLength; // pdf 전체 길이
   currentPage: WritableSignal<number> = this.pdfService.currentPage; // 현재 페이지
-  currentPage$ = this.pdfService.currentPage$; // 현재 페이지
+  // currentPage$ = this.pdfService.currentPage$; // 현재 페이지
 
   zoomScale: WritableSignal<number> = this.pdfService.zoomScale; // 줌 비율
-  zoomScale$ = this.pdfService.zoomScale$; // 줌 비율
+  // zoomScale$ = this.pdfService.zoomScale$; // 줌 비율
 
   // 사이드 바 썸네일 윈도우 좌표
   containerScroll: WritableSignal<ContainerScroll> = this.canvasService.containerScroll
@@ -63,19 +63,12 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
      * zoom이 됐을 경우
      * 렌더링 함수 실행.
      */
-    combineLatest([
-      // rxjs 한번에 여러개 합쳐버림
-      this.pdfInfo$,
-      this.currentPage$,
-      this.zoomScale$,
-    ])
-      .pipe(
-        skip(1), // 초기화 시 실행되지 않게 막고
-        takeUntilDestroyed(this.destroyRef) // 현재 컴포넌트가 사라지면 rxjs 지워버림
-      )
-      .subscribe(() => {
+    effect(() => {
+      this.currentPage()
+      if (this.pdfInfo().pdfPages.length > 0) {
         this.onChangePage();
-      });
+      }
+    }, { allowSignalWrites: true })
   }
 
   ngOnInit(): void {
@@ -202,7 +195,7 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
     // BG & Board Render
     this.pageRender(this.currentPage(), this.zoomScale());
 
-    // Thumbnail window 조정
+    // // Thumbnail window 조정
 
     this.containerSize.update(() => {
       return {

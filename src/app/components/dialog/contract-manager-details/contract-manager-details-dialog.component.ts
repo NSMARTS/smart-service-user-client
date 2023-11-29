@@ -4,7 +4,6 @@ import { EditInfo, EditInfoService } from './../../../stores/edit-info/edit-info
 import { ContractService } from 'src/app/services/contract/contract.service';
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, Inject, OnInit, ViewChild, WritableSignal, inject } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UserProfileData } from 'src/app/interfaces/user-profile-data.interface';

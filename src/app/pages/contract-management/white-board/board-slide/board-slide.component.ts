@@ -12,6 +12,7 @@ import { ContainerScroll, ContainerSize, Size } from 'src/app/interfaces/white-b
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { skip } from 'rxjs';
 import { ContractService } from 'src/app/services/contract/contract.service';
+
 pdfjsLib.GlobalWorkerOptions.workerSrc = './assets/lib/build/pdf.worker.js';
 
 @Component({
@@ -68,25 +69,18 @@ export class BoardSlideComponent {
   thumbWindow!: HTMLDivElement;
 
   constructor() {
-    /**
-     * pdf 변경 시 렌더링
-     */
-    this.pdfInfo$.pipe(
-      skip(1),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(() => {
+    // pdf 변경, 혹은 page 변경 시 onChangePage
+    effect(() => {
       if (this.pdfInfo().pdfPages.length < 1) return
       this.renderThumbnails();
     })
-    console.log(this.contractMod())
 
     /**
      *  Scroll event에 따라서 thumbnail window 위치/크기 변경
      *  --> broadcast from comclass component
      */
-    this.containerScroll$.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(() => {
+    effect(() => {
+      this.containerScroll()
       if (this.thumbWindowRef) {
         this.thumbWindow = this.thumbWindowRef.last.nativeElement;
         this.thumbWindow.style.left = this.containerScroll().left * this.scrollRatio + 'px';
@@ -94,14 +88,14 @@ export class BoardSlideComponent {
       }
     })
 
+
     /**
      *  zoom, page 전환등을 하는 경우
      *  1. scroll에 필요한 ratio 계산(thumbnail과 canvas의 크기비율)은 여기서 수행
      *  2. thumbnail의 window size 계산 수행
      */
-    this.containerSize$.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(() => {
+    effect(() => {
+      this.containerSize()
       if (this.thumbArray.length > 0) {
         this.scrollRatio = this.thumbArray[this.currentPage() - 1].width / this.containerSize().coverWidth;
         this.thumbWindowSize = {
