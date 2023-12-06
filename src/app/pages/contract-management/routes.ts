@@ -12,6 +12,10 @@ import { ManagerPayStubsListComponent } from "./manager/pay-stubs/manager-pay-st
 import { ContractListComponent } from "./employee/contract/contract-list/contract-list.component";
 import { ManagerContractListComponent } from "./manager/contract/manager-contract-list/manager-contract-list.component";
 import { PageNotFoundComponent } from "../page-not-found/page-not-found.component";
+import { signInGuard } from "src/app/guards/sign-in.guard";
+import { myManagerGuard } from "src/app/guards/my-manager.guard";
+import { isSuperManagerGuard } from "src/app/guards/is-super-manager.guard";
+import { isEmployeeGuard } from "src/app/guards/is-employee.guard";
 
 
 
@@ -24,9 +28,28 @@ import { PageNotFoundComponent } from "../page-not-found/page-not-found.componen
 // ]
 
 export const CONTRACT_MANAGEMENT_ROUTES: Route[] = [
-  { path: 'pay-stubs', loadChildren: () => import('./employee/pay-stubs/routes').then((m) => m.PAY_STUBS_MANAGEMENT_ROUTES) },
-  { path: 'manager-pay-stubs', loadChildren: () => import('./manager/pay-stubs/routes').then((m) => m.PAY_STUBS_MANAGER_MANAGEMENT_ROUTES) },
-  { path: 'contract', loadChildren: () => import('./employee/contract/routes').then((m) => m.CONTRACT_MANAGEMENT_ROUTES) },
-  { path: 'manager-contract', loadChildren: () => import('./manager/contract/routes').then((m) => m.CONTRACT_MANAGER_MANAGEMENT_ROUTES) },
-  { path: '**', component: PageNotFoundComponent }
+  {
+    path: 'pay-stubs',
+    canActivate: [signInGuard, isEmployeeGuard],
+    loadChildren: () => import('./employee/pay-stubs/routes').then((m) => m.PAY_STUBS_MANAGEMENT_ROUTES)
+  },
+  {
+    path: 'manager-pay-stubs',
+    canActivate: [signInGuard, isSuperManagerGuard],
+    loadChildren: () => import('./manager/pay-stubs/routes').then((m) => m.PAY_STUBS_MANAGER_MANAGEMENT_ROUTES)
+  },
+  {
+    path: 'contract',
+    canActivate: [signInGuard, isEmployeeGuard],
+    loadChildren: () => import('./employee/contract/routes').then((m) => m.CONTRACT_MANAGEMENT_ROUTES)
+  },
+  {
+    path: 'manager-contract',
+    canActivate: [signInGuard, isSuperManagerGuard],
+    loadChildren: () => import('./manager/contract/routes').then((m) => m.CONTRACT_MANAGER_MANAGEMENT_ROUTES)
+  },
+  {
+    path: '**',
+    component: PageNotFoundComponent
+  }
 ]

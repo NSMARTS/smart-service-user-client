@@ -149,6 +149,7 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
    *
    */
   onResize() {
+    console.log('resize!!')
     if (!this.pdfInfo().pdfDocument) return console.log(this.pdfInfo().pdfDocument);
 
     // Resize시 container size 조절.

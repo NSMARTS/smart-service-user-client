@@ -40,6 +40,7 @@ export class ManagerContractListComponent {
   resultsLength = 0;
   isLoadingResults = false;
   isRateLimitReached = false;
+  pdfUrl: string | null = null;
 
   dataSource: MatTableDataSource<Employee> = new MatTableDataSource<Employee>([]);
   destroyRef = inject(DestroyRef);
@@ -83,7 +84,14 @@ export class ManagerContractListComponent {
   ngAfterViewInit() {
     this.searchRequest()
   }
-
+  ngOnDestroy() {
+    // 컴포넌트가 파괴될 때 Blob URL 해제, 안하면 다운로드한 pdf가 브라우저 메모리를 잡아먹는다.
+    // console.log('메모리 초기화')
+    if (this.pdfUrl) {
+      window.URL.revokeObjectURL(this.pdfUrl);
+      this.pdfUrl = null;
+    }
+  }
   searchRequest() {
     const formValue = this.searchContractForm.value;
     const convertedContractStartDate = this.commonService.dateFormatting(
@@ -149,8 +157,18 @@ export class ManagerContractListComponent {
     this.router.navigate([`contract-management/manager-contract/detail/${_id}`])
   }
 
-  download(key: string) {
-
+  handleContractDownloadClick(key: string) {
+    this.contractService.downloadContract(key).subscribe({
+      next: (res) => {
+        const blob = new Blob([res], { type: 'application/pdf' });
+        this.pdfUrl = window.URL.createObjectURL(blob);
+        window.open(this.pdfUrl);
+      },
+      error: (error) => {
+        console.error(error);
+        this.dialogService.openDialogNegative('Internet Server Error.');
+      }
+    })
   }
 
   handleContractSignClick(_id: string) {

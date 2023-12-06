@@ -52,8 +52,8 @@ export class ContractService {
     );
   }
 
-  getManagerPayStubById(id: string) {
-    return this.http.get(this.baseUrl + '/manager/pay_stubs/' + id)
+  getManagerPayStubById(id: string, employeeId: string) {
+    return this.http.get(this.baseUrl + '/manager/pay_stubs/' + id + '/' + employeeId)
   }
 
   signPayStub(body: any) {

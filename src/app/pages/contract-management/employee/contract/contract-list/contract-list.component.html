@@ -124,6 +124,8 @@
               <mat-menu #menu="matMenu">
                 <button mat-menu-item
                   (click)="handleContractDetailClick(row._id)"><mat-icon>insert_photo</mat-icon>Detail</button>
+                <button mat-menu-item
+                  (click)="handleContractDownloadClick(row.key)"><mat-icon>cloud_download</mat-icon>Download</button>
                 <button mat-menu-item (click)="handleContractSignClick(row._id)"><mat-icon>edit</mat-icon>Sign</button>
                 <button mat-menu-item
                   (click)="handleContractValidateClick(row._id)"><mat-icon>check_circle</mat-icon>Validate</button>

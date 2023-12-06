@@ -83,11 +83,11 @@ const routes: Routes = [
       // 매니저가 직원들의 휴가를 관리할 수 있는 컴포넌틀르 모아놓은 것입니다.
       // 타고 들어가면 /employee-management/... 라우터 경로에 대한 처리를 확인할 수 있습니다.
       {
-        path: 'employee-management', canActivate: [myManagerGuard],
+        path: 'employee-management', canActivate: [signInGuard, myManagerGuard],
         loadChildren: () => import('./pages/employee-management/routes').then(mod => mod.EMPLOYEE_MANAGEMENT_ROUTES)
       },
       {
-        path: 'contract-management',
+        path: 'contract-management', canActivate: [signInGuard],
         loadChildren: () => import('./pages/contract-management/routes').then(mod => mod.CONTRACT_MANAGEMENT_ROUTES)
       },
       // space에 대한 컴포넌트를 모아놓은 것입니다.

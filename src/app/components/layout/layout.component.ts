@@ -36,11 +36,11 @@ export class LayoutComponent {
 
   @ViewChild('sidenav', { static: true })
   sidenav!: MatSidenav;
-  
+
   constructor(private sidenavService: SidenavService) {
     this.sidenavService.isDesktop.set(window.innerWidth > 1280)
     this.isSideNavOpen$.subscribe(() => {
-      if(this.isSideNavOpen()){
+      if (this.isSideNavOpen()) {
         this.sidenav.open()
       }
     });

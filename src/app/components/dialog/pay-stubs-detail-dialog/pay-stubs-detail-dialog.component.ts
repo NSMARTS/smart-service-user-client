@@ -31,16 +31,31 @@ export class ContractDetailDialogComponent {
     public dialogRef: MatDialogRef<ContractDetailDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
-    this.contractService.getPayStubById(this.data._id).subscribe({
-      next: (res: any) => {
-        this.isLoadingResults = false;
-      },
-      error: (error: any) => {
-        this.isLoadingResults = false;
-        this.dialogService.openDialogNegative(error.error.message)
-        this.dialogRef.close('success')
-      }
-    })
+    console.log(this.data)
+    if (!this.data.managerMode) {
+      this.contractService.getPayStubById(this.data._id).subscribe({
+        next: (res: any) => {
+          this.isLoadingResults = false;
+        },
+        error: (error: any) => {
+          this.isLoadingResults = false;
+          this.dialogService.openDialogNegative(error.error.message)
+          this.dialogRef.close('success')
+        }
+      })
+    } else if (this.data.managerMode) {
+      this.contractService.getManagerPayStubById(this.data._id, this.data.employee._id).subscribe({
+        next: (res: any) => {
+          this.isLoadingResults = false;
+        },
+        error: (error: any) => {
+          this.isLoadingResults = false;
+          this.dialogService.openDialogNegative(error.error.message)
+          this.dialogRef.close('success')
+        }
+      })
+    }
+
   }
   openSignDialog() {
     const dialogRef = this.dialog.open(PayStubsSignDialogComponent, {
