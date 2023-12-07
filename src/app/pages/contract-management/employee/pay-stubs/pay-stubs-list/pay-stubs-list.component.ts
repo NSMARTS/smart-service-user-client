@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, DestroyRef, ViewChild, inject, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DestroyRef,
+  ViewChild,
+  inject,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -25,14 +32,10 @@ interface FormData {
 @Component({
   selector: 'app-pay-stubs-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    MaterialsModule,
-    MatNativeDateModule,
-  ],
+  imports: [CommonModule, MaterialsModule, MatNativeDateModule],
 
   templateUrl: './pay-stubs-list.component.html',
-  styleUrls: ['./pay-stubs-list.component.scss']
+  styleUrls: ['./pay-stubs-list.component.scss'],
 })
 export class PayStubsListComponent implements AfterViewInit {
   // ----------서비스 주입-------------------
@@ -42,13 +45,21 @@ export class PayStubsListComponent implements AfterViewInit {
   commonService = inject(CommonService);
   contractService = inject(ContractService);
   dialogService = inject(DialogService);
-  dialog = inject(MatDialog)
+  dialog = inject(MatDialog);
 
-  displayedColumns: string[] = ['updatedAt', 'title', 'writer', 'status', 'detail', 'verify', 'download',];
+  displayedColumns: string[] = [
+    'updatedAt',
+    'title',
+    'writer',
+    'status',
+    'detail',
+    'verify',
+    'download',
+  ];
   leaveDatabase: any | null;
   data: any = [];
 
-  drawStoreService = inject(DrawStoreService)
+  drawStoreService = inject(DrawStoreService);
 
   destroyRef = inject(DestroyRef);
 
@@ -59,7 +70,6 @@ export class PayStubsListComponent implements AfterViewInit {
   searchContractForm: FormGroup;
   companyId: string;
 
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -67,8 +77,9 @@ export class PayStubsListComponent implements AfterViewInit {
   filteredEmployee = signal<any[]>([]); // 자동완성에 들어갈 emploeeList
   employees = signal<any[]>([]);
 
-  dataSource: MatTableDataSource<Employee> = new MatTableDataSource<Employee>([]);
-
+  dataSource: MatTableDataSource<Employee> = new MatTableDataSource<Employee>(
+    []
+  );
 
   constructor() {
     this.companyId = this.route.snapshot.params['id'];
@@ -82,12 +93,11 @@ export class PayStubsListComponent implements AfterViewInit {
       emailFormControl: new FormControl(''),
       uploadStartDate: new FormControl(startOfMonth),
       uploadEndDate: new FormControl(endOfMonth),
-    })
+    });
   }
 
-
   ngAfterViewInit(): void {
-    this.searchRequest()
+    this.searchRequest();
   }
 
   searchRequest() {
@@ -106,31 +116,33 @@ export class PayStubsListComponent implements AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.contractService.payStubsList(
-            this.sort.active,
-            this.sort.direction,
-            this.paginator.pageIndex,
-            this.paginator.pageSize,
-            convertedContractStartDate,
-            convertedContractEndDate,
-            formValue.titleFormControl,
-            formValue.emailFormControl,
-          ).pipe(
-            map((res: any) => {
-              // Flip flag to show that loading has finished.
-              //   this.isRateLimitReached = res.data === null;
-              console.log(res);
-              this.isLoadingResults = false;
-              this.resultsLength = res.total_count;
-              this.dataSource = new MatTableDataSource<any>(res.items);
+          return this.contractService
+            .payStubsList(
+              this.sort.active,
+              this.sort.direction,
+              this.paginator.pageIndex,
+              this.paginator.pageSize,
+              convertedContractStartDate,
+              convertedContractEndDate,
+              formValue.titleFormControl,
+              formValue.emailFormControl
+            )
+            .pipe(
+              map((res: any) => {
+                // Flip flag to show that loading has finished.
+                //   this.isRateLimitReached = res.data === null;
+                console.log(res);
+                this.isLoadingResults = false;
+                this.resultsLength = res.total_count;
+                this.dataSource = new MatTableDataSource<any>(res.items);
 
-              return res.items;
-            })
-          );
-        }),
-      ).subscribe();
+                return res.items;
+              })
+            );
+        })
+      )
+      .subscribe();
   }
-
 
   options: any = [];
   filteredOptions: Observable<any> | undefined;
@@ -138,12 +150,9 @@ export class PayStubsListComponent implements AfterViewInit {
     return user && user.email ? user.email : '';
   }
 
-
-
-
   openDetailDialog(data: any) {
-    this.drawStoreService.resetDrawingEvents()
-    console.log(data)
+    this.drawStoreService.resetDrawingEvents();
+    console.log(data);
     const dialogRef = this.dialog.open(ContractDetailDialogComponent, {
       maxWidth: '800px',
       width: '100%',
@@ -151,15 +160,14 @@ export class PayStubsListComponent implements AfterViewInit {
         ...data,
         signMode: false,
         managerMode: false,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == 'success') {
+        this.searchRequest();
       }
     });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result == 'success') {
-        this.searchRequest()
-      }
-    })
   }
-
 
   openSignDialog(data: any) {
     const dialogRef = this.dialog.open(ContractDetailDialogComponent, {
@@ -167,27 +175,27 @@ export class PayStubsListComponent implements AfterViewInit {
       width: '100%',
       data: {
         ...data,
-        signMode: true
+        signMode: true,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == 'success') {
+        this.searchRequest();
       }
     });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result == 'success') {
-        this.searchRequest()
-      }
-    })
   }
   openVerifyDialog(data: any) {
     const dialogRef = this.dialog.open(ContractValidatorDialogComponent, {
       width: '500px',
-      height: '220px',
+      //   height: '220px',
       data: {
         id: data._id,
         contractMod: false,
-      }
+      },
     });
   }
 
   handlePageEvent() {
-    this.searchRequest()
+    this.searchRequest();
   }
 }

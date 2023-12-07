@@ -6,14 +6,14 @@
  * 설명: 사이드 네비게이션 목록 초기 설정
  */
 
-import { NavigationItem } from "../interfaces/navigation-item.interface";
+import { NavigationItem } from '../interfaces/navigation-item.interface';
 export const sidenavRouteInfo: NavigationItem[] = [
   // dashboard
   {
     type: 'link',
     label: 'Dashboard',
     route: '/main',
-    icon: 'dashboard'
+    icon: 'dashboard',
   },
   {
     type: 'subheading',
@@ -23,15 +23,15 @@ export const sidenavRouteInfo: NavigationItem[] = [
         type: 'link',
         label: 'notification',
         route: '/notification',
-        icon: 'campaign'
+        icon: 'campaign',
       },
       {
         type: 'link',
         label: 'meeting',
         route: '/meeting',
-        icon: 'groups'
-      }
-    ]
+        icon: 'groups',
+      },
+    ],
   },
   // // project
   // {
@@ -71,7 +71,7 @@ export const sidenavRouteInfo: NavigationItem[] = [
             route: '/leave/my-status',
             icon: 'fact_check',
             isManager: false,
-            isReplacementDay: false
+            isReplacementDay: false,
           },
           {
             type: 'link',
@@ -87,9 +87,9 @@ export const sidenavRouteInfo: NavigationItem[] = [
             route: '/leave/rd-request-list',
             icon: 'date_range',
             isManager: false,
-            isReplacementDay: true
-          }
-        ]
+            isReplacementDay: true,
+          },
+        ],
       },
       {
         type: 'dropdown',
@@ -103,7 +103,7 @@ export const sidenavRouteInfo: NavigationItem[] = [
             route: '/employee-management/employee-leave-status',
             icon: 'update',
             isManager: true,
-            isReplacementDay: false
+            isReplacementDay: false,
           },
           {
             type: 'link',
@@ -111,7 +111,7 @@ export const sidenavRouteInfo: NavigationItem[] = [
             route: '/employee-management/employee-list',
             icon: 'format_list_bulleted',
             isManager: true,
-            isReplacementDay: false
+            isReplacementDay: false,
           },
           // {
           //     type: 'link',
@@ -127,7 +127,7 @@ export const sidenavRouteInfo: NavigationItem[] = [
             route: '/employee-management/employee-rd-request',
             icon: 'recommend',
             isManager: true,
-            isReplacementDay: false
+            isReplacementDay: false,
           },
           // {
           //     type: 'link',
@@ -135,58 +135,64 @@ export const sidenavRouteInfo: NavigationItem[] = [
           //     route: '/employee-management/register-request',
           //     icon: 'how_to_reg',
           //     isManager: true,
-          //     isReplacementDay: false 
+          //     isReplacementDay: false
           // }
-        ]
+        ],
       },
-
-    ]
+    ],
   },
   {
     type: 'subheading',
     label: 'Contract',
-    children: [{
-      type: 'dropdown',
-      label: 'Contract Management',
-      icon: 'manage_search',
-      isManager: false,
-      children: [{
-        type: 'link',
-        label: 'Contract List',
-        route: '/contract-management/contract',
-        icon: 'format_list_bulleted',
-        isManager: true,
-        isReplacementDay: false
-      }, {
-        type: 'link',
-        label: 'Payment Statement List',
-        route: '/contract-management/pay-stubs',
-        icon: 'format_list_bulleted',
-        isManager: true,
-        isReplacementDay: false
-      }]
-    },
-    {
-      type: 'dropdown',
-      label: 'Contract Management',
-      icon: 'manage_search',
-      isSuperManager: true,
-      children: [{
-        type: 'link',
-        label: 'Contract List',
-        route: '/contract-management/manager-contract',
-        icon: 'format_list_bulleted',
-        isManager: true,
-        isReplacementDay: false
-      }, {
-        type: 'link',
-        label: 'Payment Statement List',
-        route: '/contract-management/manager-pay-stubs',
-        icon: 'format_list_bulleted',
-        isManager: true,
-        isReplacementDay: false
-      },]
-    }
-    ]
+    children: [
+      {
+        type: 'dropdown',
+        label: 'Contract Management',
+        icon: 'manage_search',
+        isManager: false,
+        children: [
+          {
+            type: 'link',
+            label: 'Contract List',
+            route: '/contract-management/contract',
+            icon: 'update',
+            isManager: true,
+            isReplacementDay: false,
+          },
+          {
+            type: 'link',
+            label: 'Payment Statement List',
+            route: '/contract-management/pay-stubs',
+            icon: 'receipt_long',
+            isManager: true,
+            isReplacementDay: false,
+          },
+        ],
+      },
+      {
+        type: 'dropdown',
+        label: 'Contract Management',
+        icon: 'manage_search',
+        isSuperManager: true,
+        children: [
+          {
+            type: 'link',
+            label: 'Contract List',
+            route: '/contract-management/manager-contract',
+            icon: 'update',
+            isManager: true,
+            isReplacementDay: false,
+          },
+          {
+            type: 'link',
+            label: 'Payment Statement List',
+            route: '/contract-management/manager-pay-stubs',
+            icon: 'receipt_long',
+            isManager: true,
+            isReplacementDay: false,
+          },
+        ],
+      },
+    ],
   },
-]
+];

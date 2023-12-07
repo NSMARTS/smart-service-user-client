@@ -1,9 +1,20 @@
-import { Component, DestroyRef, ViewChild, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ViewChild,
+  inject,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialsModule } from 'src/app/materials/materials.module';
 import { MatTableDataSource } from '@angular/material/table';
 import { Employee } from 'src/app/interfaces/employee.interface';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { ContractService } from 'src/app/services/contract/contract.service';
 import { CommonService } from 'src/app/services/common/common.service';
@@ -21,7 +32,7 @@ import { ContractValidatorDialogComponent } from 'src/app/components/dialog/cont
   standalone: true,
   imports: [CommonModule, MaterialsModule, ReactiveFormsModule],
   templateUrl: './manager-contract-list.component.html',
-  styleUrls: ['./manager-contract-list.component.scss']
+  styleUrls: ['./manager-contract-list.component.scss'],
 })
 export class ManagerContractListComponent {
   // ----------서비스 주입-------------------
@@ -31,18 +42,20 @@ export class ManagerContractListComponent {
   commonService = inject(CommonService);
   contractService = inject(ContractService);
   dialogService = inject(DialogService);
-  dialog = inject(MatDialog)
+  dialog = inject(MatDialog);
 
   // ---------- 변수 선언 ------------------
   searchContractForm: FormGroup;
   companyId: string;
 
   resultsLength = 0;
-  isLoadingResults = false;
+  isLoadingResults = true;
   isRateLimitReached = false;
   pdfUrl: string | null = null;
 
-  dataSource: MatTableDataSource<Employee> = new MatTableDataSource<Employee>([]);
+  dataSource: MatTableDataSource<Employee> = new MatTableDataSource<Employee>(
+    []
+  );
   destroyRef = inject(DestroyRef);
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -54,16 +67,14 @@ export class ManagerContractListComponent {
     'employeeStatus',
     'managerName',
     'managerStatus',
-    'menu'
+    'menu',
   ];
 
   data: any = [];
 
-
   // ---------- 시그널 변수 -----------------
   filteredEmployee = signal<any[]>([]); // 자동완성에 들어갈 emploeeList
   employees = signal<any[]>([]);
-
 
   constructor() {
     this.companyId = this.route.snapshot.params['id'];
@@ -78,11 +89,10 @@ export class ManagerContractListComponent {
       emailFormControl: new FormControl(''),
       uploadStartDate: new FormControl(startOfMonth),
       uploadEndDate: new FormControl(endOfMonth),
-    })
-
+    });
   }
   ngAfterViewInit() {
-    this.searchRequest()
+    this.searchRequest();
   }
   ngOnDestroy() {
     // 컴포넌트가 파괴될 때 Blob URL 해제, 안하면 다운로드한 pdf가 브라우저 메모리를 잡아먹는다.
@@ -107,41 +117,50 @@ export class ManagerContractListComponent {
       .pipe(
         startWith({}),
         switchMap(() => {
-          return this.contractService.getManagerContractList(
-            this.sort.active,
-            this.sort.direction,
-            this.paginator.pageIndex,
-            this.paginator.pageSize,
-            convertedContractStartDate,
-            convertedContractEndDate,
-            formValue.titleFormControl,
-            formValue.emailFormControl,
-          ).pipe(
-            map((res: any) => {
-              // Flip flag to show that loading has finished.
-              //   this.isRateLimitReached = res.data === null;
-              console.log(res);
-              this.resultsLength = res.total_count;
-              this.dataSource = new MatTableDataSource<any>(res.items);
+          this.isLoadingResults = true;
+          return this.contractService
+            .getManagerContractList(
+              this.sort.active,
+              this.sort.direction,
+              this.paginator.pageIndex,
+              this.paginator.pageSize,
+              convertedContractStartDate,
+              convertedContractEndDate,
+              formValue.titleFormControl,
+              formValue.emailFormControl
+            )
+            .pipe(
+              map((res: any) => {
+                // Flip flag to show that loading has finished.
+                //   this.isRateLimitReached = res.data === null;
+                console.log(res);
+                this.isLoadingResults = false;
+                this.resultsLength = res.total_count;
+                this.dataSource = new MatTableDataSource<any>(res.items);
 
-              this.employees.set(res.emails);
-              this.searchContractForm.controls['emailFormControl'].valueChanges
-                .pipe(
-                  startWith(''),
-                  map((employee) =>
-                    employee ? this._filterStates(employee) : this.employees().slice()
-                  ),
-                  // 배열로 가져온거 시그널에 등록
-                  map((employees) => this.filteredEmployee.set(employees)),
-                  takeUntilDestroyed(this.destroyRef)
-                )
-                .subscribe();
+                this.employees.set(res.emails);
+                this.searchContractForm.controls[
+                  'emailFormControl'
+                ].valueChanges
+                  .pipe(
+                    startWith(''),
+                    map((employee) =>
+                      employee
+                        ? this._filterStates(employee)
+                        : this.employees().slice()
+                    ),
+                    // 배열로 가져온거 시그널에 등록
+                    map((employees) => this.filteredEmployee.set(employees)),
+                    takeUntilDestroyed(this.destroyRef)
+                  )
+                  .subscribe();
 
-              return res.items;
-            })
-          );
-        }),
-      ).subscribe();
+                return res.items;
+              })
+            );
+        })
+      )
+      .subscribe();
   }
 
   private _filterStates(email: string): Employee[] {
@@ -154,7 +173,9 @@ export class ManagerContractListComponent {
   }
 
   handleContractDetailClick(_id: string) {
-    this.router.navigate([`contract-management/manager-contract/detail/${_id}`])
+    this.router.navigate([
+      `contract-management/manager-contract/detail/${_id}`,
+    ]);
   }
 
   handleContractDownloadClick(key: string) {
@@ -167,26 +188,25 @@ export class ManagerContractListComponent {
       error: (error) => {
         console.error(error);
         this.dialogService.openDialogNegative('Internet Server Error.');
-      }
-    })
+      },
+    });
   }
 
   handleContractSignClick(_id: string) {
-    this.router.navigate([`contract-management/manager-contract/sign/${_id}`])
+    this.router.navigate([`contract-management/manager-contract/sign/${_id}`]);
   }
 
   handleContractValidateClick(_id: string) {
     const dialogRef = this.dialog.open(ContractValidatorDialogComponent, {
       width: '500px',
-      height: '220px',
+      //   height: '220px',
       data: {
         id: _id,
         contractMod: true,
-      }
+      },
     });
   }
-  openDetailDialog(row: any) { }
+  openDetailDialog(row: any) {}
 
-  handlePageEvent() { }
-
+  handlePageEvent() {}
 }

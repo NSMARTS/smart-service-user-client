@@ -1,8 +1,20 @@
-import { Component, DestroyRef, ViewChild, WritableSignal, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ViewChild,
+  WritableSignal,
+  inject,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialsModule } from 'src/app/materials/materials.module';
 import { Employee } from 'src/app/interfaces/employee.interface';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from 'src/app/services/employee/employee.service';
 import { CommonService } from 'src/app/services/common/common.service';
@@ -22,7 +34,7 @@ import { ContractValidatorDialogComponent } from 'src/app/components/dialog/cont
   standalone: true,
   imports: [CommonModule, MaterialsModule, ReactiveFormsModule],
   templateUrl: './contract-list.component.html',
-  styleUrls: ['./contract-list.component.scss']
+  styleUrls: ['./contract-list.component.scss'],
 })
 export class ContractListComponent {
   // ----------서비스 주입-------------------
@@ -32,18 +44,20 @@ export class ContractListComponent {
   commonService = inject(CommonService);
   contractService = inject(ContractService);
   dialogService = inject(DialogService);
-  dialog = inject(MatDialog)
+  dialog = inject(MatDialog);
 
   // ---------- 변수 선언 ------------------
   searchContractForm: FormGroup;
   companyId: string;
 
   resultsLength = 0;
-  isLoadingResults = false;
+  isLoadingResults = true;
   isRateLimitReached = false;
   pdfUrl: string | null = null;
 
-  dataSource: MatTableDataSource<Employee> = new MatTableDataSource<Employee>([]);
+  dataSource: MatTableDataSource<Employee> = new MatTableDataSource<Employee>(
+    []
+  );
   destroyRef = inject(DestroyRef);
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -55,7 +69,7 @@ export class ContractListComponent {
     'employeeStatus',
     'managerName',
     'managerStatus',
-    'menu'
+    'menu',
   ];
 
   // ---------- 시그널 변수 -----------------
@@ -72,10 +86,10 @@ export class ContractListComponent {
       titleFormControl: new FormControl(''),
       uploadStartDate: new FormControl(startOfMonth),
       uploadEndDate: new FormControl(endOfMonth),
-    })
+    });
   }
   ngAfterViewInit(): void {
-    this.searchRequest()
+    this.searchRequest();
   }
 
   ngOnDestroy() {
@@ -102,30 +116,35 @@ export class ContractListComponent {
       .pipe(
         startWith({}),
         switchMap(() => {
-          return this.contractService.getContractList(
-            this.sort.active,
-            this.sort.direction,
-            this.paginator.pageIndex,
-            this.paginator.pageSize,
-            convertedContractStartDate,
-            convertedContractEndDate,
-            formValue.titleFormControl,
-          ).pipe(
-            map((res: any) => {
-              // Flip flag to show that loading has finished.
-              //   this.isRateLimitReached = res.data === null;
-              console.log(res);
-              this.resultsLength = res.total_count;
-              this.dataSource = new MatTableDataSource<any>(res.items);
-              return res.items;
-            })
-          );
-        }),
-      ).subscribe();
+          this.isLoadingResults = true;
+          return this.contractService
+            .getContractList(
+              this.sort.active,
+              this.sort.direction,
+              this.paginator.pageIndex,
+              this.paginator.pageSize,
+              convertedContractStartDate,
+              convertedContractEndDate,
+              formValue.titleFormControl
+            )
+            .pipe(
+              map((res: any) => {
+                // Flip flag to show that loading has finished.
+                //   this.isRateLimitReached = res.data === null;
+                console.log(res);
+                this.isLoadingResults = false;
+                this.resultsLength = res.total_count;
+                this.dataSource = new MatTableDataSource<any>(res.items);
+                return res.items;
+              })
+            );
+        })
+      )
+      .subscribe();
   }
 
   handleContractDetailClick(_id: string) {
-    this.router.navigate([`contract-management/contract/detail/${_id}`])
+    this.router.navigate([`contract-management/contract/detail/${_id}`]);
   }
 
   handleContractDownloadClick(key: string) {
@@ -138,26 +157,26 @@ export class ContractListComponent {
       error: (error) => {
         console.error(error);
         this.dialogService.openDialogNegative('Internet Server Error.');
-      }
-    })
+      },
+    });
   }
 
   handleContractSignClick(_id: string) {
-    this.router.navigate([`contract-management/contract/sign/${_id}`])
+    this.router.navigate([`contract-management/contract/sign/${_id}`]);
   }
 
   handleContractValidateClick(_id: string) {
     const dialogRef = this.dialog.open(ContractValidatorDialogComponent, {
       width: '500px',
-      height: '220px',
+      //   height: '220px',
       data: {
         id: _id,
-        contractMod: true
-      }
+        contractMod: true,
+      },
     });
   }
 
-  openDetailDialog(row: any) { }
+  openDetailDialog(row: any) {}
 
-  handlePageEvent() { }
+  handlePageEvent() {}
 }
