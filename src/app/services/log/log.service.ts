@@ -1,18 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class DashboardService {
+export class LogService {
   private baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  managerDashboard() {
-    return this.http.get(this.baseUrl + '/manager/dashboard/info');
+  createLog(data: any) {
+    return this.http.post(this.baseUrl + `/log`, data)
   }
 
-  employeeDashboard() {
-    return this.http.get(this.baseUrl + '/employee/dashboard/info');
+  updateLog(data: any) {
+    return this.http.post(this.baseUrl + `/log`, data)
   }
+
+
+
 }
