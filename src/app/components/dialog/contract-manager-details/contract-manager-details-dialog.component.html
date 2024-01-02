@@ -1,0 +1,156 @@
+<div>
+  <h1 *ngIf="contractMod()==='detail'" mat-dialog-title>Contract Details</h1>
+  <h1 *ngIf="contractMod()==='sign' && !data.rejectFormMod" mat-dialog-title>Contract Sign</h1>
+  <h1 *ngIf="contractMod()==='sign' && data.rejectFormMod" mat-dialog-title>Contract Reject</h1>
+
+  <div mat-dialog-content>
+    <table class="modal-table">
+      <colgroup>
+        <col style="width:120px">
+        <col style="width:300px">
+      </colgroup>
+      <tbody>
+        <tr>
+          <th>
+            <b>Upload Date</b>
+          </th>
+          <td>
+            {{data.createdAt | date}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Title</b>
+          </th>
+          <td>
+            {{data?.title}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>description</b>
+          </th>
+          <td>
+            {{data.description}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Writer</b>
+          </th>
+          <td>
+            {{data.writer?.email}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Manager</b>
+          </th>
+          <td *ngIf="contractMod() === 'sign'">
+            {{ data.manager ? data.manager.email + ' (' + data.manager.username + ')'
+            : userProfileData.email + ' (' +userProfileData.username + ')' }}
+
+          </td>
+          <td *ngIf="contractMod() === 'detail'">
+            {{data.manager ? data.manager.email + ' (' + data.manager.username + ')' : '-'}}
+          </td>
+        </tr>
+        <!-- manager status -->
+        <tr>
+          <th>
+            <b>Status</b>
+          </th>
+          <td>
+            {{data.managerStatus}}
+          </td>
+        </tr>
+
+        <!-- manager sign -->
+        <tr [hidden]="data.rejectFormMod || data.managerStatus === 'rejected' ">
+          <th>
+            <b> Manager Sign</b>
+          </th>
+          <div #canvasContainer class="canvas-container">
+            <div class="canvasTeacher">
+              <canvas #managerCanvas></canvas>
+            </div>
+            <div class="cover" id="canvas">
+              <canvas #managerCanvasCover></canvas>
+            </div>
+          </div>
+        </tr>
+
+        <!-- manager reject -->
+        <tr *ngIf="data.rejectFormMod || data.managerStatus==='rejected'">
+          <th>
+            <b>Rejected Reason</b>
+          </th>
+          <td>
+            <mat-form-field *ngIf="data.rejectFormMod" style=" width: 100%;">
+              <mat-label>Reason</mat-label>
+              <textarea [formControl]="rejectedReason" matInput rows="6"></textarea>
+            </mat-form-field>
+            {{ data.managerStatus==='rejected' ? data.managerRejectReason : null}}
+          </td>
+
+        </tr>
+
+        <!-- employee -->
+        <tr *ngIf="!data.rejectFormMod">
+          <th>
+            <b>Employee</b>
+          </th>
+          <td>
+            {{data.employee.email}} ({{data.employee.username}})
+          </td>
+        </tr>
+        <!-- employee status -->
+        <tr *ngIf="!data.rejectFormMod">
+          <th>
+            <b>Status</b>
+          </th>
+          <td>
+            {{data.employeeStatus}}
+          </td>
+        </tr>
+
+        <!-- employee sign -->
+        <tr [hidden]="data.rejectFormMod || data.employeeStatus !== 'signed'">
+          <th>
+            <b> Employee Sign </b>
+          </th>
+          <div #canvasContainer class="canvas-container">
+            <div class="canvasTeacher">
+              <canvas #employeeCanvas></canvas>
+            </div>
+            <div class="cover" id="canvas">
+              <canvas #employeeCanvasCover></canvas>
+            </div>
+          </div>
+        </tr>
+        <!-- employee reject reason -->
+        <tr *ngIf="data.employeeStatus==='rejected' && !data.rejectFormMod">
+          <th>
+            <b>Rejected Reason</b>
+          </th>
+          <td>
+            {{data.employeeRejectReason}}
+          </td>
+
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+  <div mat-dialog-actions style="display: flex; justify-content: space-between;">
+    <button mat-flat-button mat-dialog-close>Close</button>
+    <div>
+      <button *ngIf="contractMod() === 'sign' && !data.rejectFormMod" color="primary" mat-flat-button
+        (click)="openConfirmDialog()">Sign</button>
+
+      <button *ngIf="contractMod() === 'sign' && data.rejectFormMod" color="warn" mat-flat-button
+        (click)="openRejectContractDialog()">Reject </button>
+    </div>
+
+  </div>
+</div>

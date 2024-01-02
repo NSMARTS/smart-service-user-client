@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 })
 export class DashboardService {
   private baseUrl = environment.apiUrl;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   managerDashboard() {
     return this.http.get(this.baseUrl + '/manager/dashboard/info');

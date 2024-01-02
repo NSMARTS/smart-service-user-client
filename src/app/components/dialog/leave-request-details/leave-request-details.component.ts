@@ -49,7 +49,8 @@ export class LeaveRequestDetailsComponent implements OnInit {
             }
           },
           error: (err) => {
-            this.dialogService.openDialogNegative(err.message)
+            console.log(err)
+            this.dialogService.openDialogNegative(err.error.message)
           }
         })
       }

@@ -130,7 +130,6 @@ export class EmployeeLeaveStatusComponent implements AfterViewInit, OnInit {
       data
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
       if (result == 'success') {
         this.getData()
       }

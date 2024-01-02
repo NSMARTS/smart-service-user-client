@@ -25,7 +25,6 @@ export function tokenGetter() {
     AppComponent,
     SpaceComponent,
     CreateSpaceDialogComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -46,7 +45,7 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ["localhost:3000", "192.168.0.5:3000"],
+        allowedDomains: ["localhost:3000", "192.168.0.5:3000", "test-ghrkservice.com"],
         disallowedRoutes: [
           '/api/v1/auth/sign-in',
           '/api/v1/auth/sign-up',
