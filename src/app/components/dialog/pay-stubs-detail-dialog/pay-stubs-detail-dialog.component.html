@@ -3,16 +3,16 @@
     <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
   </div>
   <h1 mat-dialog-title>{{data.title}}</h1>
-  <div mat-dialog-content class="pay_stub_contents">
-    <div id="outerContainer">
-      <div class="pdf-container">
+  <!-- <div mat-dialog-content class="pay_stub_contents"> -->
+    <!-- <div id="outerContainer"> -->
+      <!-- <div class="pdf-container"> -->
         <pdf-viewer [src]="data.location" [rotation]="0" [original-size]="false" [show-all]="true" [fit-to-page]="false"
           [zoom]="0.9" [zoom-scale]="'page-width'" [stick-to-page]="false" [render-text]="true"
           [external-link-target]="'blank'" [autoresize]="true" [show-borders]="false"
-          style="width: 100%; height: 600px;"></pdf-viewer>
-      </div>
-    </div>
-  </div>
+          style="width: 100%; height: 50vh;"></pdf-viewer>
+      <!-- </div> -->
+    <!-- </div> -->
+  <!-- </div> -->
   <div mat-dialog-actions class="pay_stubs__matcard__bottom" style="display: flex; justify-content: space-between; z-index: 1;
   ">
     <button mat-flat-button mat-dialog-close>Close</button>
