@@ -1,4 +1,9 @@
+<div class="full-loading-shade" *ngIf="isStatusLoading">
+  <mat-spinner></mat-spinner>
+</div>
+
 <div #canvasContainer class="canvas-container" [dragScroll]="true">
+
   <div class="tmp">
     <canvas #tmp></canvas>
   </div>

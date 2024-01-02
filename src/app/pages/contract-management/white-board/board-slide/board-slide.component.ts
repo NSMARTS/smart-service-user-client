@@ -18,57 +18,51 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = './assets/lib/build/pdf.worker.js';
 @Component({
   selector: 'app-board-slide',
   standalone: true,
-  imports: [
-    CommonModule,
-    MaterialsModule,
-
-  ],
+  imports: [CommonModule, MaterialsModule],
   templateUrl: './board-slide.component.html',
-  styleUrls: ['./board-slide.component.scss']
+  styleUrls: ['./board-slide.component.scss'],
 })
 export class BoardSlideComponent {
-
-  dialogService = inject(DialogService)
-  pdfService = inject(PdfService)
-  zoomService = inject(ZoomService)
-  canvasService = inject(CanvasService)
-  renderingService = inject(RenderingService)
-  contractService = inject(ContractService)
+  dialogService = inject(DialogService);
+  pdfService = inject(PdfService);
+  zoomService = inject(ZoomService);
+  canvasService = inject(CanvasService);
+  renderingService = inject(RenderingService);
+  contractService = inject(ContractService);
 
   destroyRef = inject(DestroyRef);
-
 
   thumbArray: Size[] = [];
 
   // 사이드 바 썸네일 윈도우 좌표
-  containerScroll: WritableSignal<ContainerScroll> = this.canvasService.containerScroll
+  containerScroll: WritableSignal<ContainerScroll> =
+    this.canvasService.containerScroll;
   // 사이드 바 썸네일 윈도우 크기
-  containerSize: Signal<ContainerSize> = this.canvasService.containerSize
+  containerSize: Signal<ContainerSize> = this.canvasService.containerSize;
   pdfInfo: WritableSignal<PdfInfo> = this.pdfService.pdfInfo;
-  pdfLength: WritableSignal<number> = this.pdfService.pdfLength
-  currentPage: WritableSignal<number> = this.pdfService.currentPage
-  zoomScale: WritableSignal<number> = this.zoomService.zoomScale
-  contractMod: WritableSignal<string> = this.contractService.contractMod
-
+  pdfLength: WritableSignal<number> = this.pdfService.pdfLength;
+  currentPage: WritableSignal<number> = this.pdfService.currentPage;
+  zoomScale: WritableSignal<number> = this.zoomService.zoomScale;
+  contractMod: WritableSignal<string> = this.contractService.contractMod;
 
   thumbWindowSize = {
     width: '',
-    height: ''
+    height: '',
   };
 
-  scrollRatio: number = 1
+  scrollRatio: number = 1;
 
-  @ViewChildren('thumb') thumRef!: QueryList<ElementRef> // 부모 thumb-item 안에 자식 element
-  @ViewChildren('thumbWindow') thumbWindowRef!: QueryList<ElementRef>
+  @ViewChildren('thumb') thumRef!: QueryList<ElementRef>; // 부모 thumb-item 안에 자식 element
+  @ViewChildren('thumbWindow') thumbWindowRef!: QueryList<ElementRef>;
 
   thumbWindow!: HTMLDivElement;
 
   constructor() {
     // pdf 변경, 혹은 page 변경 시 onChangePage
     effect(() => {
-      if (this.pdfInfo().pdfPages.length < 1) return
+      if (this.pdfInfo().pdfPages.length < 1) return;
       this.renderThumbnails();
-    })
+    });
 
     /**
      *  Scroll event에 따라서 thumbnail window 위치/크기 변경
@@ -76,14 +70,15 @@ export class BoardSlideComponent {
      */
     effect(() => {
       // console.log('this.containerScroll : ', this.containerScroll())
-      this.containerScroll()
+      this.containerScroll();
       if (this.thumbWindowRef) {
         this.thumbWindow = this.thumbWindowRef.last.nativeElement;
-        this.thumbWindow.style.left = this.containerScroll().left * this.scrollRatio + 'px';
-        this.thumbWindow.style.top = this.containerScroll().top * this.scrollRatio + 'px';
+        this.thumbWindow.style.left =
+          this.containerScroll().left * this.scrollRatio + 'px';
+        this.thumbWindow.style.top =
+          this.containerScroll().top * this.scrollRatio + 'px';
       }
-    })
-
+    });
 
     /**
      *  zoom, page 전환등을 하는 경우
@@ -92,17 +87,23 @@ export class BoardSlideComponent {
      */
     effect(() => {
       // console.log('containerSize : ', this.containerSize())
-      this.containerSize()
+      this.containerSize();
       if (this.thumbArray.length > 0) {
-        this.scrollRatio = this.thumbArray[this.currentPage() - 1].width / this.containerSize().coverWidth;
+        this.scrollRatio =
+          this.thumbArray[this.currentPage() - 1].width /
+          this.containerSize().coverWidth;
         this.thumbWindowSize = {
-          width: this.thumbArray[this.currentPage() - 1].width * this.containerSize().ratio.w + 'px',
-          height: this.thumbArray[this.currentPage() - 1].height * this.containerSize().ratio.h + 'px'
+          width:
+            this.thumbArray[this.currentPage() - 1].width *
+              this.containerSize().ratio.w +
+            'px',
+          height:
+            this.thumbArray[this.currentPage() - 1].height *
+              this.containerSize().ratio.h +
+            'px',
         };
       }
-    })
-
-
+    });
   }
 
   // /**
@@ -127,32 +128,28 @@ export class BoardSlideComponent {
   //     return;
   //   }
 
-
   //   this.pdfService.readFile(file)
 
   //   this.zoomService.setInitZoomScale()
   // }
 
-
   /**
-  * Thumbnail Click
-  *
-  * @param pageNum 페이지 번호
-  * @returns
-  */
+   * Thumbnail Click
+   *
+   * @param pageNum 페이지 번호
+   * @returns
+   */
   clickThumb(pageNum: number) {
     if (pageNum == this.currentPage()) return; // 동일 page click은 무시
     console.log('>> [clickThumb] change Page to : ', pageNum);
     this.currentPage.update(() => pageNum);
   }
 
-
   /**
    * 문서 Load에 따른 thumbnail 생성 및 Rendering
    *
    */
   async renderThumbnails() {
-
     this.thumbArray = [];
 
     for (let pageNum = 1; pageNum <= this.pdfLength(); pageNum++) {
@@ -164,15 +161,15 @@ export class BoardSlideComponent {
       this.thumbArray.push(thumbSize);
     }
 
-    await new Promise(res => setTimeout(res, 0));
+    await new Promise((res) => setTimeout(res, 0));
 
     // Thumbnail Background (PDF)
     for (let i = 0; i < this.thumRef.toArray().length; i++) {
-      await this.renderingService.renderThumbBackground(this.thumRef.toArray()[i].nativeElement, i + 1);
-    };
-
-
+      await this.renderingService.renderThumbBackground(
+        this.thumRef.toArray()[i].nativeElement,
+        i + 1
+      );
+    }
   }
-
 }
 
