@@ -33,7 +33,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss', '../../../styles.scss']
 })
-export class LayoutComponent implements OnDestroy {
+export class LayoutComponent {
   isDesktop: Signal<boolean> = inject(SidenavService).isDesktop;
   isSideNavOpen: Signal<boolean> = inject(SidenavService).isSideNavOpen;
   isSideNavOpen$ = toObservable(this.isSideNavOpen)
@@ -81,10 +81,20 @@ export class LayoutComponent implements OnDestroy {
       );
   }
 
-  ngOnDestroy(): void {
-    // 페이지에서 나가거나, 새로고침 시 로그 남기기
-    this.createLog(this.prevUrl)
+  /**
+   * 새로고침 시 
+   * ngOnDestory에서 api 요청이 가능할 줄 알았는데
+   * 안된다...
+   * @HostListener('window:beforeunload', ['$event'])
+   * 사용해야한다.
+   * https://stackoverflow.com/questions/51494119/angular4-handle-browser-refresh-close-event
+   * @param $event 
+   */
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    this.createLog(this.prevUrl);
   }
+
 
   /**
    * 로그 남기는 api
@@ -94,14 +104,18 @@ export class LayoutComponent implements OnDestroy {
   createLog(currentUrl: string) {
     this.leaveTime = moment().format('YYYY-MM-DD HH:mm:ss');
 
-    const body = {
-      user: this.userInfo._id,
+    let body: any = {
       company: this.userInfo.company,
       isManager: this.userInfo.isManager,
+      isSuperManager: this.userInfo.isSuperManager,
       url: this.prevUrl,
       enterTime: this.enterTime,
       leaveTime: this.leaveTime,
-    }
+    };
+
+    // 사용자가 매니저인지에 따라 employee 또는 manager 키를 추가합니다.
+    body[this.userInfo.isManager ? 'manager' : 'employee'] = this.userInfo._id;
+
 
     // 로그남기는 api 요청
     this.logService.createLog(body).subscribe({

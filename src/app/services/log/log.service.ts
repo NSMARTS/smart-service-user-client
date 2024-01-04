@@ -10,11 +10,11 @@ export class LogService {
   constructor(private http: HttpClient) { }
 
   createLog(data: any) {
-    return this.http.post(this.baseUrl + `/log`, data)
+    return this.http.post(this.baseUrl + `/admin/logs`, data)
   }
 
   updateLog(data: any) {
-    return this.http.post(this.baseUrl + `/log`, data)
+    return this.http.post(this.baseUrl + `/admin/logs`, data)
   }
 
 
