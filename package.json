@@ -5,7 +5,6 @@
     "ng": "ng",
     "start": "ng serve --port 4300 --host 0.0.0.0 --disable-host-check --proxy-config proxy.conf.json",
     "build": "ng build --configuration=production",
-    "test-ghrk": "ng build --configuration=test-ghrk",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
