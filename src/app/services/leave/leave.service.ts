@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SortDirection } from '@angular/material/sort';
+import { tap } from 'rxjs';
 import { RequestLeaveData } from 'src/app/interfaces/request-leave.interface';
 import { environment } from 'src/environments/environment';
 
@@ -79,7 +80,11 @@ export class LeaveService {
             page + 1
           }&pageSize=${pageSize}`
       )
-      .pipe();
+      .pipe(
+        tap((res: any) => {
+          console.log(res);
+        })
+      );
   }
 
   leaveInformation() {
@@ -144,12 +149,18 @@ export class LeaveService {
     status: string,
     email: string
   ) {
-    return this.http.get(
-      this.baseUrl +
-        `/manager/leave?sort=${sort}&order=${order}&page=${
-          page + 1
-        }&pageSize=${pageSize}&leaveType=${leaveType}&leaveDay=${leaveDay}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}&email=${email}`
-    );
+    return this.http
+      .get(
+        this.baseUrl +
+          `/manager/leave?sort=${sort}&order=${order}&page=${
+            page + 1
+          }&pageSize=${pageSize}&leaveType=${leaveType}&leaveDay=${leaveDay}&leaveStartDate=${leaveStartDate}&leaveEndDate=${leaveEndDate}&status=${status}&email=${email}`
+      )
+      .pipe(
+        tap((res: any) => {
+          console.log(res);
+        })
+      );
   }
 
   requestReplacementConfirm(data: any) {
