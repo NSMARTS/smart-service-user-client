@@ -70,7 +70,9 @@ export class EmployeeRdRequestComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(ReplaceDayConfirmingRequestDialogComponent, {
       maxWidth: '600px',
       width: '100%',
-      data
+      data,
+      disableClose: true,
+
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result)

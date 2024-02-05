@@ -66,6 +66,9 @@ export class RequestLeaveComponent {
   rolloverStartMonth: Date = new Date()
   rolloverMaxMonth: Date = new Date()
 
+  isSubmitting: boolean = false;
+
+
   constructor(
     private profileService: ProfileService,
     private leaveService: LeaveService,
@@ -88,12 +91,6 @@ export class RequestLeaveComponent {
     })
 
     this.requestLeaveForm.get('leaveStartDate')?.valueChanges.subscribe(newValue => {
-
-      if (this.userLeaveData.annualPolicy != 'byContract') {
-        this.tempDate = moment(this.userProfileData?.empStartDate).set('year', moment(this.requestLeaveForm.get('leaveStartDate')?.value).year()).set('month', 1).set('date', 1)
-      } else {
-        this.tempDate = moment(this.userProfileData?.empStartDate).set('year', moment(this.requestLeaveForm.get('leaveStartDate')?.value).year())
-      }
 
       // Set the same value for leaveEndDate when leaveStartDate changes
       if (!this.requestLeaveForm.get('leaveEndDate')?.value) {
@@ -149,8 +146,35 @@ export class RequestLeaveComponent {
   }
 
   requestLeave() {
+    if (this.isSubmitting) {
+      // 이미 제출 중인 경우 함수 실행을 중단합니다.
+      return;
+    }
+    this.isSubmitting = true;
+
+    if (this.userLeaveData.annualPolicy != 'byContract') {
+      this.tempDate = moment(this.userProfileData?.empStartDate)
+        .set({
+          year: moment(this.requestLeaveForm.get('leaveEndDate')?.value).year(),
+          month: 0, // 1월을 0으로 설정합니다.
+          date: 1,
+          hour: 0,
+          minute: 0,
+          second: 0,
+          millisecond: 0
+        });
+    } else {
+      this.tempDate = moment(this.userProfileData?.empStartDate).set('year', moment(this.requestLeaveForm.get('leaveStartDate')?.value).year()).startOf('day');
+    }
+
+
     const isContain = this.tempDate.isBetween(this.requestLeaveForm.get('leaveStartDate')?.value, this.requestLeaveForm.get('leaveEndDate')?.value, 'day', '[]');
 
+    // isContain은 tempdate( 기준점으로 휴가가 바뀌는 날이다. 
+    // byYear일 경우 신청해 기준 1월 1일. byContract는 신청해 기준 입사일 )가 
+    // 휴가 신청 시작날과 끝나는 사이에 있는지 확인하는 조건 true면. 휴가 신청날이 리셋날 사이에 있어 2번 휴가를 신청해야한다.
+    // 두번째 조건은 하루만 신청하는거면 2번 신청안함.
+    // 세번째 조건은 휴가 신청날이 
     if (isContain
       && moment(this.requestLeaveForm.get('leaveStartDate')?.value).diff(this.requestLeaveForm.get('leaveEndDate')?.value, 'day') != 0
       && (!moment(this.requestLeaveForm.get('leaveStartDate')?.value).isSame(moment(new Date(this.tempDate.year(), this.tempDate.month(), this.tempDate.date()))))
@@ -170,7 +194,6 @@ export class RequestLeaveComponent {
           }).subscribe({
             next: (res: any) => {
               if (res.message == 'success') {
-
                 this.leaveService.requestLeave({
                   ...this.requestLeaveForm.value,
                   leaveStartDate: new Date(this.tempDate.year(), this.tempDate.month(), this.tempDate.date()),
@@ -192,15 +215,22 @@ export class RequestLeaveComponent {
                   error: (e) => {
                     console.error(e)
                     this.dialogService.openDialogNegative(e)
+                  },
+                  complete: () => {
+                    this.isSubmitting = false;
                   }
                 })
               } else {
+                this.isSubmitting = false;
                 this.dialogService.openDialogNegative(res.message);
               }
             },
             error: (e) => {
               console.error(e)
               this.dialogService.openDialogNegative(e)
+            },
+            complete: () => {
+              this.isSubmitting = false;
             }
           })
         }
@@ -228,8 +258,13 @@ export class RequestLeaveComponent {
             error: (e) => {
               console.error(e)
               this.dialogService.openDialogNegative(e)
+            },
+            complete: () => {
+              this.isSubmitting = false;
             }
           })
+        } else {
+          this.isSubmitting = false;
         }
       })
     }

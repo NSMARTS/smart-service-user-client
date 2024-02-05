@@ -53,20 +53,23 @@ export class ReplaceDayConfirmingRequestDialogComponent implements OnInit {
    */
   acceptRequest() {
     this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
-      const data: any = this.ConfirmForm.value;
-      data._id = this.data._id;
-      this.leaveService.acceptReplacementConfirm({ data }).subscribe({
-        next: (res: any) => {
-          if (res.message == 'update success') {
-            this.dialogService.openDialogPositive('Your vacation has been accepted normally.').subscribe(() => {
-              this.dialogRef.close('success')
-            })
+      if (answer) {
+        const data: any = this.ConfirmForm.value;
+        data._id = this.data._id;
+        this.leaveService.acceptReplacementConfirm({ data }).subscribe({
+          next: (res: any) => {
+            if (res.message == 'update success') {
+              this.dialogService.openDialogPositive('Your vacation has been accepted normally.').subscribe(() => {
+                this.dialogRef.close('success')
+              })
+            }
+          },
+          error: (err) => {
+            this.dialogService.openDialogNegative(err.error.message)
           }
-        },
-        error: (err) => {
-          this.dialogService.openDialogNegative(err.error.message)
-        }
-      })
+        })
+      }
+
     })
   }
 

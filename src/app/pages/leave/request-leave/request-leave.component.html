@@ -1,126 +1,124 @@
 <div>
-    <div class="full-loading-shade" *ngIf="leaveLoadingStatus">
-        <mat-spinner></mat-spinner>
-    </div>
+  <div class="full-loading-shade" *ngIf="leaveLoadingStatus">
+    <mat-spinner></mat-spinner>
+  </div>
 
-    <div class="page_header">
-        <h1 class="page_title">Request Leave</h1>
-    </div>
+  <div class="page_header">
+    <h1 class="page_title">Request Leave</h1>
+  </div>
 
-    <section style="margin-top: 20px;">
-        <form [formGroup]="requestLeaveForm" (ngSubmit)="requestLeave()">
-            <mat-card>
-                <mat-card-content>
-                    <div class="input_group_layout">
-                        <div class="left_box">
-                            <span>Requestor</span>
-                        </div>
-                        <div class="right_box">
-                            {{userProfileData?.username}}
-                        </div>
-                    </div>
-                    <div class="input_group_layout">
-                        <div class="left_box">
-                            <span>Leave Information</span>
-                        </div>
-                        <div class="right_box">
-                            <div>
-                                <div>
-                                    <span>Annual Leave: {{employeeAnnualLeave}}</span>
-                                </div>
-                                <div *ngIf="userLeaveData?.isRollover">
-                                    <span>Rollover: {{employeeRollover}}</span>
-                                </div>
-                                <div>
-                                    <span>Sick Leave: {{employeeSickLeave}}</span>
-                                </div>
-                            </div>
+  <section style="margin-top: 20px;">
+    <form [formGroup]="requestLeaveForm" (ngSubmit)="requestLeave()">
+      <mat-card>
+        <mat-card-content>
+          <div class="input_group_layout">
+            <div class="left_box">
+              <span>Requestor</span>
+            </div>
+            <div class="right_box">
+              {{userProfileData?.username}}
+            </div>
+          </div>
+          <div class="input_group_layout">
+            <div class="left_box">
+              <span>Leave Information</span>
+            </div>
+            <div class="right_box">
+              <div>
+                <div>
+                  <span>Annual Leave: {{employeeAnnualLeave}}</span>
+                </div>
+                <div *ngIf="userLeaveData?.isRollover">
+                  <span>Rollover: {{employeeRollover}}</span>
+                </div>
+                <div>
+                  <span>Sick Leave: {{employeeSickLeave}}</span>
+                </div>
+              </div>
 
-                        </div>
-                    </div>
-                    <div class="input_group_layout">
-                        <div class="left_box">
-                            <span>Type</span>
-                        </div>
-                        <div class="right_box">
-                            <mat-form-field appearance="fill">
-                                <mat-label>Leave Classification</mat-label>
-                                <mat-select formControlName="leaveType">
-                                    <mat-option value="annualLeave">Annual Leave</mat-option>
-                                    <mat-option value="sickLeave">Sick Leave</mat-option>
-                                    <mat-option *ngIf="userLeaveData?.isRollover" value="rollover">Rollover</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field appearance="fill">
-                                <mat-label>Unit of Use</mat-label>
-                                <mat-select formControlName="leaveDay">
-                                    <mat-option value="day">Day</mat-option>
-                                    <mat-option value="half">Half</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="input_group_layout">
-                        <div class="left_box">Period</div>
-                        <div class="right_box">
-                            <!-- 연차 사용하면 언제부터 언제까지 입력 -->
-                            <mat-form-field *ngIf="requestLeaveForm.value.leaveDay == 'day'">
-                                <mat-label>Enter a date range</mat-label>
-                                <mat-date-range-input [dateFilter]="myFilter" [formGroup]="requestLeaveForm"
-                                    [rangePicker]="picker">
-                                    <input matStartDate formControlName="leaveStartDate" placeholder="Start date">
-                                    <input matEndDate formControlName="leaveEndDate" placeholder="End date">
-                                </mat-date-range-input>
-                                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-date-range-picker #picker>
-                                    <mat-datepicker-actions>
-                                        <button mat-button matDatepickerCancel>Cancel</button>
-                                        <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
-                                    </mat-datepicker-actions>
-                                </mat-date-range-picker>
-                            </mat-form-field>
+            </div>
+          </div>
+          <div class="input_group_layout">
+            <div class="left_box">
+              <span>Type</span>
+            </div>
+            <div class="right_box">
+              <mat-form-field appearance="fill">
+                <mat-label>Leave Classification</mat-label>
+                <mat-select formControlName="leaveType">
+                  <mat-option value="annualLeave">Annual Leave</mat-option>
+                  <mat-option value="sickLeave">Sick Leave</mat-option>
+                  <mat-option *ngIf="userLeaveData?.isRollover" value="rollover">Rollover</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Unit of Use</mat-label>
+                <mat-select formControlName="leaveDay">
+                  <mat-option value="day">Day</mat-option>
+                  <mat-option value="half">Half</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="input_group_layout">
+            <div class="left_box">Period</div>
+            <div class="right_box">
+              <!-- 연차 사용하면 언제부터 언제까지 입력 -->
+              <mat-form-field *ngIf="requestLeaveForm.value.leaveDay == 'day'">
+                <mat-label>Enter a date range</mat-label>
+                <mat-date-range-input [dateFilter]="myFilter" [formGroup]="requestLeaveForm" [rangePicker]="picker">
+                  <input matStartDate formControlName="leaveStartDate" placeholder="Start date">
+                  <input matEndDate formControlName="leaveEndDate" placeholder="End date">
+                </mat-date-range-input>
+                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker>
+                  <mat-datepicker-actions>
+                    <button mat-button matDatepickerCancel>Cancel</button>
+                    <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+                  </mat-datepicker-actions>
+                </mat-date-range-picker>
+              </mat-form-field>
 
-                            <!-- 반차를 사용하면 언제 사용할지만 입력 -->
-                            <mat-form-field *ngIf="requestLeaveForm.value.leaveDay == 'half'">
-                                <mat-label>Enter a date range</mat-label>
-                                <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker"
-                                    formControlName="leaveStartDate" placeholder="Date">
+              <!-- 반차를 사용하면 언제 사용할지만 입력 -->
+              <mat-form-field *ngIf="requestLeaveForm.value.leaveDay == 'half'">
+                <mat-label>Enter a date range</mat-label>
+                <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker"
+                  formControlName="leaveStartDate" placeholder="Date">
 
-                                <mat-hint>MM/DD/YYYY</mat-hint>
-                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker>
-                                    <mat-datepicker-actions>
-                                        <button mat-button matDatepickerCancel>Cancel</button>
-                                        <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
-                                    </mat-datepicker-actions>
-                                </mat-datepicker>
-                            </mat-form-field>
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker>
+                  <mat-datepicker-actions>
+                    <button mat-button matDatepickerCancel>Cancel</button>
+                    <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+                  </mat-datepicker-actions>
+                </mat-datepicker>
+              </mat-form-field>
 
-                            <!-- 둘 다 아니면 안내 문구 -->
-                            <span
-                                *ngIf="requestLeaveForm.value.leaveDay != 'half' && requestLeaveForm.value.leaveDay != 'day'">
-                                check unit of use
-                            </span>
-                        </div>
-                    </div>
-                    <div class="input_group_layout">
-                        <div class="left_box">Reason</div>
-                        <div class="no_border_bottom right_box">
-                            <mat-form-field style="width: 100%;">
-                                <mat-label>Reason</mat-label>
-                                <textarea formControlName="leaveReason" matInput rows="6"></textarea>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </mat-card-content>
-                <mat-card-actions align="end">
-                    <button [disabled]="!requestLeaveForm.valid" mat-flat-button color="primary"
-                        style="margin-right: 5px;">Request</button>
-                    <button mat-flat-button [routerLink]="['/leave/leave-request-list']">Cancel</button>
-                </mat-card-actions>
-            </mat-card>
-        </form>
-    </section>
+              <!-- 둘 다 아니면 안내 문구 -->
+              <span *ngIf="requestLeaveForm.value.leaveDay != 'half' && requestLeaveForm.value.leaveDay != 'day'">
+                check unit of use
+              </span>
+            </div>
+          </div>
+          <div class="input_group_layout">
+            <div class="left_box">Reason</div>
+            <div class="no_border_bottom right_box">
+              <mat-form-field style="width: 100%;">
+                <mat-label>Reason</mat-label>
+                <textarea formControlName="leaveReason" matInput rows="6"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <button [disabled]="!requestLeaveForm.valid || isSubmitting" mat-flat-button color="primary"
+            style="margin-right: 5px;">Request</button>
+          <button mat-flat-button [routerLink]="['/leave/leave-request-list']">Cancel</button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
+  </section>
 
 </div>

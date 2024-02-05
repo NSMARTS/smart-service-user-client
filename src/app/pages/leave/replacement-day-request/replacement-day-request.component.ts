@@ -30,9 +30,9 @@ interface FormData {
   templateUrl: './replacement-day-request.component.html',
   styleUrls: ['./replacement-day-request.component.scss']
 })
-export class ReplacementDayRequestComponent implements OnInit{ 
+export class ReplacementDayRequestComponent implements OnInit {
   userProfileData: UserProfileData | undefined;
-  userLeaveData : any;
+  userLeaveData: any;
 
   userProfile$ = toObservable(this.profileService.userProfile);
   requestLeaveForm: FormGroup = new FormGroup<FormData>({
@@ -48,18 +48,20 @@ export class ReplacementDayRequestComponent implements OnInit{
   employeeReplacementLeave: number | undefined;
 
   until: moment.Moment | undefined;
-  startDay:  moment.Moment | undefined;
+  startDay: moment.Moment | undefined;
 
   leaveLoadingStatus: boolean = true;
 
+  isSubmitting: boolean = false;
+
   constructor(
-    private profileService: ProfileService, 
+    private profileService: ProfileService,
     private leaveService: LeaveService,
     private holidayService: HolidayService,
     private dialogService: DialogService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.userProfile$.subscribe(() => {
@@ -69,9 +71,9 @@ export class ReplacementDayRequestComponent implements OnInit{
 
     this.requestLeaveForm.get('leaveStartDate')?.valueChanges.subscribe(newValue => {
       // Set the same value for leaveEndDate when leaveStartDate changes
-        if (!this.requestLeaveForm.get('leaveEndDate')?.value) {
-          this.requestLeaveForm.get('leaveEndDate')?.setValue(newValue);
-        }
+      if (!this.requestLeaveForm.get('leaveEndDate')?.value) {
+        this.requestLeaveForm.get('leaveEndDate')?.setValue(newValue);
+      }
     });
 
     this.requestCountryHoliday();
@@ -85,7 +87,7 @@ export class ReplacementDayRequestComponent implements OnInit{
       this.until = moment(res.item.approveDay).add(res.item.requestor.personalLeave.rdValidityTerm, 'months');
       this.startDay = moment(res.item.approveDay);
       this.leaveLoadingStatus = false;
-    })   
+    })
   }
 
 
@@ -104,7 +106,7 @@ export class ReplacementDayRequestComponent implements OnInit{
 
     //until 체크
     const before = moment(d || new Date()).isBefore(this.until);
-    const after =  moment(d || new Date()).isAfter(this.startDay);
+    const after = moment(d || new Date()).isAfter(this.startDay);
 
 
     // Prevent Saturday and Sunday from being selected.
@@ -129,23 +131,32 @@ export class ReplacementDayRequestComponent implements OnInit{
 
   // 요청 함수
   requestLeave() {
-    console.log(this.requestLeaveForm.value)
-    this.leaveService.requestReplacementLeave({...this.requestLeaveForm.value, 
+    if (this.isSubmitting) {
+      // 이미 제출 중인 경우 함수 실행을 중단합니다.
+      return;
+    }
+    this.isSubmitting = true;
+
+    this.leaveService.requestReplacementLeave({
+      ...this.requestLeaveForm.value,
       replacementLeave: this.employeeReplacementLeave,
-      _id : this.route.snapshot.paramMap.get('_id')!
+      _id: this.route.snapshot.paramMap.get('_id')!
     }).subscribe({
       next: (res: any) => {
-        if(res.message == 'success') {
+        if (res.message == 'success') {
           this.dialogService.openDialogPositive('request success');
           this.router.navigate(['/leave/leave-request-list'])
-        }else{
+        } else {
           this.dialogService.openDialogNegative(res.message);
         }
       },
       error: (e) => {
         // console.error(e)
         this.dialogService.openDialogNegative(e)
-      }
+      },
+      complete: () => {
+        this.isSubmitting = false;
+      },
     })
   }
 }

@@ -94,7 +94,9 @@ export class NotificationComponent implements AfterViewInit {
     const dialogRef = this.dialog.open(NotificationDetailsDialogComponent, {
       maxWidth: '1300px',
       width: '100%',
-      data
+      data,
+      disableClose: true,
+
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result == 'success') {

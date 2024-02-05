@@ -108,7 +108,9 @@ export class RdRequestListComponent implements AfterViewInit {
     const dialogRef = this.dialog.open(ReplaceDayRequestDialogComponent, {
       maxWidth: '600px',
       width: '100%',
-      data
+      data,
+      disableClose: true,
+
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result == 'success') {

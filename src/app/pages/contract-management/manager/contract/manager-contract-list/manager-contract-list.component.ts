@@ -203,10 +203,12 @@ export class ManagerContractListComponent {
       data: {
         id: _id,
         contractMod: true,
+        disableClose: true,
+
       },
     });
   }
-  openDetailDialog(row: any) {}
+  openDetailDialog(row: any) { }
 
-  handlePageEvent() {}
+  handlePageEvent() { }
 }

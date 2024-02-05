@@ -1,169 +1,168 @@
 <div>
-    <div class="page_header">
-        <h1 class="page_title">Leave Request</h1>
-        <button mat-flat-button color="primary" [routerLink]="['/leave/request-leave']">Request Leave</button>
-    </div>
-    <section class="search_section">
-        <mat-card>
-            <form [formGroup]="searchForm" (ngSubmit)="SearchRequest()">
-                <mat-card-content>
-                    <div class="search_container">
-                        <div>
-                            <div class="search_tile">
-                                <span class="search_title">Type</span>
-                                <!-- type 연가, 병가, 이월, 대체 휴가 -->
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Leave Classification</mat-label>
-                                    <mat-select formControlName="leaveType">
-                                        <mat-option value="">All</mat-option>
-                                        <mat-option value="annualLeave">Annual Leave</mat-option>
-                                        <mat-option value="rollover">Rollover</mat-option>
-                                        <mat-option value="sickLeave">Sick Leave</mat-option>
-                                        <mat-option value="replacementDay">Replacement Day</mat-option>
-                                    </mat-select>
+  <div class="page_header">
+    <h1 class="page_title">Leave Request</h1>
+    <button mat-flat-button color="primary" [routerLink]="['/leave/request-leave']">Request Leave</button>
+  </div>
+  <section class="search_section">
+    <mat-card>
+      <form [formGroup]="searchForm" (ngSubmit)="SearchRequest()">
+        <mat-card-content>
+          <div class="search_container">
+            <div>
+              <div class="search_tile">
+                <span class="search_title">Type</span>
+                <!-- type 연가, 병가, 이월, 대체 휴가 -->
+                <mat-form-field appearance="fill">
+                  <mat-label>Leave Classification</mat-label>
+                  <mat-select formControlName="leaveType">
+                    <mat-option value="">All</mat-option>
+                    <mat-option value="annualLeave">Annual Leave</mat-option>
+                    <mat-option value="rollover">Rollover</mat-option>
+                    <mat-option value="sickLeave">Sick Leave</mat-option>
+                    <mat-option value="replacementLeave">Replacement Day</mat-option>
+                  </mat-select>
 
-                                </mat-form-field>
-                                <!-- 연차 반차 -->
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Unit of Use</mat-label>
-                                    <mat-select formControlName="leaveDay">
-                                        <mat-option value="">All</mat-option>
-                                        <mat-option value="day">Day</mat-option>
-                                        <mat-option value="half">Half</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
+                </mat-form-field>
+                <!-- 연차 반차 -->
+                <mat-form-field appearance="fill">
+                  <mat-label>Unit of Use</mat-label>
+                  <mat-select formControlName="leaveDay">
+                    <mat-option value="">All</mat-option>
+                    <mat-option value="day">Day</mat-option>
+                    <mat-option value="half">Half</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
 
-                        </div>
-                        <div>
-                            <div class="search_tile">
-                                <span class="search_title">Period</span>
-                                <!-- 언제 부터 언제 까지 휴가 검색 -->
-                                <mat-form-field>
-                                    <mat-label>Enter a date range</mat-label>
-                                    <mat-date-range-input [formGroup]="searchForm" [rangePicker]="picker">
-                                        <input matStartDate formControlName="leaveStartDate" placeholder="Start date">
-                                        <input matEndDate formControlName="leaveEndDate" placeholder="End date">
-                                    </mat-date-range-input>
-                                    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                                    <mat-date-range-picker #picker>
-                                        <mat-datepicker-actions>
-                                            <button mat-button matDatepickerCancel>Cancel</button>
-                                            <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
-                                        </mat-datepicker-actions>
-                                    </mat-date-range-picker>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="search_tile">
-                                <span class="search_title">Status</span>
-                                <!-- 상태  -->
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Status</mat-label>
-                                    <mat-select formControlName="status">
-                                        <mat-option value="">All</mat-option>
-                                        <mat-option value="approve">approved</mat-option>
-                                        <mat-option value="pending">pending</mat-option>
-                                        <mat-option value="rejected">rejected</mat-option>
-                                        <mat-option value="cancel">cancel</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                </mat-card-content>
-                <mat-card-actions align="end">
-                    <button mat-flat-button color="primary" type="submit">SEARCH</button>
-                </mat-card-actions>
-            </form>
-        </mat-card>
-    </section>
-
-    <section class="table_section mat-elevation-z1">
-        <div class="example-table-container">
-            <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
-                <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-                <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
-                    API rate limit has been reached. It will be reset in one minute.
-                </div>
             </div>
-            <div class="example-table-container">
-                <table mat-table [dataSource]="data" class="" matSort matSortActive="createdAt" matSortDisableClear
-                    matSortDirection="desc">
-                    <!-- Request Date -->
-                    <ng-container matColumnDef="createdAt">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
-                            Request Date
-                        </th>
-                        <td mat-cell *matCellDef="let row">{{row.createdAt | date}}</td>
-                    </ng-container>
-
-                    <!-- Period -->
-                    <ng-container matColumnDef="period">
-                        <th mat-header-cell *matHeaderCellDef disableClear>
-                            Period
-                        </th>
-                        <td mat-cell *matCellDef="let row">{{row.leaveStartDate | date }} ~ {{row.leaveEndDate | date}}
-                        </td>
-                    </ng-container>
-
-
-                    <!-- duration -->
-                    <ng-container matColumnDef="duration">
-                        <th mat-header-cell *matHeaderCellDef>duration</th>
-                        <td mat-cell *matCellDef="let row">{{row.leaveDuration }}</td>
-                    </ng-container>
-
-                    <!-- year -->
-                    <ng-container matColumnDef="year">
-                        <th mat-header-cell *matHeaderCellDef>year</th>
-                        <td mat-cell *matCellDef="let row">{{row.year + 1}}</td>
-                    </ng-container>
-
-
-                    <!-- Day(s) -->
-                    <ng-container matColumnDef="day">
-                        <th mat-header-cell *matHeaderCellDef>Day(s)</th>
-                        <td mat-cell *matCellDef="let row">{{row.leaveDay}}</td>
-                    </ng-container>
-
-                    <!-- Type -->
-                    <ng-container matColumnDef="type">
-                        <th mat-header-cell *matHeaderCellDef>Type</th>
-                        <td mat-cell *matCellDef="let row">{{row.leaveType}}</td>
-                    </ng-container>
-
-                    <!-- Status -->
-                    <ng-container matColumnDef="status">
-                        <th mat-header-cell *matHeaderCellDef>Status</th>
-                        <td mat-cell *matCellDef="let row" [ngStyle]="{'color': getColor(row.status)}">{{row.status}}
-                        </td>
-                    </ng-container>
-
-                    <!-- button -->
-                    <ng-container matColumnDef="button">
-                        <th mat-header-cell *matHeaderCellDef>detail</th>
-                        <td mat-cell *matCellDef="let row">
-                            <button mat-flat-button color="primary"
-                                (click)="openDialogPendingLeaveDetail(row)">detail</button>
-                        </td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-
-                    <!-- Row shown when there is no matching data that will be provided to the wrapper table. -->
-                    <tr class="mat-row" *matNoDataRow>
-                        <td class="mat-cell" colspan="5">No data</td>
-                    </tr>
-                </table>
+            <div>
+              <div class="search_tile">
+                <span class="search_title">Period</span>
+                <!-- 언제 부터 언제 까지 휴가 검색 -->
+                <mat-form-field>
+                  <mat-label>Enter a date range</mat-label>
+                  <mat-date-range-input [formGroup]="searchForm" [rangePicker]="picker">
+                    <input matStartDate formControlName="leaveStartDate" placeholder="Start date">
+                    <input matEndDate formControlName="leaveEndDate" placeholder="End date">
+                  </mat-date-range-input>
+                  <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-date-range-picker #picker>
+                    <mat-datepicker-actions>
+                      <button mat-button matDatepickerCancel>Cancel</button>
+                      <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+                    </mat-datepicker-actions>
+                  </mat-date-range-picker>
+                </mat-form-field>
+              </div>
             </div>
-            <mat-paginator [length]="resultsLength" (page)="handlePageEvent()" [pageSize]="10"
-                [pageSizeOptions]="[10, 30, 50]" aria-label="Select page of GitHub search results"></mat-paginator>
+            <div>
+              <div class="search_tile">
+                <span class="search_title">Status</span>
+                <!-- 상태  -->
+                <mat-form-field appearance="fill">
+                  <mat-label>Status</mat-label>
+                  <mat-select formControlName="status">
+                    <mat-option value="">All</mat-option>
+                    <mat-option value="approve">approved</mat-option>
+                    <mat-option value="pending">pending</mat-option>
+                    <mat-option value="rejected">rejected</mat-option>
+                    <mat-option value="cancel">cancel</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <button mat-flat-button color="primary" type="submit">SEARCH</button>
+        </mat-card-actions>
+      </form>
+    </mat-card>
+  </section>
+
+  <section class="table_section mat-elevation-z1">
+    <div class="example-table-container">
+      <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+        <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+          API rate limit has been reached. It will be reset in one minute.
         </div>
-    </section>
+      </div>
+      <div class="example-table-container">
+        <table mat-table [dataSource]="data" class="" matSort matSortActive="createdAt" matSortDisableClear
+          matSortDirection="desc">
+          <!-- Request Date -->
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+              Request Date
+            </th>
+            <td mat-cell *matCellDef="let row">{{row.createdAt | date}}</td>
+          </ng-container>
+
+          <!-- Period -->
+          <ng-container matColumnDef="period">
+            <th mat-header-cell *matHeaderCellDef disableClear>
+              Period
+            </th>
+            <td mat-cell *matCellDef="let row">{{row.leaveStartDate | date }} ~ {{row.leaveEndDate | date}}
+            </td>
+          </ng-container>
+
+
+          <!-- duration -->
+          <ng-container matColumnDef="duration">
+            <th mat-header-cell *matHeaderCellDef>duration</th>
+            <td mat-cell *matCellDef="let row">{{row.leaveDuration }}</td>
+          </ng-container>
+
+          <!-- year -->
+          <ng-container matColumnDef="year">
+            <th mat-header-cell *matHeaderCellDef>year</th>
+            <td mat-cell *matCellDef="let row">{{row.year + 1}}</td>
+          </ng-container>
+
+
+          <!-- Day(s) -->
+          <ng-container matColumnDef="day">
+            <th mat-header-cell *matHeaderCellDef>Day(s)</th>
+            <td mat-cell *matCellDef="let row">{{row.leaveDay}}</td>
+          </ng-container>
+
+          <!-- Type -->
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let row">{{row.leaveType}}</td>
+          </ng-container>
+
+          <!-- Status -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let row" [ngStyle]="{'color': getColor(row.status)}">{{row.status}}
+            </td>
+          </ng-container>
+
+          <!-- button -->
+          <ng-container matColumnDef="button">
+            <th mat-header-cell *matHeaderCellDef>detail</th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-flat-button color="primary" (click)="openDialogPendingLeaveDetail(row)">detail</button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+
+          <!-- Row shown when there is no matching data that will be provided to the wrapper table. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="5">No data</td>
+          </tr>
+        </table>
+      </div>
+      <mat-paginator [length]="resultsLength" (page)="handlePageEvent()" [pageSize]="10"
+        [pageSizeOptions]="[10, 30, 50]" aria-label="Select page of GitHub search results"></mat-paginator>
+    </div>
+  </section>
 
 </div>

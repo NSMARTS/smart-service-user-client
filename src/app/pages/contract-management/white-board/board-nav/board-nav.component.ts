@@ -99,7 +99,9 @@ export class BoardNavComponent {
         data: {
           ...this.contractInfo,
           currentUrl: this.currentUrl,
-          rejectFormMod: false
+          rejectFormMod: false,
+          disableClose: true,
+
         }
       });
       // 다이얼로그 나가면 드로우이벤트 리셋
@@ -111,7 +113,9 @@ export class BoardNavComponent {
         data: {
           ...this.contractInfo,
           currentUrl: this.currentUrl,
-          rejectFormMod: false
+          rejectFormMod: false,
+          disableClose: true,
+
         }
       });
       // 다이얼로그 나가면 드로우이벤트 리셋
@@ -138,7 +142,9 @@ export class BoardNavComponent {
         data: {
           ...this.contractInfo,
           currentUrl: this.currentUrl,
-          rejectFormMod: true
+          rejectFormMod: true,
+          disableClose: true,
+
         }
       });
     }
@@ -151,6 +157,8 @@ export class BoardNavComponent {
         data: {
           ...this.contractInfo,
           currentUrl: this.currentUrl,
+          disableClose: true,
+
         }
       });
     }
@@ -159,6 +167,8 @@ export class BoardNavComponent {
         data: {
           ...this.contractInfo,
           currentUrl: this.currentUrl,
+          disableClose: true,
+
         }
       });
     }
