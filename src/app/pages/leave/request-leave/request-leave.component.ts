@@ -6,7 +6,6 @@
  * 설명: 휴가 신청 처리
  */
 
-
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -72,7 +71,6 @@ export class RequestLeaveComponent {
 
   isSubmitting: boolean = false;
 
-
   constructor(
     private profileService: ProfileService,
     private leaveService: LeaveService,
@@ -89,7 +87,7 @@ export class RequestLeaveComponent {
       console.log(this.rolloverMaxMonth);
       // 연자 정책에 따라 각 변수(롤오버최대기간, 롤오버시작일)에 저장
       if (this.userProfileData) {
-        // 'by year'일 경우  
+        // 'by year'일 경우
         if (this.userLeaveData.annualPolicy != 'byContract') {
           // 롤오버최대기간 - 1월 1일에 this.userLeaveData.rolloverMaxMonth만큼 계산해 최대일자를 저장한다.
           this.rolloverMaxMonth.setMonth(this.userLeaveData.rolloverMaxMonth);
@@ -106,7 +104,7 @@ export class RequestLeaveComponent {
           // 롤오버최대기간(월) - 계약일의 월 + 롤오버최대기간
           this.rolloverMaxMonth.setMonth(
             new Date(this.userProfileData!.empStartDate).getMonth() +
-            this.userLeaveData.rolloverMaxMonth
+              this.userLeaveData.rolloverMaxMonth
           );
 
           // 롤오버최대기간(일) - 계약일의 일만 그대로 저장
@@ -123,18 +121,37 @@ export class RequestLeaveComponent {
           );
         }
       }
-
-    })
-
-    this.requestLeaveForm.get('leaveStartDate')?.valueChanges.subscribe(newValue => {
-
-      // Set the same value for leaveEndDate when leaveStartDate changes
-      if (!this.requestLeaveForm.get('leaveEndDate')?.value) {
-        this.requestLeaveForm.get('leaveEndDate')?.setValue(newValue);
-      }
-
     });
 
+    // 연차신청 양식의 값을 변경할 때의 조건
+    this.requestLeaveForm
+      .get('leaveStartDate')
+      ?.valueChanges.subscribe((newValue) => {
+        // 연차정책이 'by year'일 경우
+        if (this.userLeaveData.annualPolicy != 'byContract') {
+          // 변수에 계약일을 `연차신청양식의 년 + 2월 1일`로 저장한다.
+          this.tempDate = moment(this.userProfileData?.empStartDate)
+            .set(
+              'year',
+              moment(this.requestLeaveForm.get('leaveStartDate')?.value).year()
+            )
+            .set('month', 1)
+            .set('date', 1);
+        } else {
+          // 연차정책이 'by contract'일 경우 변수에 `연차신청양식의 년 + 계약월 + 계약일`로 저장한다.
+          this.tempDate = moment(this.userProfileData?.empStartDate).set(
+            'year',
+            moment(this.requestLeaveForm.get('leaveStartDate')?.value).year()
+          );
+        }
+
+        console.log(this.tempDate);
+
+        // Set the same value for leaveEndDate when leaveStartDate changes
+        if (!this.requestLeaveForm.get('leaveEndDate')?.value) {
+          this.requestLeaveForm.get('leaveEndDate')?.setValue(newValue);
+        }
+      });
 
     // 해당 국가, 회사별 휴일 불러오기
     this.requestCountryHoliday();
@@ -206,31 +223,51 @@ export class RequestLeaveComponent {
     this.isSubmitting = true;
 
     if (this.userLeaveData.annualPolicy != 'byContract') {
-      this.tempDate = moment(this.userProfileData?.empStartDate)
-        .set({
-          year: moment(this.requestLeaveForm.get('leaveEndDate')?.value).year(),
-          month: 0, // 1월을 0으로 설정합니다.
-          date: 1,
-          hour: 0,
-          minute: 0,
-          second: 0,
-          millisecond: 0
-        });
+      this.tempDate = moment(this.userProfileData?.empStartDate).set({
+        year: moment(this.requestLeaveForm.get('leaveEndDate')?.value).year(),
+        month: 0, // 1월을 0으로 설정합니다.
+        date: 1,
+        hour: 0,
+        minute: 0,
+        second: 0,
+        millisecond: 0,
+      });
     } else {
-      this.tempDate = moment(this.userProfileData?.empStartDate).set('year', moment(this.requestLeaveForm.get('leaveStartDate')?.value).year()).startOf('day');
+      this.tempDate = moment(this.userProfileData?.empStartDate)
+        .set(
+          'year',
+          moment(this.requestLeaveForm.get('leaveStartDate')?.value).year()
+        )
+        .startOf('day');
     }
 
+    const isContain = this.tempDate.isBetween(
+      this.requestLeaveForm.get('leaveStartDate')?.value,
+      this.requestLeaveForm.get('leaveEndDate')?.value,
+      'day',
+      '[]'
+    );
 
-    const isContain = this.tempDate.isBetween(this.requestLeaveForm.get('leaveStartDate')?.value, this.requestLeaveForm.get('leaveEndDate')?.value, 'day', '[]');
-
-    // isContain은 tempdate( 기준점으로 휴가가 바뀌는 날이다. 
-    // byYear일 경우 신청해 기준 1월 1일. byContract는 신청해 기준 입사일 )가 
+    // isContain은 tempdate( 기준점으로 휴가가 바뀌는 날이다.
+    // byYear일 경우 신청해 기준 1월 1일. byContract는 신청해 기준 입사일 )가
     // 휴가 신청 시작날과 끝나는 사이에 있는지 확인하는 조건 true면. 휴가 신청날이 리셋날 사이에 있어 2번 휴가를 신청해야한다.
     // 두번째 조건은 하루만 신청하는거면 2번 신청안함.
-    // 세번째 조건은 휴가 신청날이 
-    if (isContain
-      && moment(this.requestLeaveForm.get('leaveStartDate')?.value).diff(this.requestLeaveForm.get('leaveEndDate')?.value, 'day') != 0
-      && (!moment(this.requestLeaveForm.get('leaveStartDate')?.value).isSame(moment(new Date(this.tempDate.year(), this.tempDate.month(), this.tempDate.date()))))
+    // 세번째 조건은 휴가 신청날이
+    if (
+      isContain &&
+      moment(this.requestLeaveForm.get('leaveStartDate')?.value).diff(
+        this.requestLeaveForm.get('leaveEndDate')?.value,
+        'day'
+      ) != 0 &&
+      !moment(this.requestLeaveForm.get('leaveStartDate')?.value).isSame(
+        moment(
+          new Date(
+            this.tempDate.year(),
+            this.tempDate.month(),
+            this.tempDate.date()
+          )
+        )
+      )
     ) {
       console.log(
         '연차 신청일:',
@@ -253,55 +290,72 @@ export class RequestLeaveComponent {
 
       this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
         if (answer) {
-          this.leaveService.requestLeave({
-            ...this.requestLeaveForm.value,
-            leaveStartDate: this.requestLeaveForm.get('leaveStartDate')?.value,
-            leaveEndDate: new Date(this.tempDate.year(), this.tempDate.month(), this.tempDate.date() - 1),
-            employeeAnnualLeave: this.employeeAnnualLeave,
-            employeeRollover: this.employeeRollover,
-            employeeSickLeave: this.employeeSickLeave
-          }).subscribe({
-            next: (res: any) => {
-              if (res.message == 'success') {
-                this.leaveService.requestLeave({
-                  ...this.requestLeaveForm.value,
-                  leaveStartDate: new Date(this.tempDate.year(), this.tempDate.month(), this.tempDate.date()),
-                  leaveEndDate: this.requestLeaveForm.get('leaveEndDate')?.value,
-                  employeeAnnualLeave: this.employeeAnnualLeave,
-                  employeeRollover: this.employeeRollover,
-                  employeeSickLeave: this.employeeSickLeave
-                }).subscribe({
-                  next: (res: any) => {
-                    if (res.message == 'success') {
-
-                      this.dialogService.openDialogPositive('request success').subscribe(() => {
-                        this.router.navigate(['/leave/leave-request-list'])
-                      })
-                    } else {
-                      this.dialogService.openDialogNegative(res.message);
-                    }
-                  },
-                  error: (e) => {
-                    console.error(e)
-                    this.dialogService.openDialogNegative(e)
-                  },
-                  complete: () => {
-                    this.isSubmitting = false;
-                  }
-                })
-              } else {
+          this.leaveService
+            .requestLeave({
+              ...this.requestLeaveForm.value,
+              leaveStartDate:
+                this.requestLeaveForm.get('leaveStartDate')?.value,
+              leaveEndDate: new Date(
+                this.tempDate.year(),
+                this.tempDate.month(),
+                this.tempDate.date() - 1
+              ),
+              employeeAnnualLeave: this.employeeAnnualLeave,
+              employeeRollover: this.employeeRollover,
+              employeeSickLeave: this.employeeSickLeave,
+            })
+            .subscribe({
+              next: (res: any) => {
+                if (res.message == 'success') {
+                  this.leaveService
+                    .requestLeave({
+                      ...this.requestLeaveForm.value,
+                      leaveStartDate: new Date(
+                        this.tempDate.year(),
+                        this.tempDate.month(),
+                        this.tempDate.date()
+                      ),
+                      leaveEndDate:
+                        this.requestLeaveForm.get('leaveEndDate')?.value,
+                      employeeAnnualLeave: this.employeeAnnualLeave,
+                      employeeRollover: this.employeeRollover,
+                      employeeSickLeave: this.employeeSickLeave,
+                    })
+                    .subscribe({
+                      next: (res: any) => {
+                        if (res.message == 'success') {
+                          this.dialogService
+                            .openDialogPositive('request success')
+                            .subscribe(() => {
+                              this.router.navigate([
+                                '/leave/leave-request-list',
+                              ]);
+                            });
+                        } else {
+                          this.dialogService.openDialogNegative(res.message);
+                        }
+                      },
+                      error: (e) => {
+                        console.error(e);
+                        this.dialogService.openDialogNegative(e);
+                      },
+                      complete: () => {
+                        this.isSubmitting = false;
+                      },
+                    });
+                } else {
+                  this.isSubmitting = false;
+                  this.dialogService.openDialogNegative(res.message);
+                }
+              },
+              error: (e) => {
+                console.error(e);
+                this.dialogService.openDialogNegative(e);
+              },
+              complete: () => {
                 this.isSubmitting = false;
-                this.dialogService.openDialogNegative(res.message);
-              }
-            },
-            error: (e) => {
-              console.error(e)
-              this.dialogService.openDialogNegative(e)
-            },
-            complete: () => {
-              this.isSubmitting = false;
-            }
-          })
+              },
+            });
         }
       });
     } else {
@@ -309,30 +363,33 @@ export class RequestLeaveComponent {
 
       this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
         if (answer) {
-          this.leaveService.requestLeave({
-            ...this.requestLeaveForm.value,
-            employeeAnnualLeave: this.employeeAnnualLeave,
-            employeeRollover: this.employeeRollover,
-            employeeSickLeave: this.employeeSickLeave
-          }).subscribe({
-            next: (res: any) => {
-              if (res.message == 'success') {
-
-                this.dialogService.openDialogPositive('request success').subscribe(() => {
-                  this.router.navigate(['/leave/leave-request-list'])
-                })
-              } else {
-                this.dialogService.openDialogNegative(res.message);
-              }
-            },
-            error: (e) => {
-              console.error(e)
-              this.dialogService.openDialogNegative(e)
-            },
-            complete: () => {
-              this.isSubmitting = false;
-            }
-          })
+          this.leaveService
+            .requestLeave({
+              ...this.requestLeaveForm.value,
+              employeeAnnualLeave: this.employeeAnnualLeave,
+              employeeRollover: this.employeeRollover,
+              employeeSickLeave: this.employeeSickLeave,
+            })
+            .subscribe({
+              next: (res: any) => {
+                if (res.message == 'success') {
+                  this.dialogService
+                    .openDialogPositive('request success')
+                    .subscribe(() => {
+                      this.router.navigate(['/leave/leave-request-list']);
+                    });
+                } else {
+                  this.dialogService.openDialogNegative(res.message);
+                }
+              },
+              error: (e) => {
+                console.error(e);
+                this.dialogService.openDialogNegative(e);
+              },
+              complete: () => {
+                this.isSubmitting = false;
+              },
+            });
         } else {
           this.isSubmitting = false;
         }
