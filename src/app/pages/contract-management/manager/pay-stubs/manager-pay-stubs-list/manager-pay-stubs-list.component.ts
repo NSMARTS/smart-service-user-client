@@ -175,6 +175,8 @@ export class ManagerPayStubsListComponent implements AfterViewInit {
       data: {
         ...data,
         managerMode: true,
+        disableClose: true,
+
       }
     });
     dialogRef.afterClosed().subscribe(result => {

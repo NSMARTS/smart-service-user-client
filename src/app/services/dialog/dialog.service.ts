@@ -30,7 +30,9 @@ export class DialogService {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         content: data
-      }
+      },
+      disableClose: true,
+
     });
 
     return dialogRef.afterClosed();
@@ -44,8 +46,10 @@ export class DialogService {
   openDialogPositive(data: string) {
     const dialogRef = this.dialog.open(PositiveDialogComponent, {
       data: {
-         content: data
-      }
+        content: data
+      },
+      disableClose: true,
+
     });
 
     return dialogRef.afterClosed();
@@ -60,7 +64,9 @@ export class DialogService {
     const dialogRef = this.dialog.open(NegativeDialogComponent, {
       data: {
         content: data
-      }
+      },
+      disableClose: true,
+
     });
 
     return dialogRef.afterClosed();
@@ -71,7 +77,9 @@ export class DialogService {
    * @returns dialogRef.afterClosed()
    */
   openDialogProgress() {
-    const dialogRef = this.dialog.open(ProcessingInstruction)
+    const dialogRef = this.dialog.open(ProcessingInstruction, {
+      disableClose: true,
+    })
 
     return dialogRef.afterClosed();
   }

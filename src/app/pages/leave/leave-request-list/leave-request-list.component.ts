@@ -92,7 +92,7 @@ export class LeaveRequestListComponent implements AfterViewInit {
           if (data === null) {
             return [];
           }
-
+          console.log(data)
           // Only refresh the result length if there is new data. In case of rate
           // limit errors, we do not want to reset the paginator to zero, as that
           // would prevent users from re-triggering requests.
@@ -107,7 +107,8 @@ export class LeaveRequestListComponent implements AfterViewInit {
     const dialogRef = this.dialog.open(LeaveRequestDetailsComponent, {
       maxWidth: '600px',
       width: '100%',
-      data
+      data,
+      disableClose: true
     });
     dialogRef.afterClosed().subscribe(result => {
 

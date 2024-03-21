@@ -1,26 +1,30 @@
 <div class="page">
-<div class="intro-section">
-  <h1>Contract Validator</h1>
-  <p>In this section, you can verify the authenticity of your contracts. Simply select your contract and click 'Verify'.
-  </p>
-</div>
-
-
-<div class="upload-section">
-  <div class="file-input">
-    <mat-form-field appearance="outline">
-      <input matInput [value]="fileName" [placeholder]="'Pdf upload'" disabled />
-    </mat-form-field>
-    <button mat-flat-button type="button" class="custom-file-input-button" (click)="fileInputElement.click()">Choose PDF
-        File</button>
+  <div class="intro-section">
+    <h1>Contract Validator</h1>
+    <p>In this section, you can verify the authenticity of your contracts. Simply select your contract and click
+      'Verify'.
+    </p>
   </div>
 
-  <input type="file" id="fileInput" #fileInputElement style="display: none;" (change)="onFileSelected($event)"
-    name="fileInput" accept="application/pdf" />
+
+  <div class="upload-section">
+    <div class="file-input">
+      <mat-form-field appearance="outline">
+        <input matInput [value]="fileName" [placeholder]="'Pdf upload'" disabled />
+      </mat-form-field>
+      <button mat-flat-button type="button" class="custom-file-input-button" (click)="fileInputElement.click()">Choose
+        PDF
+        File</button>
+    </div>
+
+    <input type="file" id="fileInput" #fileInputElement style="display: none;" (change)="onFileSelected($event)"
+      name="fileInput" accept="application/pdf" />
 
 
 
 
-</div>
-<button (click)="validateContract()" color="primary" mat-flat-button> Verify </button>
+  </div>
+  <button (click)="validateContract()" color="primary" mat-flat-button style="margin-right: 5px;"> Verify </button>
+  <button mat-flat-button mat-dialog-close color="accent">Close</button>
+
 </div>

@@ -1,99 +1,99 @@
 <div>
-    <h1 mat-dialog-title>Leave Request Details</h1>
-    <div mat-dialog-content>
-        <table class="modal-table">
-            <colgroup>
-                <col style="width:120px">
-                <col style="width:380px">
-            </colgroup>
-            <tbody>
-                <tr>
-                    <th>
-                        <b>Status</b>
-                    </th>
-                    <td>
-                        {{data.status}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <b>Requestor</b>
-                    </th>
-                    <td>
-                        {{userProfileData?.username}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <b>Request day</b>
-                    </th>
-                    <td>
-                        {{data.createdAt | date}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <b>Leave Type</b>
-                    </th>
-                    <td>
-                        {{data.leaveType}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <b>Period</b>
-                    </th>
-                    <td>
-                        {{data.leaveStartDate | date }} ~ {{data.leaveEndDate |
-                        date}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <b>Leave of used</b>
-                    </th>
-                    <td>
-                        {{data.leaveDuration}}day(s)
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <b>Reason</b>
-                    </th>
-                    <td>
-                        {{data.leaveReason}}
-                    </td>
-                </tr>
-                <tr *ngIf="data.approver">
-                    <th>
-                        <b>Approver</b>
-                    </th>
-                    <td>
-                        {{data.approver.username}}
-                    </td>
-                </tr>
-                <tr *ngIf="data.rejector">
-                    <th>
-                        <b>Rejector</b>
-                    </th>
-                    <td>
-                        {{data.rejector.username}}
-                    </td>
-                </tr>
-                <tr *ngIf="data.rejectedReason">
-                    <th>
-                        <b>Rejected Reason</b>
-                    </th>
-                    <td>
-                        {{data.rejectedReason}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div mat-dialog-actions style="display: flex; justify-content: space-between;">
-        <button mat-flat-button mat-dialog-close>close</button>
-        <button *ngIf="data.status == 'pending'" color="accent" mat-flat-button
-            (click)="cancelRequest()">Cancel</button>
-    </div>
+  <h1 mat-dialog-title>Leave Request Details</h1>
+  <div mat-dialog-content>
+    <table class="modal-table">
+      <colgroup>
+        <col style="width:120px">
+        <col style="width:380px">
+      </colgroup>
+      <tbody>
+        <tr>
+          <th>
+            <b>Status</b>
+          </th>
+          <td>
+            {{data.status}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Requestor</b>
+          </th>
+          <td>
+            {{userProfileData?.username}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Request day</b>
+          </th>
+          <td>
+            {{data.createdAt | date}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Leave Type</b>
+          </th>
+          <td>
+            {{data.leaveType}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Period</b>
+          </th>
+          <td>
+            {{data.leaveStartDate | date }} ~ {{data.leaveEndDate |
+            date}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Leave of used</b>
+          </th>
+          <td>
+            {{data.leaveDuration}}day(s)
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <b>Reason</b>
+          </th>
+          <td>
+            {{data.leaveReason}}
+          </td>
+        </tr>
+        <tr *ngIf="data.approver">
+          <th>
+            <b>Approver</b>
+          </th>
+          <td>
+            {{data.approver.username}}
+          </td>
+        </tr>
+        <tr *ngIf="data.rejector">
+          <th>
+            <b>Rejector</b>
+          </th>
+          <td>
+            {{data.rejector.username}}
+          </td>
+        </tr>
+        <tr *ngIf="data.rejectedReason">
+          <th>
+            <b>Rejected Reason</b>
+          </th>
+          <td>
+            {{data.rejectedReason}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div mat-dialog-actions style="display: flex; justify-content: space-between;">
+    <button mat-flat-button mat-dialog-close>close</button>
+    <button [disabled]="isSubmitting" *ngIf="data.status == 'pending'" color="accent" mat-flat-button
+      (click)="cancelRequest()">Cancel</button>
+  </div>
 </div>

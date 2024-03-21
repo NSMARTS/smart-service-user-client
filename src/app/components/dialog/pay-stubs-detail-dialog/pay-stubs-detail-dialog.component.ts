@@ -60,7 +60,8 @@ export class ContractDetailDialogComponent {
   openSignDialog() {
     const dialogRef = this.dialog.open(PayStubsSignDialogComponent, {
       data: {
-        ...this.data
+        ...this.data,
+        disableClose: true,
       }
     });
     dialogRef.afterClosed().subscribe(res => {

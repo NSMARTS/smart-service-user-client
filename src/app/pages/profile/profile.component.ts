@@ -88,7 +88,9 @@ export class ProfileComponent implements OnInit {
             width: '100%',
             data: {
               isManager: this.isManager
-            }
+            },
+            disableClose: true,
+
           })
         } else {
           this.dialogService.openDialogNegative('The password is incorrect. Please check again.')
@@ -103,7 +105,9 @@ export class ProfileComponent implements OnInit {
             width: '100%',
             data: {
               isManager: this.isManager
-            }
+            },
+            disableClose: true,
+
           })
         } else {
           this.dialogService.openDialogNegative('The password is incorrect. Please check again.')

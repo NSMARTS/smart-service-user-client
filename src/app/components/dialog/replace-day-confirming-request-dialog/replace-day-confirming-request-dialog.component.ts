@@ -30,6 +30,7 @@ export class ReplaceDayConfirmingRequestDialogComponent implements OnInit {
 
   userProfileData: UserProfileData | undefined;
   userProfile$ = toObservable(this.profileService.userProfile);
+  isSubmitting: Boolean = false
 
 
   constructor(
@@ -52,21 +53,31 @@ export class ReplaceDayConfirmingRequestDialogComponent implements OnInit {
    * 휴일 신청 승인
    */
   acceptRequest() {
+    this.isSubmitting = true
     this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
-      const data: any = this.ConfirmForm.value;
-      data._id = this.data._id;
-      this.leaveService.acceptReplacementConfirm({ data }).subscribe({
-        next: (res: any) => {
-          if (res.message == 'update success') {
-            this.dialogService.openDialogPositive('Your vacation has been accepted normally.').subscribe(() => {
-              this.dialogRef.close('success')
-            })
+      if (answer) {
+        const data: any = this.ConfirmForm.value;
+        data._id = this.data._id;
+        this.leaveService.acceptReplacementConfirm({ data }).subscribe({
+          next: (res: any) => {
+            if (res.message == 'update success') {
+              this.dialogService.openDialogPositive('Your vacation has been accepted normally.').subscribe(() => {
+                this.dialogRef.close('success')
+              })
+            }
+          },
+          error: (err) => {
+            this.isSubmitting = false
+            this.dialogService.openDialogNegative(err.error.message)
+          },
+          complete: () => {
+            this.isSubmitting = false
           }
-        },
-        error: (err) => {
-          this.dialogService.openDialogNegative(err.error.message)
-        }
-      })
+        })
+      } else {
+        this.isSubmitting = false
+      }
+
     })
   }
 
@@ -74,6 +85,7 @@ export class ReplaceDayConfirmingRequestDialogComponent implements OnInit {
    * 휴일 신청 거절
    */
   rejectRequest() {
+    this.isSubmitting = true
     this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
       if (answer) {
         const data: any = this.ConfirmForm.value;
@@ -87,9 +99,15 @@ export class ReplaceDayConfirmingRequestDialogComponent implements OnInit {
             }
           },
           error: (err) => {
+            this.isSubmitting = false
             this.dialogService.openDialogNegative(err.error.message)
-          }
+          },
+          complete: () => {
+            this.isSubmitting = false
+          },
         })
+      } else {
+        this.isSubmitting = false
       }
     }
     )

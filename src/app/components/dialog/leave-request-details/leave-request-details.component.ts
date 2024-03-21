@@ -19,6 +19,7 @@ export class LeaveRequestDetailsComponent implements OnInit {
 
   userProfileData: UserProfileData | undefined;
   userProfile$ = toObservable(this.profileService.userProfile);
+  isSubmitting: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<LeaveRequestDetailsComponent>,
@@ -38,6 +39,10 @@ export class LeaveRequestDetailsComponent implements OnInit {
   }
 
   cancelRequest() {
+    if (this.isSubmitting) {
+      return;
+    }
+    this.isSubmitting = true;
     this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
       if (answer) {
         this.leaveService.cancelLeaveRequest(this.data._id).subscribe({
@@ -50,9 +55,12 @@ export class LeaveRequestDetailsComponent implements OnInit {
           },
           error: (err) => {
             console.log(err)
+            this.isSubmitting = false;
             this.dialogService.openDialogNegative(err.error.message)
           }
         })
+      } else {
+        this.isSubmitting = false;
       }
     })
 

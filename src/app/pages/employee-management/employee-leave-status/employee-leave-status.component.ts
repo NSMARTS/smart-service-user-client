@@ -127,7 +127,9 @@ export class EmployeeLeaveStatusComponent implements AfterViewInit, OnInit {
     const dialogRef = this.dialog.open(LeaveRequestManagerDetailsComponent, {
       maxWidth: '600px',
       width: '100%',
-      data
+      data,
+      disableClose: true,
+
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result == 'success') {

@@ -160,6 +160,8 @@ export class PayStubsListComponent implements AfterViewInit {
         ...data,
         signMode: false,
         managerMode: false,
+        disableClose: true,
+
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -176,6 +178,8 @@ export class PayStubsListComponent implements AfterViewInit {
       data: {
         ...data,
         signMode: true,
+        disableClose: true,
+
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -192,6 +196,8 @@ export class PayStubsListComponent implements AfterViewInit {
         id: data._id,
         contractMod: false,
       },
+      disableClose: true,
+
     });
   }
 
