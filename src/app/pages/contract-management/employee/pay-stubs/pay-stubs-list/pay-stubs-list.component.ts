@@ -195,9 +195,9 @@ export class PayStubsListComponent implements AfterViewInit {
       data: {
         id: data._id,
         contractMod: false,
-        disableClose: true,
-
       },
+      disableClose: true,
+
     });
   }
 

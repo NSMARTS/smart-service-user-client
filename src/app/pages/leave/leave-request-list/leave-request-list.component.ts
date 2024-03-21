@@ -108,8 +108,7 @@ export class LeaveRequestListComponent implements AfterViewInit {
       maxWidth: '600px',
       width: '100%',
       data,
-      disableClose: true,
-
+      disableClose: true
     });
     dialogRef.afterClosed().subscribe(result => {
 

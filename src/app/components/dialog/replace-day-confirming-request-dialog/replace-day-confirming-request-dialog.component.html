@@ -1,85 +1,85 @@
 <form [formGroup]="ConfirmForm">
-    <div>
-        <h1 mat-dialog-title>Leave Request Details</h1>
-        <div mat-dialog-content>
-            <table class="modal-table">
-                <colgroup>
-                    <col style="width:120px">
-                    <col style="width:380px">
-                </colgroup>
-                <tbody>
-                    <tr>
-                        <th>
-                            <b>Status</b>
-                        </th>
-                        <td>
-                            {{data.status}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <b>Requestor</b>
-                        </th>
-                        <td>
-                            {{data.requestor.username}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <b>Request day</b>
-                        </th>
-                        <td>
-                            {{data.createdAt | date}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <b>Period</b>
-                        </th>
-                        <td>
-                            {{data.leaveStartDate | date }} ~ {{data.leaveEndDate |
-                            date}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <b>Reason</b>
-                        </th>
-                        <td>
-                            {{data.leaveReason}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <b>Duration</b>
-                        </th>
-                        <td>
-                            <mat-form-field>
-                                <mat-label>Duration</mat-label>
-                                <input matInput type="number" formControlName="duration" />
-                            </mat-form-field>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <b>Manager's Reason</b>
-                        </th>
-                        <td>
-                            <mat-form-field style=" width: 100%;">
-                                <mat-label>Reason</mat-label>
-                                <textarea formControlName="managerReason" matInput rows="6"></textarea>
-                            </mat-form-field>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div mat-dialog-actions style="display: flex; justify-content: space-between">
-            <button mat-flat-button mat-dialog-close>Close</button>
-            <div>
-                <button mat-flat-button color='primary' (click)="acceptRequest()">accept</button>
-                <button color="accent" mat-flat-button (click)="rejectRequest()">reject</button>
-            </div>
-        </div>
+  <div>
+    <h1 mat-dialog-title>Leave Request Details</h1>
+    <div mat-dialog-content>
+      <table class="modal-table">
+        <colgroup>
+          <col style="width:120px">
+          <col style="width:380px">
+        </colgroup>
+        <tbody>
+          <tr>
+            <th>
+              <b>Status</b>
+            </th>
+            <td>
+              {{data.status}}
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <b>Requestor</b>
+            </th>
+            <td>
+              {{data.requestor.username}}
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <b>Request day</b>
+            </th>
+            <td>
+              {{data.createdAt | date}}
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <b>Period</b>
+            </th>
+            <td>
+              {{data.leaveStartDate | date }} ~ {{data.leaveEndDate |
+              date}}
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <b>Reason</b>
+            </th>
+            <td>
+              {{data.leaveReason}}
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <b>Duration</b>
+            </th>
+            <td>
+              <mat-form-field>
+                <mat-label>Duration</mat-label>
+                <input matInput type="number" min="0" formControlName="duration" />
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <b>Manager's Reason</b>
+            </th>
+            <td>
+              <mat-form-field style=" width: 100%;">
+                <mat-label>Reason</mat-label>
+                <textarea formControlName="managerReason" matInput rows="6"></textarea>
+              </mat-form-field>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+    <div mat-dialog-actions style="display: flex; justify-content: space-between">
+      <button mat-flat-button mat-dialog-close>Close</button>
+      <div>
+        <button mat-flat-button color='primary' (click)="acceptRequest()" [disabled]="isSubmitting">accept</button>
+        <button color="accent" mat-flat-button (click)="rejectRequest()" [disabled]="isSubmitting">reject</button>
+      </div>
+    </div>
+  </div>
 </form>

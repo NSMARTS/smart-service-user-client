@@ -32,7 +32,7 @@ export class LeaveRequestManagerDetailsComponent implements OnInit {
   userProfileData: UserProfileData | undefined;
   userProfile$ = toObservable(this.profileService.userProfile);
 
-
+  isSubmitting: Boolean = false
   constructor(
     public dialogRef: MatDialogRef<LeaveRequestManagerDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -53,6 +53,7 @@ export class LeaveRequestManagerDetailsComponent implements OnInit {
    * 휴가 승인
    */
   approveRequest() {
+    this.isSubmitting = true;
     this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
       if (answer) {
         this.leaveService.approveLeaveRequest(this.data._id).subscribe({
@@ -64,9 +65,15 @@ export class LeaveRequestManagerDetailsComponent implements OnInit {
             }
           },
           error: (err: any) => {
+            this.isSubmitting = false
             this.dialogService.openDialogNegative(err.error.message)
+          },
+          complete: () => {
+            this.isSubmitting = false
           }
         })
+      } else {
+        this.isSubmitting = false
       }
     }
     )
@@ -76,6 +83,7 @@ export class LeaveRequestManagerDetailsComponent implements OnInit {
    * 휴가 거절
    */
   rejectRequest() {
+    this.isSubmitting = true;
     this.dialogService.openDialogConfirm('').subscribe((answer: any) => {
       if (answer) {
         this.leaveService.rejectLeaveRequest(this.data._id, this.rejectedReason.value).subscribe({
@@ -88,8 +96,14 @@ export class LeaveRequestManagerDetailsComponent implements OnInit {
           },
           error: (err) => {
             this.dialogService.openDialogNegative(err.error.message)
+          },
+          complete: () => {
+            this.isSubmitting = false
           }
         })
+      } else {
+        this.isSubmitting = false
+
       }
     })
   }

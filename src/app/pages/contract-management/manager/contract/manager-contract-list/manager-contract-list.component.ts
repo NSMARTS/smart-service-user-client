@@ -203,9 +203,9 @@ export class ManagerContractListComponent {
       data: {
         id: _id,
         contractMod: true,
-        disableClose: true,
-
       },
+      disableClose: true,
+
     });
   }
   openDetailDialog(row: any) { }
